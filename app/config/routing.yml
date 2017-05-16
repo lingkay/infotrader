@@ -1,0 +1,3 @@
+core_user:
+    resource: "@CoreUserBundle/Resources/config/routing.yml"
+    prefix:   /users

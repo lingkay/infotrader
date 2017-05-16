@@ -1,0 +1,3 @@
+core_user_homepage:
+    path:     /welcome
+    defaults: { _controller: CoreUserBundle:User:index }

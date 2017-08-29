@@ -1,0 +1,18 @@
+evangeliko_post_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: EvangelikoPostBundle:Default:index }
+
+evangeliko_post_submit:
+    path: /post
+    methods: [POST]
+    defaults: { _controller: EvangelikoPostBundle:Post:post }
+
+evangeliko_view_post:
+    path: /view/post
+    methods: [GET]
+    defaults: { _controller: EvangelikoPostBundle:Post:viewPost }
+
+evangeliko_view_free_post:
+    path: /view/post/{id}
+    methods: [GET]
+    defaults: { _controller: EvangelikoPostBundle:Post:viewFreePost }

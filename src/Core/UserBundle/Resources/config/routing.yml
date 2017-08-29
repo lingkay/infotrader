@@ -1,3 +1,14 @@
-core_user_homepage:
-    path:     /welcome
-    defaults: { _controller: CoreUserBundle:User:index }
+# core_user_homepage:
+#     path:     /welcome
+#     defaults: { _controller: CoreUserBundle:User:index }
+core_user_login:
+    path: /login
+    defaults: { _controller: CoreUserBundle:User:login }
+
+core_user_registration:
+    path: /register
+    defaults: { _controller: CoreUserBundle:User:registration }
+
+user:
+    type: rest
+    resource: Core\UserBundle\Controller\Rest\UserController

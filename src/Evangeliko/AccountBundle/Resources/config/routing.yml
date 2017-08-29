@@ -1,0 +1,43 @@
+evangeliko_account_index:
+    path: /
+    defaults: { _controller: EvangelikoAccountBundle:Account:index }
+
+evangeliko_profile_index:
+    path: /profile
+    methods: [GET]
+    defaults: { _controller: EvangelikoAccountBundle:Profile:index }
+
+evangeliko_profile_edit_submit:
+    path: /profile
+    methods: [POST] 
+    defaults: { _controller: EvangelikoAccountBundle:Profile:profileEdit }
+
+evangeliko_reply_post:
+    path: /reply/post
+    methods: [POST]
+    defaults: { _controller: EvangelikoAccountBundle:Account:replyPost }
+
+evangeliko_search_people:
+    path: /search/people
+    methods: [POST]
+    defaults: { _controller: EvangelikoAccountBundle:Account:searchPeople }
+
+evangeliko_invite_people:
+    path:     /invite/people/{id}/{community}
+    methods:  [GET]
+    defaults: { _controller: EvangelikoAccountBundle:Account:invitePeople }
+
+evangeliko_search_people:
+    path: /searchs/people
+    methods: [GET]
+    defaults: { _controller: EvangelikoAccountBundle:Account:searchsPeople }
+
+evangeliko_credit_index:
+    path: /credit
+    methods: [GET]
+    defaults: { _controller: EvangelikoAccountBundle:Credit:index }
+
+evangeliko_credit_submit:
+    path: /credit
+    methods: [POST]
+    defaults: { _controller: EvangelikoAccountBundle:Credit:submit }

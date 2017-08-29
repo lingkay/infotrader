@@ -1,0 +1,84 @@
+{% extends 'CoreTemplateBundle::base.html.twig' %}
+{% import 'CoreTemplateBundle::macro.html.twig' as form %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-12">
+		<div class="container-fluid">
+			{% set src = asset('bundles/coretemplate/assets/img/no_photo.png')  %}
+			<div class="row">
+			<h4>For Aproval</h4>
+			{# {% if approvals is not null %}
+				{% for approval in approvals %}
+	                    <div class="col-md-4">
+	                        <div class="jumbotron">
+	                            <div class="container">
+	                                <div style="background-color: white !important;">
+	                                    <img alt="" src="{{ src }}" height="200" width="200" border="5" class="img-responsive center-block" />
+	                                    <div style="text-align: center;">
+	                                        {{ form.hidden('community_id', approval.getCommunity.getID) }}
+	                                        {{ form.hidden('account_id', approval.getFollower.getID) }}
+	                                        {{ form.hidden('approval', true) }}
+	                                        {{ approval.getFollower.getFullName }} - {{ approval.getCommunity.getName }}
+	                                        <div class="form-group">
+		                                        <button id="post-btn" type="submit" class="btn btn-primary">Accept</button>
+	                                        </div>
+
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </form>
+				{% endfor %}
+			{% endif %} #}
+			{% if approvals is not null %}
+				<div class="col-md-offset-1 col-md-10">
+					<table class="table table-stripped table-bordered">
+						{% for approval in approvals %}
+			                <form class="form-horizontal" method="post" action="{{ path('evangeliko_community_accept_invite') }}">
+							<tr>
+								<td>
+									{{approval.getFollower.getFullName}} wants to follow {{ approval.getCommunity.getName }} hive
+								</td>
+								<td>
+									<button id="post-btn" type="submit" class="btn btn-primary pull-right">Accept</button>
+								</td>
+							</tr>
+							</form>
+						{% endfor %}
+					</table>
+				</div>
+			{% endif %}
+			</div>
+			<div class="row">
+			<h4>Pending Hive Invites</h4>
+			{% if lists is not null %}
+				{% for list in lists %}
+	                <form class="form-horizontal" method="post" action="{{ path('evangeliko_community_accept_invite') }}">
+	                    <div class="col-md-4">
+	                        <div class="jumbotron">
+	                            <div class="container">
+	                                <div style="background-color: white !important;">
+	                                    <img alt="" src="{{ src }}" height="200" width="200" border="5" class="img-responsive center-block" />
+	                                    <div style="text-align: center;">
+	                                        {{ form.hidden('community_id', list.getCommunity.getID) }}
+	                                        {{ form.hidden('account_id', app.getUser.getAccount.getID) }}
+	                                        {{ form.hidden('approval', false)}}
+	                                        {{ list.getCommunity.getName }}
+	                                        <div class="form-group">
+		                                        <button id="post-btn" type="submit" class="btn btn-primary">Follow</button>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </form>
+				{% endfor %}
+			{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% block left_menu %}
+<div class="col-sm-3 col-md-2 sidebar">
+    {% set src = asset('bundles/coretemplate/assets/img/user_avatar.jpg')  %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <img src="{{ src }}" class="img-thumbnail" width="350" height="250"> 
+                </div>
+                <div class="form-group" style="margin-bottom: 0px !important;">
+                    <label class="control-label label-name">{{object.getName}}</label>
+                </div>
+                <div class="form-group" style="margin-bottom: 0px !important;">
+                    <label class="control-label label-name">{{object.getDescription}}</label>
+                </div>
+            </div>
+        </div>
+    <hr>
+    <ul class="nav nav-sidebar">
+        <li class="active">
+            <a href="{{ path('evangeliko_community_view', {'slug': object.getSlug}) }}"><span class="glyphicon glyphicon-home"></span>  Home</a>
+        </li>
+        <li>
+            <a href="#"><span class="glyphicon glyphicon-user"></span> Followers</a>
+        </li>
+        <li>
+            <a href="#"><span class="glyphicon glyphicon-lock"></span> About</a>
+        </li>
+        <li>
+            <a href="#"><span class="glyphicon glyphicon-picture"></span> Photos</a>
+        </li>
+        <li>
+            <a href="#"><span class="glyphicon glyphicon-facetime-video"></span> Videos</a>
+        </li>
+    </ul>
+</div>
+{% endblock %}

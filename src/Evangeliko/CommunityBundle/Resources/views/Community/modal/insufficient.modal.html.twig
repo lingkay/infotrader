@@ -1,0 +1,26 @@
+<div id="insufficient-credit-form" class="modal fade" tabindex="-1" aria-hidden="true">
+    <form id="add-post-form" action="{{ path('evangeliko_credit_index') }}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Paid Post</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row form-horizontal form">
+                        <div class="form-body">
+                            <p>You have insufficient credits. Would you like to buy additional credits?</p>
+                            {{ form.hidden('redirect_id', "") }}
+                            {{ form.hidden('amt_deduct', "")}}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn default">Close</button>
+                    <a href="{{ path('evangeliko_credit_index') }}" class="btn btn-primary">Buy Credits</a>
+                    <button id="btn_product_submit" class="btn default">View Post</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

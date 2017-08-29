@@ -1,0 +1,3 @@
+evangeliko_test_homepage:
+    path:     /
+    defaults: { _controller: EvangelikoTestBundle:Default:index }

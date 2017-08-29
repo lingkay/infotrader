@@ -1,0 +1,41 @@
+{% extends 'CoreTemplateBundle::base.html.twig' %}
+{% import 'CoreTemplateBundle::macro.html.twig' as form %}
+
+{% block content %}
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12">
+		<div class="container-fluid">
+			<form class="form-horizontal" method="post" data-toggle="validator" role="form">
+				<div class="jumbotron">
+					<div class="container">
+						<div class="col-md-12" style="background-color: white !important;">
+							<div class="form-body">
+								<h4 class="form-section">Page Information</h4>
+								<div id="cgroup-slug" class="form-group">
+								    <label class="col-md-2 control-label"></label>
+									<div class=" col-md-4">
+										<div id="cgroup-slug" class="input-group">
+								        	<span class="input-group-addon" id="caddon-slug" name="addon_slug" class="form-control">{{ app.request.getSchemeAndHttpHost() ~ "/" }}</span>
+								        	<input id="cform-slug" type="text" class="form-control" name="slug" placeholder="" value="{{ object.getSlug|default('') }}" {{ object.getID == NULL ? "readonly" : "" }} required>
+								   	 </div>
+									</div>
+								</div>
+								{{ form.group_selectnew("Access Type", "page_type", page_type, object.getType|default(''), 3, 4, {requried:true}) }}
+								{{ form.group_textnew("Page Name",'page_name', object.getName|default(''),3,4) }}
+								{{ form.group_textarea('Description', 'description', object.getDescription|default(''), 3, 3, 4) }}
+								{{ form.group_selectnew("Interest", "interest[]", interest, object.getInterests|default(''), 3, 4, {multi: true, requried:true}) }}
+								<div class="col-md-7">
+									<div class="form-actions fluid pull-right">
+										<button type="submit" class="btn btn-primary">Submit</button>
+									</div>
+								</div>
+								<br>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}

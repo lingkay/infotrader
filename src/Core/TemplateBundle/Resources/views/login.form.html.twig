@@ -1,0 +1,41 @@
+{% extends "CoreUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+<!-- BEGIN LOGIN -->
+<div class="form form--input-wrap with-label content">
+    <!-- BEGIN LOGIN FORM -->
+    <form class="navbar-form navbar-right login-form form--login" action="/login_check" method="post">
+        {# <div class="form-group"> #}
+            <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+            <div class="form--input-wrap with-label">
+                <label for="input_email">Username</label>
+                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" name="_username"/>
+            </div>
+        {# </div> #}
+        {# <div class="form-group"> #}
+            <div class="form--input-wrap with-label">
+                <label for="input_passsword">Password</label>
+                <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="_password"/>
+            </div>
+        {# </div> #}
+        <div class="form--input-wrap with-label label-bottom">
+            <button type="submit" class="btn btn-primary">Login <i class="m-icon-swapright m-icon-white"></i></button>
+            <a href="#" class="small">Forgot password</a>
+        </div>
+    </form>
+    <!-- END LOGIN FORM -->
+    <div class="clearfix"></div>
+</div>
+<!-- END LOGIN -->
+{% endblock %}
+{#             <label for="input_email">Email</label>
+            <input id="input_email" type="email" class="">
+          </div>
+          <div class="form--input-wrap with-label">
+            <label for="input_passsword">Password</label>
+            <input id="input_passsword" type="password" class="">
+          </div>
+          <div class="form--input-wrap with-label label-bottom">
+            <input type="submit" class="btn btn-primary" value="Login"> #}
+
+          

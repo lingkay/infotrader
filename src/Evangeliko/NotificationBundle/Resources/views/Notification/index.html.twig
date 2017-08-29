@@ -1,0 +1,29 @@
+{% extends 'CoreTemplateBundle::base.html.twig' %}
+{% import 'CoreTemplateBundle::macro.html.twig' as form %}
+
+{% block content %}
+<div class="row">
+	<div class="col-xs-12 col-sm-12 col-md-12">
+		<div class="container-fluid">
+			<form class="form-horizontal">
+				<div class="jumbotron">
+					<div class="container">
+						<div class="col-md-12" style="background-color: white !important;">
+							<div class="form-body">
+								<h4 class="form-section">Notifications</h4>
+								<ul class="list-group">
+									{% for notif in notifs %}
+										<li class="list-group-item">
+											{{ notif.getMessage }}
+										</li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}

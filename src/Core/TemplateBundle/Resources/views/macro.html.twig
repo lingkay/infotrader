@@ -1,0 +1,91 @@
+{% form_theme form 'CoreTemplateBundle::captcha.html.twig' %}
+
+{% macro options(fields, selected) %}
+    <option></option>
+{% for value,display in fields %}
+    {% if (value == selected) %}
+        <option value="{{ value }}" selected="selected">{{ display }}</option>
+    {% else %}
+        <option value="{{ value }}">{{ display }}</option>
+    {% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% macro group_textnew(label, name, value, label_size, body_size, options = {} ) %}
+{% set options = options|merge({'prefix' : options.prefix is defined ? options.prefix  : 'c' }) %}
+{% set options = options|merge({'readonly' : ( options.readonly is defined ? options.readonly : false )}) %}
+{% set options = options|merge({'class' : ( options.class is defined ? options.class : '' )}) %}
+{% set options = options|merge({'required' : ( options.required is defined ? options.required : false )}) %}
+{% set options = options|merge({'bare' : ( options.bare is defined ? options.bare : false )}) %}
+
+{% if options.bare == false %}
+    <div id="{{ options.prefix }}group-{{ name }}" class="form-group">
+{% endif %}
+{% if label_size > 0 %}
+    <label class="col-md-{{ label_size }} control-label">{{ label }}</label>
+{% endif %}
+    <div class="col-md-{{ body_size }}">
+        <input id="{{ options.prefix }}form-{{ name }}" type="text" name="{{ name }}" class="form-control {{ options.class }}" placeholder="{{ label }}" value="{{ value }}" {{ options.readonly ? 'readonly ' : '' }} {{ options.required ? 'required' : '' }} novalidate>
+    </div>
+{% if options.bare == false %}
+    </div>
+{% endif %}
+{% endmacro %}
+
+{% macro group_email(label, name, value, label_size, body_size, readonly = false, prefix = 'c') %}
+<div id="{{ prefix }}group-{{ name }}" class="form-group">
+    <label class="col-md-{{ label_size }} control-label">{{ label }}</label>
+    <div class="col-md-{{ body_size }}">
+        <input id="{{ prefix }}form-{{ name }}" type="email" name="{{ name }}" class="form-control" placeholder="{{ label }}" value="{{ value }}" {{ readonly ? 'readonly ' : '' }}>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro group_textarea(label, name, value, row_size, label_size, body_size, readonly = false, prefix = 'c', class) %}
+<div id="{{ prefix }}group-{{ name }}" class="form-group {{ class }}">
+    <label class="col-md-{{ label_size }} control-label">{{ label }}</label>
+    <div class="col-md-{{ body_size }}">
+        <textarea id="{{ prefix }}form-{{ name }}" name="{{ name }}" class="form-control" rows="{{ row_size }}" placeholder="{{ label }}" {{ readonly ? 'readonly ' : '' }}>{{ value }}</textarea>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro group_selectnew(label, name, options, value, label_size, body_size, conf = {}) %}
+{% import _self as self %}
+{% set conf = conf|merge({'prefix' : conf.prefix is defined ? conf.prefix  : 'c' }) %}
+{% set conf = conf|merge({'readonly' : ( conf.readonly is defined ? conf.readonly : false )}) %}
+{% set conf = conf|merge({'class' : ( conf.class is defined ? conf.class : '' )}) %}
+{% set conf = conf|merge({'required' : ( conf.required is defined ? conf.required : false )}) %}
+{% set conf = conf|merge({'bare' : ( conf.bare is defined ? conf.bare : false )}) %}
+{% set conf = conf|merge({'disabled' : ( conf.disabled is defined ? conf.disabled : false )}) %}
+{% set conf = conf|merge({'multi' : ( conf.multi is defined ? conf.multi : false )}) %}
+
+{% if conf.bare == false %}
+<div id="{{ conf.prefix }}group-{{ name }}" class="form-group">
+{% endif %}  
+    {% if label_size > 0 %}
+    <label class="col-md-{{ label_size }} control-label">{{ label }}</label>
+    {% endif %}
+    <div class="col-md-{{ body_size }}">
+        <select id="{{ conf.prefix }}form-{{ name }}" name="{{ name }}" class="form-control select_2 {{ conf.class }}" {{ conf.disabled ? 'disabled ' : '' }} data-placeholder="-- Select {{ label }} --" {{ conf.readonly ? 'readonly ' : '' }} {{ conf.required ? 'required' : '' }}{{ conf.multi ? 'multiple' : '' }}>
+        {{ self.options(options, value) }}
+        </select>
+    </div>
+
+{% if conf.bare == false %}
+</div>
+{% endif %}
+{% endmacro %}
+
+{% macro hidden(name, value, class, prefix = 'c') %}
+<input id="{{ prefix }}form-{{ name }}" type="hidden" name="{{ name }}" value="{{ value }}" class="{{ class }}">
+{% endmacro %}
+
+{% macro group_number(label, name, value, label_size, body_size, readonly = false, prefix = 'c') %}
+<div id="{{ prefix }}group-{{ name }}" class="form-group">
+    <label class="col-md-{{ label_size }} control-label">{{ label }}</label>
+    <div class="col-md-{{ body_size }}">
+        <input type="number" id="{{ prefix }}form-{{ name }}" name="{{ name }}" class="form-control price" placeholder="{{ label }}" value="{{ value }}" {{ readonly ? 'readonly ' : '' }}>
+    </div>
+</div>
+{% endmacro %}

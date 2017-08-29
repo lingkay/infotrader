@@ -14,12 +14,29 @@ class AppKernel extends Kernel
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
-            // new FOS\UserBundle\FOSUserBundle(),
-            // new FOS\OAuthServerBundle\FOSOAuthServerBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
+            new FOS\OAuthServerBundle\FOSOAuthServerBundle(),
+
+            new JMS\SerializerBundle\JMSSerializerBundle(),
+            new FOS\RestBundle\FOSRestBundle(),
+            new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
+            new FOS\HttpCacheBundle\FOSHttpCacheBundle(),
+            new Bazinga\Bundle\HateoasBundle\BazingaHateoasBundle(),
+            new Hautelook\TemplatedUriBundle\HautelookTemplatedUriBundle(),
+            new Bazinga\Bundle\RestExtraBundle\BazingaRestExtraBundle(),
 
             new Core\UserBundle\CoreUserBundle(),
+            new Core\TemplateBundle\CoreTemplateBundle(),
+            new Core\ApiBundle\CoreApiBundle(),
+            new Evangeliko\AccountBundle\EvangelikoAccountBundle(),
+            new Evangeliko\CommunityBundle\EvangelikoCommunityBundle(),
+            new Core\FixtureBundle\CoreFixtureBundle(),
+            new Evangeliko\PostBundle\EvangelikoPostBundle(),
+            new Evangeliko\NotificationBundle\EvangelikoNotificationBundle(),
+            new Evangeliko\TestBundle\EvangelikoTestBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

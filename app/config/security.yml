@@ -46,11 +46,11 @@ security:
                 invalidate_session: true
             anonymous: ~
             switch_user: { role: ROLE_ADMIN, parameter: _switch }
-            remember_me:
-                secret:      "%secret%"
-                lifetime: 31536000
-                path:     /
-                domain:   ~ 
+            # remember_me:
+            #     secret:      "%secret%"
+            #     lifetime: 31536000
+            #     path:     /
+            #     domain:   ~ 
             # activate different ways to authenticate
 
             # http://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate

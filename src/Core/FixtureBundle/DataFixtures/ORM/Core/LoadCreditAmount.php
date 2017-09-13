@@ -16,9 +16,11 @@ class LoadCreditAmount extends AbstractFixture implements OrderedFixtureInterfac
     {
         $user = $this->getReference('admin');
         $amts = [100.00, 500.00, 1000.00];
-        foreach($amts as $amt){
+        $amt_pay = [99.00, 489.00, 969.00];
+        foreach($amts as $key => $amt){
             $pt = new CreditAmount();
             $pt->setPrice($amt)
+               ->setPayAmount($amt_pay[$key])
                ->setUserCreate($user);
             
             $em->persist($pt);

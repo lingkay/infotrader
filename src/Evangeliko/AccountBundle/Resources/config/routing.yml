@@ -41,3 +41,20 @@ evangeliko_credit_submit:
     path: /credit
     methods: [POST]
     defaults: { _controller: EvangelikoAccountBundle:Credit:submit }
+
+evangeliko_new_order:
+    path: /orders/new/{amount}
+    defaults: { _controller: EvangelikoAccountBundle:Orders:new }
+
+evangeliko_show_order:
+    path: /orders/{id}/show
+    defaults: { _controller: EvangelikoAccountBundle:Orders:show }
+
+app_orders_paymentcreate:
+    path: /orders/{id}/payment/create
+    defaults: { _controller: EvangelikoAccountBundle:Orders:paymentCreate }
+
+evangeliko_payment_complete:
+    path: /orders/{id}/payment/complete
+    methods: [GET]
+    defaults: { _controller: EvangelikoAccountBundle:Orders:paymentComplete }

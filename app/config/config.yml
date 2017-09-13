@@ -135,3 +135,16 @@ fos_http_cache:
                     vary: [Accept-Encoding, Accept-Language]
 
 nelmio_api_doc: ~
+
+jms_payment_core:
+    encryption:
+        secret: def0000068558b290bb54ca3b3a396d4521c052a4bc06a9324e909b807cd0525e7ccfb855916adb1d4cd1349728d4ca66a111c67129a12a39ad6fc4527e255d1f8d4a72d
+
+jms_payment_paypal:
+    username: kd_laquian-facilitator_api1.yahoo.com
+    password: 5G26QTC3AL5EJA4L
+    signature: AFcWxV21C7fd0v3bYYYRCpSSRl31AV.yMc5qhNKgnjqwT9Q3PdH17ZFT
+
+services:
+    fos_user.doctrine_registry:
+        alias: doctrine

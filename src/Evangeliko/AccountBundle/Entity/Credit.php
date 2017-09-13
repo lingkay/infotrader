@@ -30,6 +30,9 @@ class Credit
 	/** @ORM\Column(type="decimal", precision=10, scale=2, nullable=true) */
 	protected $amount;
 
+	/** @ORM\OneToMany(targetEntity="\Evangeliko\AccountBundle\Entity\CreditHistory", mappedBy="credit") */
+	protected $history;
+
 	function __construct()
 	{
 		$this->initTrackCreate();
@@ -56,6 +59,11 @@ class Credit
 	public function getAmount()
 	{
 		return $this->amount;
+	}
+
+	public function getCreditHistory()
+	{
+		return $this->history;
 	}
 
 	public function toData()

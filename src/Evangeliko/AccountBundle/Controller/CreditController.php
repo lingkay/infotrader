@@ -2,15 +2,17 @@
 
 namespace Evangeliko\AccountBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
+
 use Doctrine\DBAL\DBALException;
 use Core\ValidationException;
 
+use Evangeliko\AccountBundle\Entity\Order;
 use Evangeliko\AccountBundle\Entity\Account;
 use Evangeliko\AccountBundle\Entity\Credit;
 use Evangeliko\AccountBundle\Entity\CreditHistory;
@@ -43,6 +45,10 @@ class CreditController extends Controller
 		}
 		$params['notifs'] = $notif_list;
 
+		// $session = $this->request->getSession();
+
+		// $session->set('credit_redirect', $data['redirect_id']);
+
 		if(isset($data['redirect_id'])){
 			$params['redirect_id'] = $data['redirect_id'];
 			$params['deduct'] = $data['amt_deduct'];
@@ -52,7 +58,7 @@ class CreditController extends Controller
 		}
 
 		foreach ($amts as $amt) {
-			$amt_list[$amt->getPrice()] = $amt->getPrice();
+			$amt_list[$amt->getPayAmount()] = $amt->getPrice();
 		}
 
 		$params['amt_opts'] = $amt_list;
@@ -74,32 +80,40 @@ class CreditController extends Controller
 
 			$acct_credit = $em->getRepository("EvangelikoAccountBundle:Credit")->find($data['account_credit_id']);
 
-			$balance = floatval($acct_credit->getAmount()) + $data['reload_amount'];
-			$acct_credit->setAmount($balance);
-
-			$history = new CreditHistory();
-
-			$history->setCredit($acct_credit)
-			        ->setAmount($data['reload_amount'])
-			        ->setUserCreate($this->getUser());
-
-			$em->persist($history);
+			$order = new Order($data['reload_amount'],$acct_credit);
+			$em->persist($order);
 			$em->flush();
 
-			$this->addFlash('success', "Credit reload complete.");
+			return $this->redirect($this->generateUrl('evangeliko_show_order', [
+				'id' => $order->getId(),
+			]));
 
-			if($data['redirect'] != "false"){
-				$url = $this->generateUrl('evangeliko_view_free_post', array('id' => $data['redirect']));
-				$amount = floatval($data['reload_amount']) - floatval($data['amt_deduct']);
+			// $balance = floatval($acct_credit->getAmount()) + $data['reload_amount'];
+			// $acct_credit->setAmount($balance);
 
-				$acct_credit->setAmount($amount);
+			// $history = new CreditHistory();
 
-				$em->flush();
-			}else{
-	            $url = $this->request->headers->get("referer");
-			}
+			// $history->setCredit($acct_credit)
+			        // ->setAmount($data['reload_amount'])
+			        // ->setUserCreate($this->getUser());
 
-            return new RedirectResponse($url);  
+			// $em->persist($history);
+			// $em->flush();
+
+			// $this->addFlash('success', "Credit reload complete.");
+
+			// if($data['redirect'] != "false"){
+			// 	$url = $this->generateUrl('evangeliko_view_free_post', array('id' => $data['redirect']));
+			// 	$amount = floatval($data['reload_amount']) - floatval($data['amt_deduct']);
+
+			// 	$acct_credit->setAmount($amount);
+
+			// 	$em->flush();
+			// }else{
+	  //           $url = $this->request->headers->get("referer");
+			// }
+
+   //          return new RedirectResponse($url);  
 
         } catch (ValidationException $e) {
             $this->addFlash('error', $e->getMessage());

@@ -1,280 +1,142 @@
-{% extends 'CoreTemplateBundle::base.html.twig' %}
+{% extends 'CoreTemplateBundle::base_community.html.twig' %}
 {% import 'CoreTemplateBundle::macro.html.twig' as form %}
 
 {% block content %}
-{# <div class="row">
-    <div class="col-md-12">
-        <div class="col-md-9">
-            <div class="container-fluid">
-                <div class="jumbotron">
-                    <form class="form-horizontal" method="post" id="post-form" action="{{ path('evangeliko_post_submit') }}">
-                        <div class="form-body">
-                            <div id="cgroup-post" class="form-group">
-                                <div class="col-md-12">
-                                    <div id="cgroup-upload" class="form-group">
-                                        <label class="col-md-2 control-label"><a href="#">Upload Photo</a></label>    
-                                    </div>
-                                    {{ form.hidden('account_type', 'account') }}
-                                    {{ form.hidden('community_id', object.getID ) }}
-                                    {{ form.group_selectnew("Post Type", "post_type", post_type, '', 2, 4, {requried:true, }) }}
-                                    <div id="paid_post" style="display:none;">
-                                        {{ form.group_number("Amount", "amount", 0, 2, 4)}}
-                                    </div>
-                                    <textarea id="cform-post" name="post" class="form-control" rows="3" placeholder="What's on your mind?"></textarea>
-                                    {{ form.hidden('parent', '') }}
-                                    <button id="post-btn" type="submit" class="btn btn-primary pull-right">Post</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="container-fluid">
-                <div class="col-md-12">
-                    <div class="row">
-                        {% set src = asset('bundles/coretemplate/assets/img/no_photo.png')  %}
-                        {% if communities is not null %}
-                            {% for community in communities %}
-                            <form class="form-horizontal" method="post" action="{{ path('evangeliko_community_follow') }}">
-                                <div class="col-md-4">
-                                    <div class="jumbotron">
-                                        <div class="container">
-                                            <div style="background-color: white !important;">
-                                                <img alt="" src="{{ src }}" height="200" width="200" border="5" class="img-responsive center-block" />
-                                                <div style="text-align: center;">
-                                                    {{ form.hidden('community_id', community.id) }}
-                                                    {{ community.name }}
-                                                    <button id="post-btn" type="submit" class="btn btn-primary">Follow</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        {% endfor %}
-                    {% endif %}
-                    </div>
-                </div>
-            </div>
-            <div id="posts">
-                {% if posts is not null %}
-                    {% for post in posts %}
-                        <div class="container-fluid">
-                            <div class="jumbotron">
-                                <div class="form-body form-horizontal">
-                                    <div class="form-group">
-                                        <a href="#">{{ post.getUserCreate.getAccount.getFullName }}</a>
-                                    </div>
-                                    <div class="form-group">
-                                        {{ post.getTimePassed }}
-                                    </div>
-                                    <div class="container">
-                                        <div class="col-md-12" style="background-color: white !important;">
-                                            <div class="short-message">
-                                                <br>
-                                                {{ form.hidden('type_post', post.getPostType) }}
-                                                <div class="form-group">
-                                                    <div class="col-md-offset-1 col-md-10 col-md-offset-1">
-                                                        <textarea id="cform-post" name="post" class="form-control" rows="2" readonly>{{ post.getShortMessage}}</textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="read-more pull-right">
-                                                    <input type="hidden" name="post_id" class="post_type" value="{{post.getPostType}}">
-                                                    <a class="read-more-a">Read More</a>
-                                                </div>
-                                            </div>
-                                            <div class="full-text" style="display: none;">
-                                                <br>
-                                                <div class="form-group">
-                                                    <div class="col-md-offset-1 col-md-10 col-md-offset-1">
-                                                        <textarea id="cform-post" name="post" class="form-control" rows="5" readonly>{{ post.getMessage}}</textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="full-text-div pull-right">
-                                                    <input type="hidden" name="post_id" class="post_type" value="{{post.getPostType}}">
-                                                    <a class="collapse-a">Collapse</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-        </div>
-    </div>
-</div> #}
-<div class="feed--tabs">
-    <div class="container">
-        <div class="row">
-            <ul class="feed--tabs--menu">
-                <li class="active">
-                    <a href="#">My article</a>
-                </li>
-                <li>
-                    <a href="#">You've Read</a>
-                </li>
-            </ul>
-            <div class="btn btn-info">Post</div>
-        </div>
-    </div>
-</div>
-    <div class="page--wrap--contents">
+    <div class="feed--tabs">
         <div class="container">
             <div class="row">
+                <div class="dropdown feed--tabs--menu--mobile visible-xs">
+                    <div class="container">
+                        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Featured
+                            <span><i class="small material-icons">keyboard_arrow_down</i></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Trending</a></li>
+                            <li><a href="#">What's new</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <ul class="feed--tabs--menu hidden-xs">
+                    <li class="active">
+                        <a href="#">Featured</a>
+                    </li>
+                    <li>
+                        <a href="#">Trending</a>
+                    </li>
+                    <li>
+                        <a href="#">What's new</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page--wrap--contents">
+
+        <div class="container">
+
+            <div class="row">
+
                 <div class="grid articles">
-                    <div class="articles--single grid-item col-sm-6">
-                        <!-- add inner element for column content -->
-                        <div class="grid-item-content">
-                            <div class="grid-item-content--text">
-                                <h3>The quick brown fox jumps over the lazy dog.</h3>
-                                <p>
-                                    The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.
-                                </p>
-                            </div>
-                            <img src="http://via.placeholder.com/460x212" alt="" class="img-responsive">
-                            <div class="grid-item-content--share">
-                            <ul>
-                                <li>
-                                    <a href="#" class="grid-item-content--share--button honeys">
-                                        <i class="small material-icons">menu</i> 5 honeys
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="grid-item-content--share--button comments">
-                                        <i class="small material-icons">chat_bubble_outline</i> 4 comments
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="grid-item-content--share--button shares">
-                                        <i class="small material-icons">share</i> 6 shares
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="grid-item-content--share--button more">
-                                        <i class="small material-icons">more_horiz</i>
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="clearfix"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="articles--single grid-item col-sm-6">
-                        <!-- add inner element for column content -->
-                        <div class="grid-item-content">
-                            <div class="grid-item-content--text">
-                                <h3>The quick brown fox jumps over the lazy dog.</h3>
-                                <p>
-                                    The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.
-                                </p>
-                            </div>
-                            <img src="http://via.placeholder.com/460x212" alt="" class="img-responsive">
-                            <div class="grid-item-content--share">
-                                <ul>
-                                    <li>
-                                        <a href="#" class="grid-item-content--share--button honeys">
-                                            <i class="small material-icons">menu</i> 5 honeys
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="grid-item-content--share--button comments">
-                                            <i class="small material-icons">chat_bubble_outline</i> 4 comments
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="grid-item-content--share--button shares">
-                                            <i class="small material-icons">share</i> 6 shares
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="grid-item-content--share--button more">
-                                            <i class="small material-icons">more_horiz</i>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="grid-sizer col-sm-6"></div>
+                    <div class="gutter-sizer"></div>
 
-                    <div class="articles--single grid-item col-sm-6">
-                    <!-- add inner element for column content -->
-                        <div class="grid-item-content">
-                            <div class="grid-item-content--text">
-                                <h3>The quick brown fox jumps over the lazy dog.</h3>
-                                <p>
-                                    The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.
-                                </p>
-                            </div>
-                            <img src="http://via.placeholder.com/460x212" alt="" class="img-responsive">
-                            <div class="grid-item-content--share">
-                                <ul>
-                                    <li>
-                                        <a href="#" class="grid-item-content--share--button honeys">
-                                            <i class="small material-icons">menu</i> 5 honeys
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="grid-item-content--share--button comments">
-                                            <i class="small material-icons">chat_bubble_outline</i> 4 comments
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="grid-item-content--share--button shares">
-                                            <i class="small material-icons">share</i> 6 shares
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="grid-item-content--share--button more">
-                                            <i class="small material-icons">more_horiz</i>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
-                    </div>
+                    {% if posts is not null %}
+                        {% for post in posts %}
 
-                    <div class="articles--single grid-item col-sm-6">
-                    <!-- add inner element for column content -->
-                        <div class="grid-item-content">
-                            <div class="grid-item-content--text">
-                                <h3>The quick brown fox jumps over the lazy dog.</h3>
-                                <p>
-                                    The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.
-                                </p>
+                            <div class="articles--single grid-item col-sm-6">
+                                <!-- add inner element for column content -->
+                                <div class="grid-item-content">
+                                    <div class="grid-item-content--text author">
+
+                                        <img src="http://via.placeholder.com/30x30" alt="" class="img-circle">
+                                        <div class="author--details">
+                                            <h5>{{ post.getUserCreate.getAccount.getFullName }}</h5>
+                                            <small>{{ post.getTimePassed }}</small>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <input type="hidden" name="post_id" class="post_type" value="{{post.getPostType}}">
+                                    </div>
+
+                                    {% if post.getPostType == 'Paid' %}
+                                        {% if post.getUserCreate.getID == app.getUser.getID %}
+                                            <div class="grid-item-content--text">
+                                                <h3>{{ post.getTitle }}</h3>
+                                                <p>
+                                                    {{ post.getMessage }}
+                                                </p>
+                                            </div>
+                                            <img src="http://via.placeholder.com/460x212" alt="" class="img-responsive">
+                                            <div class="grid-item-content--share">
+                                                <ul>
+                                                    <li>
+                                                        <a href="#" class="grid-item-content--share--button honeys">
+                                                            <i class="small material-icons">menu</i> honeys
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="grid-item-content--share--button comments">
+                                                            <i class="small material-icons">chat_bubble_outline</i> comments
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="grid-item-content--share--button shares">
+                                                            <i class="small material-icons">share</i> shares
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="grid-item-content--share--button more">
+                                                            <a href="{{ path('evangeliko_view_free_post', {'id':post.getID}) }}"><i class="small material-icons">more_horiz</i></a>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        {% else %}
+                                            <div class="grid-item-content--text">
+                                                <h3>{{ post.getTitle }}</h3>
+                                                <a href="" class="btn btn-default">Read this article for {{ post.getAmount }} credits only.</a>
+                                            </div>
+                                        {% endif %}
+                                    {% else %}
+                                        <div class="grid-item-content--text">
+                                            <h3>{{ post.getTitle }}</h3>
+                                            <p>
+                                                {{ post.getMessage }}
+                                            </p>
+                                        </div>
+                                        <img src="http://via.placeholder.com/460x212" alt="" class="img-responsive">
+                                        <div class="grid-item-content--share">
+                                            <ul>
+                                                <li>
+                                                    <a href="#" class="grid-item-content--share--button honeys">
+                                                        <i class="small material-icons">menu</i> honeys
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="grid-item-content--share--button comments">
+                                                        <i class="small material-icons">chat_bubble_outline</i> comments
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="grid-item-content--share--button shares">
+                                                        <i class="small material-icons">share</i> shares
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="grid-item-content--share--button more">
+                                                        <a href="{{ path('evangeliko_view_free_post', {'id':post.getID}) }}"><i class="small material-icons">more_horiz</i></a>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
-                            <img src="http://via.placeholder.com/460x212" alt="" class="img-responsive">
-                            <div class="grid-item-content--share">
-                                <ul>
-                                    <li>
-                                        <a href="#" class="grid-item-content--share--button honeys">
-                                            <i class="small material-icons">menu</i> 5 honeys
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="grid-item-content--share--button comments">
-                                            <i class="small material-icons">chat_bubble_outline</i> 4 comments
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="grid-item-content--share--button shares">
-                                            <i class="small material-icons">share</i> 6 shares
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" class="grid-item-content--share--button more">
-                                            <i class="small material-icons">more_horiz</i>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
-                    </div>
+                        {% endfor %}
+                    {% endif %}
+
                 </div>
             </div>
         </div>
@@ -282,37 +144,4 @@
 {% endblock %}
 
 {% block js %}
-<script type="text/javascript">
-$(document).ready(function(e){
-
-	$('#cform-post_type').change(function(){
-        var post_type = $(this).val();
-
-        if(post_type == 'paid'){
-            $("#paid_post").show();
-        }else{
-            $('#cform-amount').val(0);
-            $("#paid_post").hide();
-        }
-    });
-
-    $('#posts').on('click', '.read-more-a', function() {
-        var read_more_div = $(this).parent("div");
-        var short_msg_div = read_more_div.parent("div");
-        var parent_div = short_msg_div.parent("div");
-        var full_msg_div = parent_div.find(".full-text")
-        short_msg_div.hide();
-        full_msg_div.show();
-    });
-
-    $('#posts').on('click', '.collapse-a', function() {
-        var read_more_div = $(this).parent("div");
-        var full_msg_div = read_more_div.parent("div");
-        var parent_div = full_msg_div.parent("div");
-        var short_msg_div = parent_div.find(".short-message")
-        short_msg_div.show();
-        full_msg_div.hide();
-    });
-});
-</script>
 {% endblock %}

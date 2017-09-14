@@ -1,35 +1,159 @@
 {% extends 'CoreTemplateBundle::base.html.twig' %}
 {% import 'CoreTemplateBundle::macro.html.twig' as form %}
 {% block content %}
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12">
-		<div class="container-fluid">
-			<form class="form-horizontal" method="post" action="{{ path('evangeliko_profile_edit_submit') }}">
-				<div class="jumbotron">
-					<div class="container">
-						<div class="col-md-12" style="background-color: white !important;">
-							<div class="form-body">
-								<h4 class="form-section">Personal Information</h4>
-								{{ form.hidden("user", object.getID|default(null)) }}
-								{{ form.group_email("Email", "email", object.getEmail, 3, 4, true) }}
-								{{ form.group_textnew("First Name",'first_name', object.getFirstName|default(""),3,4) }}
-								{{ form.group_textnew("Last Name",'last_name', object.getLastName|default(""),3,4) }}
-								{{ form.group_textnew("Phone Number",'phone_number', object.getLandlineNumber|default(""),3,4) }}
-								{{ form.group_textnew("Mobile Number",'mobile_number', object.getMobileNumber|default(""),3,4) }}
-								{{ form.group_textarea('About Me', 'about_me', object.getAbout|default(""), 3, 3, 4) }}
-								{{ form.group_selectnew("Interest", "interest[]", interest, object.getInterests|default(""), 3, 4, {requried:true, multi: true}) }}
-								<div class="col-md-7">
-									<div class="form-actions fluid pull-right">
-										<button type="submit" class="btn btn-primary">Submit</button>
-									</div>
+	<div class="jumbotron jumbotron--profile">
+		<div class="container">
+			<div class="jumbotron--contents">
+				<div class="row">
+					<div class="col-md-6 col-md-push-6">
+						<div class="jumbotron--profile--image row">
+							<img src="http://via.placeholder.com/100x100" alt="" class="img-circle">
+						</div>
+					</div>
+					<div class="col-md-4 col-md-pull-6">
+						<div class="row">
+							<h1>{{ profile.getFirstName }} {{ profile.getLastName }}</h1>
+							<p><small>Hive member since {{ account.getDateCreateFormatted }}</small></p>
+							<br>
+							<p>Visionary, Dreamer, Future maker, Planner<br/>The quick brown fox jumps over the lazy dog</p>
+							<p><span>Editor of</span> <strong>All About Earth</strong></p>
+							<div class="row">
+								<div class="col-sm-4">
+									<p><strong>520</strong> Following</p>
 								</div>
-								<br>
+								<div class="col-sm-4">
+									<p><strong>250</strong> Followers</p>
+								</div>
 							</div>
+							<a href="#" class="btn btn-default">Follow</a>
 						</div>
 					</div>
 				</div>
-			</form>
+			</div>
 		</div>
 	</div>
-</div>
+
+	<div class="feed--tabs">
+		<div class="container">
+			<div class="dropdown feed--tabs--menu--mobile visible-xs">
+				<div class="container">
+					<button class="btn dropdown-toggle" type="button" data-toggle="dropdown">My article
+						<span><i class="small material-icons">keyboard_arrow_down</i></span></button>
+					<ul class="dropdown-menu">
+						<li><a href="#">You've Read</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<ul class="feed--tabs--menu hidden-xs">
+				<li class="active">
+					<a href="#">My article</a>
+				</li>
+				<li>
+					<a href="#">You've Read</a>
+				</li>
+			</ul>
+            {#{% if user.getAccount == account.getId %}#}
+			<a class="btn btn-info" href="{{ path('evangeliko_post_user_article') }}">Post</a>
+            {#{% endif %}#}
+		</div>
+	</div>
+
+	<div class="page--wrap--contents">
+		<div class="container">
+			<div class="row">
+				<div class="grid articles">
+                    {#<div class="grid-sizer col-sm-6"></div>#}
+					<div class="gutter-sizer"></div>
+
+                    {% if posts is not null %}
+                        {% for post in posts %}
+							<div class="articles--single grid-item col-sm-6">
+								<!-- add inner element for column content -->
+								<div class="grid-item-content">
+									<input type="hidden" name="post_id" class="post_type" value="{{post.getPostType}}">
+
+                                    {% if post.getPostType == 'Paid' %}
+                                        {% if post.getUserCreate.getID == app.getUser.getID %}
+											<div class="grid-item-content--text">
+												<h3>{{ post.getTitle }}</h3>
+												<p>
+                                                    {{ post.getMessage }}
+												</p>
+											</div>
+											<img src="http://via.placeholder.com/460x212" alt="" class="img-responsive">
+											<div class="grid-item-content--share">
+												<ul>
+													<li>
+														<a href="#" class="grid-item-content--share--button honeys">
+															<i class="small material-icons">menu</i> honeys
+														</a>
+													</li>
+													<li>
+														<a href="#" class="grid-item-content--share--button comments">
+															<i class="small material-icons">chat_bubble_outline</i> comments
+														</a>
+													</li>
+													<li>
+														<a href="#" class="grid-item-content--share--button shares">
+															<i class="small material-icons">share</i> shares
+														</a>
+													</li>
+													<li>
+														<a href="#" class="grid-item-content--share--button more">
+															<a href="{{ path('evangeliko_view_free_post', {'id':post.getID}) }}"><i class="small material-icons">more_horiz</i></a>
+														</a>
+													</li>
+												</ul>
+												<div class="clearfix"></div>
+											</div>
+                                        {% else %}
+											<div class="grid-item-content--text">
+												<h3>{{ post.getTitle }}</h3>
+												<a href="" class="btn btn-default">Read this article for {{ post.getAmount }} credits only.</a>
+											</div>
+                                        {% endif %}
+                                    {% else %}
+										<div class="grid-item-content--text">
+											<h3>{{ post.getTitle }}</h3>
+											<p>
+                                                {{ post.getMessage }}
+											</p>
+										</div>
+										<img src="http://via.placeholder.com/460x212" alt="" class="img-responsive">
+										<div class="grid-item-content--share">
+											<ul>
+												<li>
+													<a href="#" class="grid-item-content--share--button honeys">
+														<i class="small material-icons">menu</i> honeys
+													</a>
+												</li>
+												<li>
+													<a href="#" class="grid-item-content--share--button comments">
+														<i class="small material-icons">chat_bubble_outline</i> comments
+													</a>
+												</li>
+												<li>
+													<a href="#" class="grid-item-content--share--button shares">
+														<i class="small material-icons">share</i> shares
+													</a>
+												</li>
+												<li>
+													<a href="#" class="grid-item-content--share--button more">
+														<a href="{{ path('evangeliko_view_free_post', {'id':post.getID}) }}"><i class="small material-icons">more_horiz</i></a>
+													</a>
+												</li>
+											</ul>
+											<div class="clearfix"></div>
+										</div>
+                                    {% endif %}
+								</div>
+							</div>
+                        {% endfor %}
+                    {% endif %}
+
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

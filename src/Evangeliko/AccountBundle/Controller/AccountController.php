@@ -21,20 +21,20 @@ class AccountController extends Controller
 {
 	protected $request;
 
-	public function indexAction(Request $request)
-	{
-		$this->request = $request;
+    public function indexAction(Request $request)
+    {
+        $this->request = $request;
 
-		$user = $this->getUser();
+        $user = $this->getUser();
 
-		$params['object'] = $user->getAccount();
+        $params['account'] = $user->getAccount();
 
-		$em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
-		$params['post_type'] = [
-			'free' => 'Free',
-			'paid' => 'Paid'
-		];
+        $params['post_type'] = [
+            'free' => 'Free',
+            'paid' => 'Paid'
+        ];
 
         // $community = $em->getRepository("EvangelikoCommunityBundle:Community")->createQueryBuilder("o")
         //                 ->where('o.type = :public')
@@ -42,53 +42,55 @@ class AccountController extends Controller
         //                 ->getQuery()
         //                 ->getResult();
 
-		$community = $em->getRepository("EvangelikoCommunityBundle:Community")->findAll();
+        $community = $em->getRepository("EvangelikoCommunityBundle:Community")->findAll();
 
-		$community_list = [];
+        $community_list = [];
 
-		$community_followed = [];
+        $community_followed = [];
 
-		foreach ($user->getAccount()->getCommunityFollowed() as $follow) {
-			$community_followed[] = $follow->getCommunity()->getID();
-		}
-
-		foreach ($community as $c) {
-			if(!in_array($c->getID(), $community_followed)){
-				if(!empty(array_intersect($user->getAccount()->getInterests(), $c->getInterests()))){	
-					$community_list[] = $c->toData();
-				}
-			}
-		}
-
-		$params['communities'] = $community_list;
-
-        $posts = $em->getRepository('EvangelikoPostBundle:Post')
-                    ->findBy(
-                		array('account' => $this->getUser()->getAccount()),
-                		array('date_create' => 'DESC')
-            		);
-        $post_array = array();
-        foreach ($posts as $post){
-        	$post_array[$post->getID()] = $post;
+        foreach ($user->getAccount()->getCommunityFollowed() as $follow) {
+            $community_followed[] = $follow->getCommunity()->getID();
         }
 
-		$params['posts'] = $post_array;
+        foreach ($community as $c) {
+            if(!in_array($c->getID(), $community_followed)){
+                if(!empty(array_intersect($user->getAccount()->getInterests(), $c->getInterests()))){
+                    $community_list[] = $c->toData();
+                }
+            }
+        }
 
-		$account = $this->getUser()->getAccount();
+        $params['communities'] = $community_list;
 
-		$notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+        $posts = $em->getRepository('EvangelikoPostBundle:Post')
+            ->findBy(
+                [],
+                array('date_create' => 'DESC')
+            );
+        $post_array = array();
+        foreach ($posts as $post){
+            if ($post->getParent() == NULL) {
+                $post_array[$post->getID()] = $post;
+            }
+        }
 
-		$notif_list = [];
+        $params['posts'] = $post_array;
 
-		foreach ($notifs as $notif) {
-			$notif_list[] = $notif;
-		}
-		$params['notifs'] = $notif_list;
+        $account = $this->getUser()->getAccount();
 
-		$twig_file = 'EvangelikoAccountBundle:Account:index.html.twig';
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+
+        $notif_list = [];
+
+        foreach ($notifs as $notif) {
+            $notif_list[] = $notif;
+        }
+        $params['notifs'] = $notif_list;
+
+        $twig_file = 'EvangelikoAccountBundle:Account:index.html.twig';
 
         return $this->render($twig_file, $params);
-	}
+    }
 
 	public function ajaxPostAction(Request $request)
 	{

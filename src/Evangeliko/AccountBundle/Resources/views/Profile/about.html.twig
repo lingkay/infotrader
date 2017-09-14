@@ -1,0 +1,36 @@
+{% extends 'CoreTemplateBundle::base.html.twig' %}
+{% import 'CoreTemplateBundle::macro.html.twig' as form %}
+{% block content %}
+
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12">
+			<div class="container-fluid">
+				<form class="form-horizontal" method="post" action="{{ path('evangeliko_profile_edit_submit') }}">
+					<div class="jumbotron">
+						<div class="container">
+							<div class="col-md-12" style="background-color: white !important;">
+								<div class="form-body">
+									<h4 class="form-section">Personal Information</h4>
+                                    {{ form.hidden("user", account.getID|default(null)) }}
+                                    {{ form.group_email("Email", "email", account.getEmail, 3, 4, true) }}
+                                    {{ form.group_textnew("First Name",'first_name', account.getFirstName|default(""),3,4) }}
+                                    {{ form.group_textnew("Last Name",'last_name', account.getLastName|default(""),3,4) }}
+                                    {{ form.group_textnew("Phone Number",'phone_number', account.getLandlineNumber|default(""),3,4) }}
+                                    {{ form.group_textnew("Mobile Number",'mobile_number', account.getMobileNumber|default(""),3,4) }}
+                                    {{ form.group_textarea('About Me', 'about_me', account.getAbout|default(""), 3, 3, 4) }}
+                                    {{ form.group_selectnew("Interest", "interest[]", interest, account.getInterests|default(""), 3, 4, {requried:true, multi: true}) }}
+									<div class="col-md-7">
+										<div class="form-actions fluid pull-right">
+											<button type="submit" class="btn btn-primary">Submit</button>
+										</div>
+									</div>
+									<br>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

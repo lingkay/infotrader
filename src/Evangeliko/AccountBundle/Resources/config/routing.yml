@@ -3,12 +3,17 @@ evangeliko_account_index:
     defaults: { _controller: EvangelikoAccountBundle:Account:index }
 
 evangeliko_profile_index:
-    path: /profile
+    path: /profile/{id}
     methods: [GET]
     defaults: { _controller: EvangelikoAccountBundle:Profile:index }
 
+evangeliko_profile_about:
+    path: /profile/about
+    methods: [GET]
+    defaults: { _controller: EvangelikoAccountBundle:Profile:profileAbout }
+
 evangeliko_profile_edit_submit:
-    path: /profile
+    path: /profile/about
     methods: [POST] 
     defaults: { _controller: EvangelikoAccountBundle:Profile:profileEdit }
 

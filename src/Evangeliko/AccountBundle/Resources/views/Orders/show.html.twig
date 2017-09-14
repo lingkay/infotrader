@@ -30,7 +30,7 @@
 					</div>
 				</div>
 				<div class="col-md-8">
-					{{ form_tool.group_textnew("Total Price", "total_price","$"~ order.amount, 3, 4) }}
+					{{ form_tool.group_textnew("Total Price", "total_price","$"~ order.amount, 3, 4, {'readonly': true}) }}
 					{{ form_start(form) }}
 					<br><br><br>
 					<div class="form-group">

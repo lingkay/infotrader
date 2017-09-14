@@ -11,7 +11,7 @@
                     <div class="jumbotron--contents">
                         <h1>{{page.getName}}</h1>
                         <p>{{page.getDescription}}</p>
-                        <p><a href="{{ path('evangeliko_community_view', {'slug': page.getSlug}) }}">www.infotrader.dev/community/{{page.getSlug}}</a></p>
+                        <p><a href="{{ path('evangeliko_community_view', {'slug': page.getSlug}) }}">{{ app.request.getSchemeAndHttpHost() ~ "/community/" ~ page.getSlug }}</a></p>
                         <a href="{{ path('evangeliko_community_edit_page', {'slug': page.getSlug }) }}" class="btn btn-default">Edit</a>
                         {#<a href="#" class="btn btn-default btn-md" style="background-color: transparent; color: #337ab7;">UNBLESS</a>#}
                         <a href="#" class="btn btn-default btn-md" style="background-color: transparent; color: #337ab7;">FOLLOWED</a>

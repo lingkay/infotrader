@@ -95,7 +95,16 @@
                                         {% else %}
                                             <div class="grid-item-content--text">
                                                 <h3>{{ post.getTitle }}</h3>
-                                                <a href="" class="btn btn-default">Read this article for {{ post.getAmount }} credits only.</a>
+                                                {% if account.getCredit.getAmount >= post.getAmount %}
+                                                    <form id="add-post-form" action="{{ path('evangeliko_view_post') }}">
+                                                    {{ form.hidden('post_id', post.getID) }}
+                                                    {{ form.hidden('amount_modal', post.getAmount)}}
+                                                    {# <a href="{{ path('evangeliko_view_post', {'id': post.getID}) }}" class="btn btn-default">Read this article for {{ post.getAmount }} credits only.</a> #}
+                                                    <button class="btn btn-default">Read this article for {{ post.getAmount }} credits only.</button>
+                                                    </form>
+                                                {% else %}
+                                                    <a href="{{ path('evangeliko_view_paid_post', {'id': post.getID}) }}" class="btn btn-default">Read this article for {{ post.getAmount }} credits only.</a>   
+                                                {% endif %}
                                             </div>
                                         {% endif %}
                                     {% else %}

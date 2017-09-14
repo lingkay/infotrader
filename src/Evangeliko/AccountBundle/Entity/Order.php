@@ -30,10 +30,25 @@ class Order
      */
     protected $credit;
 
-    public function __construct($amount,$credit)
+    /** @ORM\Column(type="integer") */
+    private $redirect;
+
+    public function __construct($amount,$credit,$redirect)
     {
         $this->amount = $amount;
         $this->credit = $credit;
+        $this->redirect = $redirect;
+    }
+
+    public function setRedirectID($redirect)
+    {
+        $this->redirect = $redirect;
+        return $this;
+    }
+
+    public function getRedirectID()
+    {
+        return $this->redirect;
     }
 
     public function setCredit($credit)

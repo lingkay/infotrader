@@ -20,75 +20,157 @@ class PostController extends Controller
 {
 	protected $request;
 
-	public function postAction(Request $request)
-	{
-		$this->request = $request;
+    public function indexAction(Request $request, $slug)
+    {
+        $this->request = $request;
 
-		$user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
 
-		$em = $this->getDoctrine()->getManager();
+        $community = $em->getRepository("EvangelikoCommunityBundle:Community")->findOneBy(['slug' => $slug]);
 
-		$data = $this->request->request->all();
+        $twig_file = "EvangelikoCommunityBundle:Community:create_post.html.twig";
 
-		$post = new Post();
+        $params['page'] = $community;
 
-		if($data['account_type'] == 'community'){
-			$community = $em->getRepository("EvangelikoCommunityBundle:Community")->find($data['community_id']);
-			$post->setCommunity($community);
-		}else{
-			$account = $em->getRepository("EvangelikoAccountBundle:Account")->find($data['community_id']);
-			$post->setAccount($account);
-		}
+        $pts = $em->getRepository("EvangelikoPostBundle:PostType")->findAll();
 
-		if(isset($data['post_type'])){
-			$post->setPostType($data['post_type']);
-			if($data['post_type'] == 'Paid'){
-				$post->setAmount($data['amount']);
-			}
-		}
+        $pt_list = [];
 
-		if($data['parent'] != NULL){
-			$parent = $em->getRepository("EvangelikoPostBundle:Post")->find($data['parent']);
+        foreach ($pts as $pt) {
+            $pt_list[$pt->getName()] = $pt->getName();
+        }
 
-			$post->setMessage($data['reply'])
-			     ->setTitle($parent->getTitle())
-			     ->setParent($parent);
-		}else{
-			$post->setMessage($data['post'])
-				 ->setTitle($data['post_title']);
-		}
+        $params['post_type'] = $pt_list;
 
-		    $post->setUserCreate($this->getUser());
+        $search_result = [];
 
-		$em->persist($post);
-		$em->flush();
+        $params['search'] = $search_result;
 
-        $url = $this->request->headers->get("referer");
-        return new RedirectResponse($url);
-	}
+        //added
+        $account = $this->getUser()->getAccount();
+        $params['account'] = $account;
 
-	public function viewPostAction(Request $request)
-	{
-		$this->request = $request;
-		$data = $this->request->query->all();
-		$em = $this->getDoctrine()->getManager();
-
-		$post = $em->getRepository("EvangelikoPostBundle:Post")->find($data['post_id']);
-		$params['post'] = $post;
-		$params['object'] = $this->getUser()->getAccount();
-
-		$credit = $this->getUser()->getAccount()->getCredit();
-
-		$amount = $credit->getAmount() - floatval($data['amount_modal']);
-
-		$credit->setAmount($amount);
-
-		$em->flush();
-
-		$twig_file = 'EvangelikoCommunityBundle:Community:view_post.html.twig';
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+        $notif_list = [];
+        foreach ($notifs as $notif) {
+            $notif_list[] = $notif;
+        }
+        $params['notifs'] = $notif_list;
+        //
 
         return $this->render($twig_file, $params);
-	}
+    }
+
+    public function createUserPostAction(Request $request)
+    {
+        $this->request = $request;
+
+        $em = $this->getDoctrine()->getManager();
+
+        $twig_file = "EvangelikoAccountBundle:Profile:create_post.html.twig";
+
+        $pts = $em->getRepository("EvangelikoPostBundle:PostType")->findAll();
+
+        $pt_list = [];
+
+        foreach ($pts as $pt) {
+            $pt_list[$pt->getName()] = $pt->getName();
+        }
+
+        $params['post_type'] = $pt_list;
+
+        $search_result = [];
+
+        $params['search'] = $search_result;
+
+        //added
+        $account = $this->getUser()->getAccount();
+        $params['account'] = $account;
+
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+        $notif_list = [];
+        foreach ($notifs as $notif) {
+            $notif_list[] = $notif;
+        }
+        $params['notifs'] = $notif_list;
+        //
+
+        return $this->render($twig_file, $params);
+    }
+
+    public function postAction(Request $request)
+    {
+        $this->request = $request;
+
+        $user = $this->getUser();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $data = $this->request->request->all();
+
+        $post = new Post();
+        if($data['account_type'] != 'user') {
+            if($data['account_type'] == 'community'){
+                $community = $em->getRepository("EvangelikoCommunityBundle:Community")->find($data['community_id']);
+                $post->setCommunity($community);
+            }else{
+                $account = $em->getRepository("EvangelikoAccountBundle:Account")->find($data['community_id']);
+                $post->setAccount($account);
+            }
+        }
+
+
+        if(isset($data['post_type'])){
+            $post->setPostType($data['post_type']);
+            if($data['post_type'] == 'Paid'){
+                $post->setAmount($data['amount']);
+            }
+        }
+
+        if($data['parent'] != NULL){
+            $parent = $em->getRepository("EvangelikoPostBundle:Post")->find($data['parent']);
+
+            $post->setMessage($data['reply'])
+                ->setTitle($parent->getTitle())
+                ->setParent($parent);
+        }else{
+            $post->setMessage($data['post'])
+                ->setTitle($data['post_title']);
+        }
+
+        $post->setUserCreate($this->getUser());
+
+        $em->persist($post);
+        $em->flush();
+
+//        $url = $this->request->headers->get("referer");
+//        return new RedirectResponse($url);
+//        return new RedirectResponse("/profile");
+        return $this->redirect($this->generateUrl('evangeliko_profile_index'));
+    }
+
+    public function viewPostAction(Request $request)
+    {
+        $this->request = $request;
+        $data = $this->request->query->all();
+        $em = $this->getDoctrine()->getManager();
+
+        $post = $em->getRepository("EvangelikoPostBundle:Post")->find($data['post_id']);
+        $params['post'] = $post;
+        $params['account'] = $this->getUser()->getAccount();
+
+        $credit = $this->getUser()->getAccount()->getCredit();
+
+        $amount = $credit->getAmount() - floatval($data['amount_modal']);
+
+        $credit->setAmount($amount);
+
+        $em->flush();
+
+        $twig_file = 'EvangelikoCommunityBundle:Community:view_post.html.twig';
+
+        return $this->render($twig_file, $params);
+    }
 
 	public function viewFreePostAction(Request $request, $id = null)
 	{

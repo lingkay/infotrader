@@ -1,6 +1,10 @@
-evangeliko_post_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: EvangelikoPostBundle:Default:index }
+evangeliko_post_article:
+    path: community/{slug}/post
+    defaults: { _controller: EvangelikoPostBundle:Post:index }
+
+evangeliko_post_user_article:
+    path: profile/post
+    defaults: { _controller: EvangelikoPostBundle:Post:createUserPost }
 
 evangeliko_post_submit:
     path: /post

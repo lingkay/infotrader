@@ -23,69 +23,40 @@
         <link href="{{ asset('bundles/coretemplate/assets/css/custom.css') }}" rel="stylesheet" type="text/css"/>
         <link href="{{ asset('bundles/coretemplate/assets/css/reject.css') }}" rel="stylesheet" type="text/css"/>
         <link href="{{ asset('bundles/coretemplate/assets/select2-4.0.3/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css"/>
+        {% block css %}{% endblock %}
     </head>
 <body class="page">
 <div id="site-canvas">
     <div class="page--wrap">
         {% embed 'CoreTemplateBundle::top_menu.html.twig' %}{% endembed %}
-<div class="jumbotron jumbotron--profile">
-    <div class="container">
-        <div class="jumbotron--contents">
-            <div class="row">
-                <div class="col-md-6 col-md-push-6">
-                    <div class="jumbotron--profile--image row">
-                        <img src="http://via.placeholder.com/100x100" alt="" class="img-circle">
-                    </div>
-                </div>
-                <div class="col-md-4 col-md-pull-6">
-                    <div class="row">
-                        <h1>{{object.getFirstName}} {{object.getLastName}}</h1> 
-                        <p><small>Hive member since {{object.getDateCreateFormatted}}</small></p>
-                        <br>
-                        <p>Visionary, Dreamer, Future maker, Planner<br/>The quick brown fox jumps over the lazy dog</p>
-                        <p><span>Editor of</span> <strong>All About Earth</strong></p>
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <p><strong>520</strong> Following</p>
-                            </div>
-                            <div class="col-sm-4">
-                                <p><strong>250</strong> Followers</p>
-                            </div>
-                        </div>
-                        <a href="#" class="btn btn-default">Follow</a> 
-                    </div>
-                </div>
-            </div>
+
+        {% block content %}{% endblock %}
+    </div>
+    <footer class="site-footer">
+        <div class="container">
+            <a href="#">Hive <span>/ Copyright 2017</span></a>
+            <ul class="site-footer--menu">
+                <li>
+                    <a href="#">Getting started</a>
+                </li>
+                <li>
+                    <a href="#">Help</a>
+                </li>
+                <li>
+                    <a href="#">Careers</a>
+                </li>
+                <li>
+                    <a href="#">Privacy</a>
+                </li>
+                <li>
+                    <a href="#">Terms</a>
+                </li>
+                <li>
+                    <a href="#">About</a>
+                </li>
+            </ul>
         </div>
-    </div>
-</div>
-    {% block content %}{% endblock %}
-</div>
-<footer class="site-footer">
-    <div class="container">
-        <a href="#">Hive <span>/ Copyright 2017</span></a>
-        <ul class="site-footer--menu">
-            <li>
-                <a href="#">Getting started</a>
-            </li>
-            <li>
-                <a href="#">Help</a>
-            </li>
-            <li>
-                <a href="#">Careers</a>
-            </li>
-            <li>
-                <a href="#">Privacy</a>
-            </li>
-            <li>
-                <a href="#">Terms</a>
-            </li>
-            <li>
-                <a href="#">About</a>
-            </li>
-        </ul>
-    </div>
-</footer>
+    </footer>
 </div>
     <!-- Bootstrap core JavaScript
     ================================================== -->

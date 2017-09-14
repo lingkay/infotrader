@@ -27,6 +27,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class OrdersController extends Controller
 {
+	/**
+     * @Route("/new/{amount}")
+     */
 	public function newAction($amount)
 	{
 	    $em = $this->getDoctrine()->getManager();
@@ -40,6 +43,10 @@ class OrdersController extends Controller
 	    ]));
 	}
 
+	/**
+	 * @Route("/{id}/show")
+	 * @Template
+	 */
 	public function showAction(Request $request, Order $order)
 	{
 		$em = $this->getDoctrine()->getManager();
@@ -111,6 +118,9 @@ class OrdersController extends Controller
 	    return $ppc->createPayment($instruction->getId(), $amount);
 	}
 
+	/**
+	 * @Route("/{id}/payment/create")
+	 */
 	public function paymentCreateAction(Order $order)
 	{
 	    $payment = $this->createPayment($order);

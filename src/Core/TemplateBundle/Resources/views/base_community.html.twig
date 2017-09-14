@@ -1,69 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <link rel="icon" href="../../favicon.ico">
 
-        <title>Evangeliko - Community</title>
+<head>
+    <title>Infotrade</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <link rel="stylesheet" href="{{ asset('bundles/coretemplate/assets/bootstrap/css/bootstrap.min.css') }}"/>
+    <!-- <link rel="stylesheet" href="vendors/fontawesome/css/font-awesome.min.css"/> -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('bundles/coretemplate/assets/jquery-ui/css/jquery-ui.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/coretemplate/assets/css/main.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/coretemplate/assets/css/custom.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/coretemplate/assets/css/reject.css') }}"/>
+    {% block css %}{% endblock %}
+</head>
 
-        <!-- Bootstrap core CSS -->
-        <link href="{{ asset('bundles/coretemplate/assets/bootstrap-3.3.7-dist/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
-
-        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <link href="{{ asset('bundles/coretemplate/assets/css/ie10-viewport-bug-workaround.css') }}" rel="stylesheet" type="text/css"/>
-        <!-- Custom styles for this template -->
-        <link href="{{ asset('bundles/coretemplate/assets/css/custom.css') }}" rel="stylesheet" type="text/css"/>
-        <link href="{{ asset('bundles/coretemplate/assets/font-awesome-4.7.0/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css"/>
-        <link href="{{ asset('bundles/coretemplate/assets/select2-4.0.3/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css"/>
-        {% block css %}{% endblock %}
-    </head>
-    <body>
-        <div class="container-fluid">
-            <div class="row">
-                {% embed 'EvangelikoCommunityBundle:Community:community_left_menu.html.twig' %}{% endembed %}
-                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="padding-left: 0px !important; padding-right: 0px !important;">
-                    {% for flash_msg in app.session.flashbag.get('error') %}
-                    <div class="alert alert-danger alert-dismissable">
-                        <button type="button" 
-                        class="close" data-dismiss="alert" aria-hidden="true"></button>
-                        <strong>Error: </strong>
-                        {{ flash_msg }}
-                    </div>
-                    {% endfor %}
-
-                    {% for flash_msg in app.session.flashbag.get('success') %}
-                    <div class="alert alert-success alert-dismissable">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-                        <strong>Success: </strong>
-                        {{ flash_msg }}
-                    </div>
-                    {% endfor %}
-                    {% block content %}{% endblock %}
-                </div>
-            </div>
+<body class="page">
+    <div id="site-canvas">
+        <div class="page--wrap">
+            {% embed 'CoreTemplateBundle::top_menu.html.twig' %}{% endembed %}
+            {% block content %}{% endblock %}
         </div>
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="{{ asset('bundles/coretemplate/assets/bootstrap-3.3.7-dist/js/bootstrap.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('bundles/coretemplate/assets/select2-4.0.3/dist/js/select2.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('bundles/coretemplate/assets/js/template.js') }}" type="text/javascript"></script>
-<script src="{{ asset('bundles/coretemplate/assets/bootstrap-validator-master/validator.js')}}" type="text/javascript"></script>
-    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
-    <script src="../../assets/js/vendor/holder.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-<script>
-jQuery(document).ready(function() {
-   Template.init();
-});
-</script>
+        <footer class="site-footer">
+            <div class="container">
+                <a href="#">Hive <span>/ Copyright 2017</span></a>
+
+                <ul class="site-footer--menu">
+                    <li>
+                        <a href="#">Getting started</a>
+                    </li>
+                    <li>
+                        <a href="#">Help</a>
+                    </li>
+                    <li>
+                        <a href="#">Careers</a>
+                    </li>
+                    <li>
+                        <a href="#">Privacy</a>
+                    </li>
+                    <li>
+                        <a href="#">Terms</a>
+                    </li>
+                    <li>
+                        <a href="#">About</a>
+                    </li>
+                </ul>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ asset('bundles/coretemplate/assets/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('bundles/coretemplate/assets/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/coretemplate/assets/jquery-ui/js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('bundles/coretemplate/assets/js/jquery.placeholder.min.js') }}"></script>
+    <script src="https://masonry.desandro.com/masonry.pkgd.js"></script>
+    <script src="{{ asset('bundles/coretemplate/assets/js/jquery.reject.min.js') }}"></script>
+    <script src="{{ asset('bundles/coretemplate/assets/js/main.js') }}"></script>
+    <script>
+        /*
+         * Uses jQuery!!!!111one
+         */
+
+        /*====================================
+         =            ON DOM READY            =
+         ====================================*/
+        jQuery(function() {
+
+            // Toggle Nav on Click
+            jQuery('.toggle-nav').click(function() {
+                // Calling a function in case you want to expand upon this.
+                toggleNav();
+            });
+
+        });
+
+        /*========================================
+         =            CUSTOM FUNCTIONS            =
+         ========================================*/
+        function toggleNav() {
+            if (jQuery('body').hasClass('show-nav')) {
+                // Do things on Nav Close
+                jQuery('body').removeClass('show-nav');
+            } else {
+                // Do things on Nav Open
+                jQuery('body').addClass('show-nav');
+            }
+
+            //jQuery('body').toggleClass('show-nav');
+
+
+        }
+
+        jQuery('.grid').masonry({
+            itemSelector: '.grid-item',
+            columnWidth: '.grid-sizer'
+        });
+    </script>
     {% block js %}{% endblock %}
-    </body>
+</body>
 </html>

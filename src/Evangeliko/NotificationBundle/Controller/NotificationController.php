@@ -29,6 +29,8 @@ class NotificationController extends Controller
 
 		$em = $this->getDoctrine()->getManager();
 
+        $params['account']= $account;
+
 		$notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
 
 		$notif_list = [];
@@ -37,7 +39,6 @@ class NotificationController extends Controller
 			$notif_list[] = $notif;
 		}
 
-		$params['object'] = $this->getUser()->getAccount();
 		$params['notifs'] = $notif_list;
 
 		$twig_file = "EvangelikoNotificationBundle:Notification:index.html.twig";

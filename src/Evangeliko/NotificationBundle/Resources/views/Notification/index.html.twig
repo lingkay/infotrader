@@ -1,29 +1,30 @@
-{% extends 'CoreTemplateBundle::base.html.twig' %}
+{% extends 'CoreTemplateBundle::base_community.html.twig' %}
 {% import 'CoreTemplateBundle::macro.html.twig' as form %}
 
 {% block content %}
-<div class="row">
-	<div class="col-xs-12 col-sm-12 col-md-12">
-		<div class="container-fluid">
-			<form class="form-horizontal">
-				<div class="jumbotron">
-					<div class="container">
-						<div class="col-md-12" style="background-color: white !important;">
-							<div class="form-body">
-								<h4 class="form-section">Notifications</h4>
-								<ul class="list-group">
-									{% for notif in notifs %}
-										<li class="list-group-item">
-											{{ notif.getMessage }}
-										</li>
-									{% endfor %}
-								</ul>
-							</div>
-						</div>
-					</div>
+	<div class="page--wrap--contents">
+		<div class="container">
+			<div class="notifications-list">
+				<div class="notifications-list--text-wrap">
+					<h4>All Notifications</h4>
 				</div>
-			</form>
+				<div class="notifications-list--text-wrap">
+					<ul class="notifications">
+                        {% for notif in notifs %}
+							<li>
+								<a href="#">
+									<div class="notifications--single">
+										<img src="http://via.placeholder.com/31x30" alt="">
+                                        {#<p><strong>maria cruz</strong> likes your article</p>#}
+                                        {#<small>5 hours ago</small>#}
+										<p>{{ notif.getMessage }}</p>
+									</div>
+								</a>
+							</li>
+                        {% endfor %}
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
-</div>
 {% endblock %}

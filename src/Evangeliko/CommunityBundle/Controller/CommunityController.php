@@ -27,7 +27,7 @@ class CommunityController extends Controller
 
 		$em = $this->getDoctrine()->getManager();
 
-		$params['object'] = $this->getUser()->getAccount();
+		$params['account'] = $this->getUser()->getAccount();
 
 		$cts = $em->getRepository("EvangelikoCommunityBundle:CommunityType")->findAll();
 
@@ -125,27 +125,45 @@ class CommunityController extends Controller
 		}
 	}
 
-	public function editPageAction(Request $request, $slug)
-	{
-		$this->request = $request;
+    public function editPageAction(Request $request, $slug)
+    {
+        $this->request = $request;
 
-		$em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
-		$params['object'] = $this->getUser()->getAccount();
+        $account = $this->getUser()->getAccount();
 
-		$params['readonly'] = true;
+        $params['account'] = $account;
 
-		$pts = $em->getRepository("EvangelikoPostBundle:PostType")->findAll();
+        $params['page'] = $em->getRepository("EvangelikoCommunityBundle:Community")->findOneBy(['slug' => $slug]);
 
-		$params['page_type'] = [
-			'Free' => 'Public',
-			'Private' => 'Private'
-		];
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+        $notif_list = [];
+        foreach ($notifs as $notif) {
+            $notif_list[] = $notif;
+        }
+        $params['notifs'] = $notif_list;
 
-		$twig_file = "EvangelikoCommunityBundle:Community:index.html.twig";
+        $params['readonly'] = true;
 
-		return $this->render($twig_file, $params);
-	}
+        $ints = $em->getRepository("EvangelikoAccountBundle:Interest")->findAll();
+        $int_list = [];
+        foreach ($ints as $int) {
+            $int_list[$int->getName()] = $int->getName();
+        }
+        $params['interest'] = $int_list;
+
+        $pts = $em->getRepository("EvangelikoPostBundle:PostType")->findAll();
+
+        $params['page_type'] = [
+            'Free' => 'Public',
+            'Private' => 'Private'
+        ];
+
+        $twig_file = "EvangelikoCommunityBundle:Community:index.html.twig";
+
+        return $this->render($twig_file, $params);
+    }
 
 	public function editSubmitAction(Request $request, $slug)
 	{
@@ -179,48 +197,61 @@ class CommunityController extends Controller
 		}
 	}
 
-	public function viewCommunityAction(Request $request, $slug)
-	{
-		$this->request = $request;
+    public function viewCommunityAction(Request $request, $slug)
+    {
+        $this->request = $request;
 
-		$em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
-		$community = $em->getRepository("EvangelikoCommunityBundle:Community")->findOneBy(['slug' => $slug]);
+        $community = $em->getRepository("EvangelikoCommunityBundle:Community")->findOneBy(['slug' => $slug]);
 
-		$twig_file = "EvangelikoCommunityBundle:Community:view.html.twig";
+        $twig_file = "EvangelikoCommunityBundle:Community:view.html.twig";
 
-		$params['object'] = $community;
+        $params['page'] = $community;
 
-		$pts = $em->getRepository("EvangelikoPostBundle:PostType")->findAll();
+        $pts = $em->getRepository("EvangelikoPostBundle:PostType")->findAll();
 
-		$pt_list = [];
+        $pt_list = [];
 
-		foreach ($pts as $pt) {
-			$pt_list[$pt->getName()] = $pt->getName();
-		}
+        foreach ($pts as $pt) {
+            $pt_list[$pt->getName()] = $pt->getName();
+        }
 
-		$params['post_type'] = $pt_list;
+        $params['post_type'] = $pt_list;
 
-		$search_result = [];
+        $search_result = [];
 
-		$params['search'] = $search_result;
+        $params['search'] = $search_result;
 
+        //added
+        $account = $this->getUser()->getAccount();
+        $params['account'] = $account;
+
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+
+        $notif_list = [];
+
+        foreach ($notifs as $notif) {
+            $notif_list[] = $notif;
+        }
+        $params['notifs'] = $notif_list;
+        //
         $posts = $em->getRepository('EvangelikoPostBundle:Post')
-                    ->findBy(
-                		array('community' => $community),
-                		array('date_create' => 'DESC')
-            		);
+            ->findBy(
+                array('community' => $community),
+                array('date_create' => 'DESC')
+            );
         $post_array = array();
         foreach ($posts as $post){
-        	if ($post->getParent() == NULL) {
-	        	$post_array[$post->getID()] = $post;
-        	}
+            if ($post->getParent() == NULL) {
+                $post_array[$post->getID()] = $post;
+            }
         }
 
         $params['posts'] = $post_array;
 
-		return $this->render($twig_file, $params);
-	}
+        return $this->render($twig_file, $params);
+    }
 
 	public function communityFollowAction(Request $request)
 	{

@@ -3,192 +3,182 @@
 
 {% block content %}
     {% set src = asset('bundles/coretemplate/assets/img/restaurant.jpg')  %}
-{# <img src="{{ src }}" class="img-rounded" alt="restaurant" width="100%" height="20%"> #}
-<div class="row">
-    <div class="col-md-12">
-        <div style="width: 100%; height: 180px; background-image: url({{src}});">
-            <div class="pull-left" style="padding-left: 10px;">
-                <a href="#" class="btn btn-default btn-md" style="background-color: transparent; color: #337ab7;">UNBLESS</a>
-                <a href="#" class="btn btn-default btn-md" style="background-color: transparent; color: #337ab7;">FOLLOWED</a>
-            </div>
-            <div class="pull-right" style="padding-right: 10px;">
-                <a href="#" class="btn btn-default btn-md" style="background-color: transparent; color: #337ab7;">CHANGE BANNER</a>
-            </div>
-        </div>
-        <div class="col-md-8">
-            <div class="container-fluid">
-                <div class="jumbotron">
-                    <form class="form-horizontal" method="post" id="post-form" action="{{ path('evangeliko_post_submit') }}">
-                        <div class="form-body">
-                            <div id="cgroup-post" class="form-group">
-                                {# <label class="col-md-{{ label_size }} control-label">{{ label }}</label> #}
-                                <div class="col-md-12">
-                                    <div id="cgroup-upload" class="form-group">
-                                        <label class="col-md-3 control-label"><a href="#">Upload Photo</a></label>    
-                                    </div>
-                                    {{ form.hidden('account_type', 'community') }}
-                                    {{ form.hidden('community_id', object.getID ) }}
-                                    {{ form.group_selectnew("Post Type", "post_type", post_type, '', 2, 4, {requried:true}) }}
-                                    <div id="paid_post" style="display:none;">
-                                        {{ form.group_number("Amount", "amount", 0, 2, 4)}}
-                                    </div>
-                                    {{ form.group_textnew('Post Title', 'post_title','', 2, 4) }}
-                                    <textarea id="cform-post" name="post" class="form-control" rows="3" placeholder="What's on your mind?"></textarea>
-                                    {{ form.hidden('parent', '') }}
-                                    <button id="post-btn" type="submit" class="btn btn-primary pull-right">Post</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div id="posts">
-                {{ form.hidden('credits', app.getUser.getAccount.getCredit.getAmount) }}
-                <div class="container-fluid">
-                    <div class="jumbotron">
-                        <div class="form-body form-horizontal">
-                            <div class="form-group">
-                                <a href="#">KarlO Laquian</a>
-                            </div>
-                            <div class="form-group">
-                                10 day(s) ago
-                            </div>
-                            <div class="container">
-                                <div class="col-md-12" style="background-color: white !important;">
-                                    <div class="short-message">
-                                        <br>
-                                        <div class="form-group">
-                                            <div class="col-md-offset-1 col-md-10 col-md-offset-1">
-                                                <textarea id="cform-post" name="post" class="form-control" rows="2" readonly>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sed purus neque. Pellentesque vulputate iaculis tincidunt. ...</textarea>
-                                            </div>
-                                        </div>
-                                        <div class="read-more pull-right">
-                                            <a href="#insufficient-credit-form" class="read-more-a" data-toggle="modal">Read More</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    {# <img src="{{ src }}" class="img-rounded" alt="restaurant" width="100%" height="20%"> #}
+    <div class="jumbotron" style="background: url('{{ asset("bundles/coretemplate/assets/img/jumbotron-placeholder.jpeg")}}');">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="jumbotron--contents">
+                        <h1>{{page.getName}}</h1>
+                        <p>{{page.getDescription}}</p>
+                        <p><a href="{{ path('evangeliko_community_view', {'slug': page.getSlug}) }}">www.infotrader.dev/community/{{page.getSlug}}</a></p>
+                        <a href="{{ path('evangeliko_community_edit_page', {'slug': page.getSlug }) }}" class="btn btn-default">Edit</a>
+                        {#<a href="#" class="btn btn-default btn-md" style="background-color: transparent; color: #337ab7;">UNBLESS</a>#}
+                        <a href="#" class="btn btn-default btn-md" style="background-color: transparent; color: #337ab7;">FOLLOWED</a>
                     </div>
-                </div>
-                {% if posts is not null %}
-                    {% for post in posts %}
-                        <div class="container-fluid">
-                            <div class="jumbotron">
-                                <div class="form-body form-horizontal">
-                                    <div class="form-group">
-                                        <div class="col-md-6">
-                                            <a href="#">{{ post.getUserCreate.getAccount.getFullName }}</a>
-                                        </div>
-                                        <div class="col-md-6">
-                                            {% if post.getPostType == 'Paid' %}
-                                                Amount: {{ post.getAmount }}
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        {{ post.getTimePassed }}
-                                    </div>
-                                    <div class="container">
-                                        <div class="col-md-12" style="background-color: white !important;">
-                                            <div class="short-message form-group">
-                                                <br>
-                                                {{ form.hidden('type_post', post.getPostType) }}
-                                                <div class="form-group">
-                                                    <div class="col-md-offset-1 col-md-10 col-md-offset-1">
-                                                        {{ form.group_textnew('Post Title', 'post_title', post.getTitle, 0, 12, {readonly: true}) }}                                         
-                                                    </div>
-                                                </div>
-                                                <div class="read-more pull-right">
-                                                    <input type="hidden" name="post_id" class="post_type" value="{{post.getPostType}}">
-                                                    {% if post.getPostType == 'Paid' %}
-                                                        {% if post.getUserCreate.getID == app.getUser.getID %}
-                                                            <a href="{{ path('evangeliko_view_free_post', {'id':post.getID}) }}">Read More</a>
-                                                        {% else %}
-                                                            {% if app.getUser.getAccount.getCredit.getAmount >= post.getAmount %}
-                                                                <a href="#sufficient-credit-form" class="read-more-a" data-toggle="modal" data-id="{{post.getID}}" data-amount="{{ post.getAmount }}">Read More</a>
-                                                            {% else %}
-                                                                <a href="#insufficient-credit-form" class="read-more-a" data-toggle="modal" data-id="{{post.getID}}" data-amount="{{ post.getAmount }}">Read More</a>
-                                                            {% endif %}
-                                                        {% endif %}
-                                                    {% else %}
-                                                        <a href="{{ path('evangeliko_view_free_post', {'id':post.getID}) }}">Read More</a>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="container-fluid">
-                <div class="jumbotron">
-                    <form method="post" class="form-horizontal" action="{{ path('evangeliko_search_people') }}">
-                        {{ form.hidden('slug', object.getSlug) }}
-                        {{ form.group_textnew("Search People",'search_name', "",3,12) }}
-                        <div class="form-group">
-                            <button id="post-btn" type="submit" class="btn btn-primary pull-right">Search</button>
-                        </div>
-                        <div class="form-body">
-                            {% if search is not null %}
-                                {% for person in search %}
-                                    <div class="form-group">
-                                        <a href="#">{{ person.getFullName }}</a>
-                                        <a href="{{ path('evangeliko_invite_people', {'id': person.getID, 'community': object.getID}) }}" class="btn btn-default pull-right">Invite</a>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
-{% embed 'EvangelikoCommunityBundle:Community:modal/post.type.modal.html.twig' %}{% endembed %}
-{% embed 'EvangelikoCommunityBundle:Community:modal/insufficient.modal.html.twig' %}{% endembed %}
+
+    <div class="feed--tabs">
+        <div class="container">
+            <div class="row">
+                <ul class="feed--tabs--menu">
+                    <li class="active">
+                        <a href="#">My articles</a>
+                    </li>
+                    <li>
+                        <a href="#">Paid articles</a>
+                    </li>
+                    <li>
+                        <a href="#">Free articles</a>
+                    </li>
+                </ul>
+                <a class="btn btn-info" href="{{ path('evangeliko_post_article', {'slug': page.getSlug }) }}">Post</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page--wrap--contents">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="grid articles">
+                    <div class="grid-sizer col-sm-6"></div>
+                    <div class="gutter-sizer"></div>
+
+                    {% if posts is not null %}
+                        {% for post in posts %}
+                            <div class="articles--single grid-item col-sm-6">
+                                <!-- add inner element for column content -->
+                                <div class="grid-item-content">
+                                    <input type="hidden" name="post_id" class="post_type" value="{{post.getPostType}}">
+
+                                    {% if post.getPostType == 'Paid' %}
+                                        {% if post.getUserCreate.getID == app.getUser.getID %}
+                                            <div class="grid-item-content--text">
+                                                <h3>{{ post.getTitle }}</h3>
+                                                <p>
+                                                    {{ post.getMessage }}
+                                                </p>
+                                            </div>
+                                            <img src="http://via.placeholder.com/460x212" alt="" class="img-responsive">
+                                            <div class="grid-item-content--share">
+                                                <ul>
+                                                    <li>
+                                                        <a href="#" class="grid-item-content--share--button honeys">
+                                                            <i class="small material-icons">menu</i> honeys
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="grid-item-content--share--button comments">
+                                                            <i class="small material-icons">chat_bubble_outline</i> comments
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="grid-item-content--share--button shares">
+                                                            <i class="small material-icons">share</i> shares
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="grid-item-content--share--button more">
+                                                            <a href="{{ path('evangeliko_view_free_post', {'id':post.getID}) }}"><i class="small material-icons">more_horiz</i></a>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        {% else %}
+                                            <div class="grid-item-content--text">
+                                                <h3>{{ post.getTitle }}</h3>
+                                                <a href="" class="btn btn-default">Read this article for {{ post.getAmount }} credits only.</a>
+                                            </div>
+                                        {% endif %}
+                                    {% else %}
+                                        <div class="grid-item-content--text">
+                                            <h3>{{ post.getTitle }}</h3>
+                                            <p>
+                                                {{ post.getMessage }}
+                                            </p>
+                                        </div>
+                                        <img src="http://via.placeholder.com/460x212" alt="" class="img-responsive">
+                                        <div class="grid-item-content--share">
+                                            <ul>
+                                                <li>
+                                                    <a href="#" class="grid-item-content--share--button honeys">
+                                                        <i class="small material-icons">menu</i> honeys
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="grid-item-content--share--button comments">
+                                                        <i class="small material-icons">chat_bubble_outline</i> comments
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="grid-item-content--share--button shares">
+                                                        <i class="small material-icons">share</i> shares
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="grid-item-content--share--button more">
+                                                        <a href="{{ path('evangeliko_view_free_post', {'id':post.getID}) }}"><i class="small material-icons">more_horiz</i></a>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% embed 'EvangelikoCommunityBundle:Community:modal/post.type.modal.html.twig' %}{% endembed %}
+    {% embed 'EvangelikoCommunityBundle:Community:modal/insufficient.modal.html.twig' %}{% endembed %}
 {% endblock %}
 {% block js %}
-<script type="text/javascript">
-$(document).ready(function(e){
-    $('#cform-post_type').change(function(){
-        var post_type = $(this).val();
+    <script type="text/javascript">
+        $(document).ready(function(e){
+            $('#cform-post_type').change(function(){
+                var post_type = $(this).val();
 
-        if(post_type == 'Paid'){
-            $("#paid_post").show();
-        }else{
-            $('#cform-amount').val(0);
-            $("#paid_post").hide();
-        }
-    });
+                if(post_type == 'Paid'){
+                    $("#paid_post").show();
+                }else{
+                    $('#cform-amount').val(0);
+                    $("#paid_post").hide();
+                }
+            });
 
-    $('#posts').on('click', '.read-more-a', function() {
-        var id = $(this).data('id');
-        var amount = $(this).data('amount');
-        var credits = $('#cform-credits').val();
+            $('#posts').on('click', '.read-more-a', function() {
+                var id = $(this).data('id');
+                var amount = $(this).data('amount');
+                var credits = $('#cform-credits').val();
 
-        if (credits >= amount) {
-            $('#cform-post_id').val(id);
-            $('#cform-amount_modal').val(amount);
-        }else{
-            $('#cform-redirect_id').val(id);
-            $('#cform-amt_deduct').val(amount);
-        }
-    });
+                if (credits >= amount) {
+                    $('#cform-post_id').val(id);
+                    $('#cform-amount_modal').val(amount);
+                }else{
+                    $('#cform-redirect_id').val(id);
+                    $('#cform-amt_deduct').val(amount);
+                }
+            });
 
-    $('#posts').on('click', '.reply-form', function() {
-        var read_more_div = $(this).parent("div");
-        var full_msg_div = read_more_div.parent("div");
-        var parent_div = full_msg_div.parent("div");
-        var short_msg_div = parent_div.find(".replay-text")
-        short_msg_div.show();
-        // full_msg_div.hide();
-    });
-});
-</script>
+            $('#posts').on('click', '.reply-form', function() {
+                var read_more_div = $(this).parent("div");
+                var full_msg_div = read_more_div.parent("div");
+                var parent_div = full_msg_div.parent("div");
+                var short_msg_div = parent_div.find(".replay-text")
+                short_msg_div.show();
+                // full_msg_div.hide();
+            });
+        });
+    </script>
 {% endblock %}

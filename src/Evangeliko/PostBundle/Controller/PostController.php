@@ -113,13 +113,17 @@ class PostController extends Controller
             if($data['account_type'] == 'community'){
                 $community = $em->getRepository("EvangelikoCommunityBundle:Community")->find($data['community_id']);
                 $post->setCommunity($community);
+
+                $url = $this->generateUrl('evangeliko_community_view', array('slug' => $community->getSlug()));
             }else{
                 $account = $em->getRepository("EvangelikoAccountBundle:Account")->find($data['community_id']);
                 $post->setAccount($account);
             }
+        } else{
+            $account = $user->getAccount();
+            $url = $this->generateUrl('evangeliko_profile_index', array('id' => $account->getId()));
         }
-
-
+        
         if(isset($data['post_type'])){
             $post->setPostType($data['post_type']);
             if($data['post_type'] == 'Paid'){
@@ -143,10 +147,7 @@ class PostController extends Controller
         $em->persist($post);
         $em->flush();
 
-//        $url = $this->request->headers->get("referer");
-//        return new RedirectResponse($url);
-//        return new RedirectResponse("/profile");
-        return $this->redirect($this->generateUrl('evangeliko_profile_index'));
+        return $this->redirect($url);
     }
 
     public function viewPostAction(Request $request)

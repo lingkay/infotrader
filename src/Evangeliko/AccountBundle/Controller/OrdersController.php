@@ -74,9 +74,6 @@ class OrdersController extends Controller
 		$form = $this->createForm('jms_choose_payment_method', null, [
 		    'amount'   => $order->getAmount(),
 		    'currency' => 'USD',
-	        'choice_options' => [
-		        'expanded' => false,
-		    ],
 		    'predefined_data' => $config,
 		]);
 
@@ -102,6 +99,7 @@ class OrdersController extends Controller
 	    	'object' => $user->getAccount(),
 	        'order' => $order,
 	        'form'  => $form->createView(),
+	        'account' => $account
 	    ];
 	}
 
@@ -171,6 +169,8 @@ class OrdersController extends Controller
 		$em->flush();
 
 		$url = $this->generateUrl('evangeliko_credit_index');
+
+		$this->addFlash('success', "Successfully bought credits.");
 
 	    return new RedirectResponse($url);
 	}

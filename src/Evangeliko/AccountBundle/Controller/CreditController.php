@@ -28,7 +28,7 @@ class CreditController extends Controller
 
 		$em = $this->getDoctrine()->getManager();
 
-		$params['object'] = $this->getUser()->getAccount();
+		$params['account'] = $this->getUser()->getAccount();
 
 		$amts = $em->getRepository("EvangelikoAccountBundle:CreditAmount")->findAll();
 
@@ -58,7 +58,7 @@ class CreditController extends Controller
 		}
 
 		foreach ($amts as $amt) {
-			$amt_list[$amt->getPayAmount()] = $amt->getPrice();
+			$amt_list[$amt->getPayAmount()] = $amt->getPrice()." Credits ($".$amt->getPayAmount().")";
 		}
 
 		$params['amt_opts'] = $amt_list;

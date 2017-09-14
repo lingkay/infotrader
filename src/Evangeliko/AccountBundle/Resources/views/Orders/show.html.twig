@@ -1,26 +1,37 @@
-{% extends 'CoreTemplateBundle::base.html.twig' %}
+{% extends 'CoreTemplateBundle::base_community.html.twig' %}
 {% import 'CoreTemplateBundle::macro.html.twig' as form_tool %}
 
-{% form_theme form 'EvangelikoAccountBundle:Orders:theme.html.twig' %}
+{# {% form_theme form 'EvangelikoAccountBundle:Orders:theme.html.twig' %} #}
 {% block content %}
-{# <div class="row">
-	<div class="col-md-12">
-		<div class="form-body">
-			<div class="form-horizontal form"> #}
-				{# <div class="form-group"> #}
-					{# group_textnew(label, name, value, label_size, body_size, options = {} ) #}
-
-				{# </div> #}
-{# 			</div>
-		</div>		
-	</div>
-</div> #}
-<div class="page--wrap--contents">
+<div class="article-page--header">
 	<div class="container">
 		<div class="row">
+			<div class="account">
+				<div class="col-xs-8">
+					<h2>Purchase credits</h2>
+					<p>When topping up your balance, please note: per our fraud control guidelines, some transactions (especially those third-party payments) may require additional verification. In some cases, we’ll need phone verification for the card holder.</p>
+				</div>
+				<div class="col-xs-4 account--balance">
+					<small>Current balance</small>
+					<large>{{ account.getCredit.getAmount }}</large>
+					<a href="">Top-up now!</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page--wrap--contents">
+	<div class="container">
+		<div class="page-section">
+			<div class="row">
+				<div class="col-md-4 hidden-xs">
+					<div class="banner-bg banner-bg--color">
+						<h2 class="mb30">Purchase credits to enjoy more of the Hive.</h2>
+						<p>Join us for our next chapter as Hive becomes the most rewarding platform for the world’s writers, thinkers, and storytellers.</p>
+					</div>
+				</div>
+				<div class="col-md-8">
 					{{ form_tool.group_textnew("Total Price", "total_price","$"~ order.amount, 3, 4) }}
-					{# <label class="col-md-3 control-label">Total price:</label> $  #}
-
 					{{ form_start(form) }}
 					<br><br><br>
 					<div class="form-group">
@@ -28,11 +39,12 @@
 					</div>
 					<div class="col-md-3">
 						<div class="form-actions fluid">
-							{# <button type="submit" class="btn btn-primary">Submit</button> #}
 							<input type="submit" value="Pay with Paypal" class="btn btn-primary" />
 						</div>
 					</div>
 					{{ form_end(form) }}
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

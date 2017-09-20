@@ -656,11 +656,11 @@ nav.navbar-default.white {
     display: -ms-flexbox;
     display: flex;
     -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
     -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
   }
 }
 .navbar-inner {
@@ -676,11 +676,11 @@ nav.navbar-default.white {
     display: -ms-flexbox;
     display: flex;
     -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
     -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
   }
 }
 .navbar-inner .navbar-brand {
@@ -813,11 +813,11 @@ nav.navbar-default.white {
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
 }
 .navbar .top-menu > ul > li {
   padding: 0px 25px;
@@ -825,11 +825,11 @@ nav.navbar-default.white {
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
 }
 .navbar .top-menu > ul > li:nth-child(1) {
   padding: 0px 5px;
@@ -838,7 +838,7 @@ nav.navbar-default.white {
   padding: 0px 5px;
 }
 .navbar .top-menu > ul > li:last-child {
-  border-left: 1px solid white;
+  /*border-left: 1px solid white;*/
   padding: 0px 0px 0px 25px;
 }
 .navbar .top-menu > ul > li > a {
@@ -1422,8 +1422,8 @@ i.custom-icon.honey {
     display: -ms-flexbox;
     display: flex;
     -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
   }
 }
 .grid-item-content--share ul li {
@@ -1638,11 +1638,11 @@ i.honey-icon {
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
 }
 .article-page--content--wrap.unpaid .unpaid--content .btn {
   padding: 25px;
@@ -1663,8 +1663,8 @@ i.honey-icon {
 .article-page .grid-item-content--share {
   display: inline-block;
   -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
   margin: 0px;
   padding: 0px;
   list-style: none;
@@ -1681,8 +1681,8 @@ i.honey-icon {
 .article-page .grid-item-content--share ul {
   display: inline-block;
   -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
   width: 100%;
 }
 .article-page .grid-item-content--share ul li:last-child {

@@ -20,3 +20,8 @@ evangeliko_view_free_post:
     path: /view/post/{id}
     methods: [GET]
     defaults: { _controller: EvangelikoPostBundle:Post:viewFreePost }
+
+evangeliko_view_paid_post:
+    path: /view/paid/post/{id}
+    methods: [GET]
+    defaults: { _controller: EvangelikoPostBundle:Post:viewPaidPost }

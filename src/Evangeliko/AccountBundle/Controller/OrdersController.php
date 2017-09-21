@@ -168,9 +168,20 @@ class OrdersController extends Controller
 		$credit->setAmount($balance);
 		$em->flush();
 
-		$url = $this->generateUrl('evangeliko_credit_index');
+		if($order->getRedirectID() != 0){
+			$post = $em->getRepository("EvangelikoPostBundle:Post")->find($order->getRedirectID());
+			$url = $this->generateUrl('evangeliko_view_free_post', array('id' => $post->getID()));
 
-		$this->addFlash('success', "Successfully bought credits.");
+			$amount = floatval($balance) - floatval($post->getAmount());
+
+			$credit->setAmount($amount);
+
+			$em->flush();
+			$this->addFlash('success', "Thank you and enjoy reading");
+		}else{
+			$this->addFlash('success', "Successfully bought credits.");
+            $url = $this->generateUrl('evangeliko_credit_index');
+		}
 
 	    return new RedirectResponse($url);
 	}

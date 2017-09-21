@@ -31,6 +31,7 @@ class PostController extends Controller
         $twig_file = "EvangelikoCommunityBundle:Community:create_post.html.twig";
 
         $params['page'] = $community;
+        $params['account'] = $this->getUser()->getAccount();
 
         $pts = $em->getRepository("EvangelikoPostBundle:PostType")->findAll();
 
@@ -158,7 +159,15 @@ class PostController extends Controller
 
         $post = $em->getRepository("EvangelikoPostBundle:Post")->find($data['post_id']);
         $params['post'] = $post;
-        $params['account'] = $this->getUser()->getAccount();
+        $account = $this->getUser()->getAccount();
+        $params['account'] = $account;
+
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+        $notif_list = [];
+        foreach ($notifs as $notif) {
+            $notif_list[] = $notif;
+        }
+        $params['notifs'] = $notif_list;
 
         $credit = $this->getUser()->getAccount()->getCredit();
 
@@ -180,10 +189,40 @@ class PostController extends Controller
 
 		$post = $em->getRepository("EvangelikoPostBundle:Post")->find($id);
 		$params['post'] = $post;
-		$params['object'] = $this->getUser()->getAccount();
+        $account = $this->getUser()->getAccount();
+		$params['account'] = $account;
+
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+        $notif_list = [];
+        foreach ($notifs as $notif) {
+            $notif_list[] = $notif;
+        }
+        $params['notifs'] = $notif_list;
 
 		$twig_file = 'EvangelikoCommunityBundle:Community:view_post.html.twig';
 
         return $this->render($twig_file, $params);
 	}
+
+    public function viewPaidPostAction(Request $request, $id = null)
+    {
+        $this->request = $request;
+        $em = $this->getDoctrine()->getManager();
+
+        $post = $em->getRepository("EvangelikoPostBundle:Post")->find($id);
+        $params['post'] = $post;
+        $account = $this->getUser()->getAccount();
+        $params['account'] = $account;
+
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+        $notif_list = [];
+        foreach ($notifs as $notif) {
+            $notif_list[] = $notif;
+        }
+        $params['notifs'] = $notif_list;
+
+        $twig_file = 'EvangelikoPostBundle:Post:view_paid_post.html.twig';
+
+        return $this->render($twig_file, $params);
+    }
 }

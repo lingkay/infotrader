@@ -39,6 +39,9 @@
 					</div>
 				</div>
 			</nav>
+
+			{#<button type="button" data-toggle="modal" data-target="#loginModal">Open Modal</button>#}
+
 			<div class="page--wrap--contents">
 				<div class="container">
 					<div class="row">
@@ -51,20 +54,20 @@
 							<div class="form">
 								{% for flash_msg in app.session.flashbag.get('error') %}
 						            <div class="alert alert-danger alert-dismissable">
-						                <button type="button" 
+						                <button type="button"
 						                class="close" data-dismiss="alert" aria-hidden="true"></button>
 						                <strong>Error: </strong>
 						                {{ flash_msg }}
 						            </div>
-						            {% endfor %}
+								{% endfor %}
 
-						            {% for flash_msg in app.session.flashbag.get('success') %}
-						            <div class="alert alert-success alert-dismissable">
-						                <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-						                <strong>Success: </strong>
-						                {{ flash_msg }}
-						            </div>
-					            {% endfor %}
+								{#{% for flash_msg in app.session.flashbag.get('success') %}#}
+						            {#<div class="alert alert-success alert-dismissable">#}
+						                {#<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>#}
+						                {#<strong>Success: </strong>#}
+						                {#{{ flash_msg }}#}
+						            {#</div>#}
+					            {#{% endfor %}#}
 								<form action="{{ path('core_user_registration') }}" method="POST">
 									<div class="form--input-wrap with-label">
 										<label for="input_first_name">First name</label>
@@ -116,73 +119,103 @@
 			</div>
 		</div>
 
-	<footer class="site-footer">
-		<div class="container">
-			<a href="#">Hive <span>/ Copyright 2017</span></a>
-			<ul class="site-footer--menu">
-				<li>
-					<a href="#">Getting started</a>
-				</li>
-				<li>
-					<a href="#">Help</a>
-				</li>
-				<li>
-					<a href="#">Careers</a>
-				</li>
-				<li>
-					<a href="#">Privacy</a>
-				</li>
-				<li>
-					<a href="#">Terms</a>
-				</li>
-				<li>
-					<a href="#">About</a>
-				</li>
-			</ul>
+		<footer class="site-footer">
+			<div class="container">
+				<a href="#">Hive <span>/ Copyright 2017</span></a>
+				<ul class="site-footer--menu">
+					<li>
+						<a href="#">Getting started</a>
+					</li>
+					<li>
+						<a href="#">Help</a>
+					</li>
+					<li>
+						<a href="#">Careers</a>
+					</li>
+					<li>
+						<a href="#">Privacy</a>
+					</li>
+					<li>
+						<a href="#">Terms</a>
+					</li>
+					<li>
+						<a href="#">About</a>
+					</li>
+				</ul>
+			</div>
+		</footer>
+	</div>
+
+
+
+	<div id="loginModal" class="modal fade" data-backdrop="static">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- header -->
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h3 class="modal-title">Registration Successful</h3>
+				</div>
+				<!-- body -->
+				<div class="modal-body">
+					<form role="form">
+						<h3>Verify Your Account</h3>
+						<p>An email has been sent to your email address with a link to verify your account.</p>
+						<small>*Please take note that the activation link is valid for 24 hours only.</small>
+					</form>
+
+				</div>
+				<!-- footer -->
+				<div class="modal-footer">
+					<button class="btn btn-warning center-block">Resend Email Verification</button>
+				</div>
+			</div>
 		</div>
-	</footer>
-</div>
-<script src="{{ asset('bundles/coretemplate/assets/jquery/dist/jquery.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('bundles/coretemplate/assets/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('bundles/coretemplate/assets/jquery-ui/js/jquery-ui.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('bundles/coretemplate/assets/js/jquery.placeholder.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('bundles/coretemplate/assets/js/jquery.reject.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('bundles/coretemplate/assets/js/main.js') }}" type="text/javascript"></script>
-<script src="{{ asset('bundles/coretemplate/assets/select2-4.0.3/dist/js/select2.min.js') }}" type="text/javascript"></script>
-<script src="{{ asset('bundles/coretemplate/assets/js/template.js') }}" type="text/javascript"></script>  
-<script>
-    /*
- * Uses jQuery!!!!111one
- */
+	</div>
 
-/*====================================
-=            ON DOM READY            =
-====================================*/
-jQuery(function() {
-	Template.init();
-  // Toggle Nav on Click
-  jQuery('.toggle-nav').click(function() {
-    // Calling a function in case you want to expand upon this.
-    toggleNav();
-  });
+	<script src="{{ asset('bundles/coretemplate/assets/jquery/dist/jquery.min.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('bundles/coretemplate/assets/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('bundles/coretemplate/assets/jquery-ui/js/jquery-ui.min.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('bundles/coretemplate/assets/js/jquery.placeholder.min.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('bundles/coretemplate/assets/js/jquery.reject.min.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('bundles/coretemplate/assets/js/main.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('bundles/coretemplate/assets/select2-4.0.3/dist/js/select2.min.js') }}" type="text/javascript"></script>
+	<script src="{{ asset('bundles/coretemplate/assets/js/template.js') }}" type="text/javascript"></script>
+	<script>
+		/*
+	 * Uses jQuery!!!!111one
+	 */
 
-});
+	/*====================================
+	=            ON DOM READY            =
+	====================================*/
+	jQuery(function() {
+	    Template.init();
+		// Trigger Modal when registered successfully
+        {% for flash_msg in app.session.flashbag.get('success') %}
+        	$("#loginModal").modal();
+		{% endfor %}
+	    // Toggle Nav on Click
+		jQuery('.toggle-nav').click(function() {
+		// Calling a function in case you want to expand upon this.
+		toggleNav();
+		});
+	});
 
-/*========================================
-=            CUSTOM FUNCTIONS            =
-========================================*/
-function toggleNav() {
-  if (jQuery('body').hasClass('show-nav')) {
-    // Do things on Nav Close
-    jQuery('body').removeClass('show-nav');
-  } else {
-    // Do things on Nav Open
-    jQuery('body').addClass('show-nav');
-  }
-
-  //jQuery('body').toggleClass('show-nav');
-}
-</script>
+	/*========================================
+	=            CUSTOM FUNCTIONS            =
+	========================================*/
+	function toggleNav() {
+	    if (jQuery('body').hasClass('show-nav')) {
+		// Do things on Nav Close
+		jQuery('body').removeClass('show-nav');
+		} else {
+	        // Do things on Nav Open
+			jQuery('body').addClass('show-nav');
+	    }
+	    // jQuery('body').toggleClass('show-nav');
+	}
+	</script>
 </body>
 
 </html>

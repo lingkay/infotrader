@@ -65,6 +65,31 @@ class CommunityController extends Controller
 		return $this->render($twig_file, $params);
 	}
 
+    public function listAction(Request $request)
+    {
+        $this->request = $request;
+
+        $account = $this->getUser()->getAccount();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $params['account']= $account;
+
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+
+        $notif_list = [];
+
+        foreach ($notifs as $notif) {
+            $notif_list[] = $notif;
+        }
+
+        $params['notifs'] = $notif_list;
+
+        $twig_file = "EvangelikoCommunityBundle:Community:list.html.twig";
+
+        return $this->render($twig_file, $params);
+    }
+
 	public function addSubmitAction(Request $request)
 	{
 		$this->request = $request;
@@ -197,7 +222,7 @@ class CommunityController extends Controller
 		}
 	}
 
-    public function viewCommunityAction(Request $request, $slug)
+    public function viewCommunityAction(Request $request, $slug, $filterType)
     {
         $this->request = $request;
 
@@ -208,6 +233,9 @@ class CommunityController extends Controller
         $twig_file = "EvangelikoCommunityBundle:Community:view.html.twig";
 
         $params['page'] = $community;
+
+        $filter_type = $filterType;
+        $params['filter_type'] = $filter_type;
 
         $pts = $em->getRepository("EvangelikoPostBundle:PostType")->findAll();
 
@@ -220,27 +248,39 @@ class CommunityController extends Controller
         $params['post_type'] = $pt_list;
 
         $search_result = [];
-
         $params['search'] = $search_result;
 
-        //added
+
         $account = $this->getUser()->getAccount();
         $params['account'] = $account;
 
         $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
-
         $notif_list = [];
-
         foreach ($notifs as $notif) {
             $notif_list[] = $notif;
         }
         $params['notifs'] = $notif_list;
-        //
-        $posts = $em->getRepository('EvangelikoPostBundle:Post')
-            ->findBy(
-                array('community' => $community),
-                array('date_create' => 'DESC')
-            );
+
+        if($filter_type == 'free' || $filter_type == 'paid'){
+            if ($filter_type == 'free'){
+                $filter_type = 'free';
+            } elseif ($filter_type == 'paid'){
+                $filter_type = 'Paid';
+            }
+            $posts = $em->getRepository('EvangelikoPostBundle:Post')
+                ->findBy(
+                    ["community" => $community,
+                        "post_type" => $filter_type],
+                    ['date_create' => "DESC"]
+                );
+        } else{
+            $posts = $em->getRepository('EvangelikoPostBundle:Post')
+                ->findBy(
+                    array('community' => $community),
+                    array('date_create' => 'DESC')
+                );
+        }
+
         $post_array = array();
         foreach ($posts as $post){
             if ($post->getParent() == NULL) {

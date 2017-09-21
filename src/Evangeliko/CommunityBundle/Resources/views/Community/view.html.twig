@@ -11,7 +11,7 @@
                     <div class="jumbotron--contents">
                         <h1>{{page.getName}}</h1>
                         <p>{{page.getDescription}}</p>
-                        <p><a href="{{ path('evangeliko_community_view', {'slug': page.getSlug}) }}">{{ app.request.getSchemeAndHttpHost() ~ "/community/" ~ page.getSlug }}</a></p>
+                        <p><a href="{{ path('evangeliko_community_view', {'slug': page.getSlug, 'filterType' : 'all'}) }}">www.infotrader.dev/community/{{page.getSlug}}</a></p>
                         <a href="{{ path('evangeliko_community_edit_page', {'slug': page.getSlug }) }}" class="btn btn-default">Edit</a>
                         {#<a href="#" class="btn btn-default btn-md" style="background-color: transparent; color: #337ab7;">UNBLESS</a>#}
                         <a href="#" class="btn btn-default btn-md" style="background-color: transparent; color: #337ab7;">FOLLOWED</a>
@@ -25,14 +25,14 @@
         <div class="container">
             <div class="row">
                 <ul class="feed--tabs--menu">
-                    <li class="active">
-                        <a href="#">My articles</a>
+                    <li {% if filter_type is defined %}{% if filter_type == 'all' %} class="active" {% endif %}{% endif %}>
+                        <a href="{{ path('evangeliko_community_view', {'slug': page.getSlug, 'filterType': 'all'}) }}">My articles</a>
                     </li>
-                    <li>
-                        <a href="#">Paid articles</a>
+                    <li {% if filter_type is defined %}{% if filter_type == 'paid' %} class="active" {% endif %}{% endif %}>
+                        <a href="{{ path('evangeliko_community_view', {'slug': page.getSlug, 'filterType' : 'paid'}) }}">Paid articles</a>
                     </li>
-                    <li>
-                        <a href="#">Free articles</a>
+                    <li {% if filter_type is defined %}{% if filter_type == 'free' %} class="active" {% endif %}{% endif %}>
+                        <a href="{{ path('evangeliko_community_view', {'slug': page.getSlug, 'filterType' : 'free'}) }}">Free articles</a>
                     </li>
                 </ul>
                 <a class="btn btn-info" href="{{ path('evangeliko_post_article', {'slug': page.getSlug }) }}">Post</a>

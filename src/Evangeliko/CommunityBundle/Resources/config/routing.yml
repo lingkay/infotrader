@@ -9,9 +9,24 @@ evangeliko_community_add_submit:
     defaults: { _controller: EvangelikoCommunityBundle:Community:addSubmit }
 
 evangeliko_community_view:
-    path:     /community/{slug}
+    path:     /community/{slug}/{filterType}
     methods:  [GET]
     defaults: { _controller: EvangelikoCommunityBundle:Community:viewCommunity }
+
+evangeliko_community_list:
+    path:     /community/list
+    methods:  [GET]
+    defaults: { _controller: EvangelikoCommunityBundle:Community:list }
+
+#evangeliko_community_view_paid:
+#    path:     /community/{slug}/{filterType}
+#    methods:  [GET]
+#    defaults: { _controller: EvangelikoCommunityBundle:Community:viewCommunity } #viewCommunityPaid
+#
+#evangeliko_community_view_free:
+#    path:     /community/{slug}/{filterType}
+#    methods:  [GET]
+#    defaults: { _controller: EvangelikoCommunityBundle:Community:viewCommunity } #viewCommunityFree
 
 evangeliko_community_edit_page:
     path:     /community/edit/{slug}

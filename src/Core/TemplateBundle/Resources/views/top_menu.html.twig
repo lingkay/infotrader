@@ -12,7 +12,7 @@
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                <h2>My Page</h2> <i class="small material-icons">keyboard_arrow_down</i>
+                                <h2>Pages</h2> <i class="small material-icons">keyboard_arrow_down</i>
                             </a>
                             <ul class="dropdown-menu right">
                                 {% if account.getCommunityFollowed is not null %}
@@ -29,14 +29,11 @@
                                         {#{% endif %}#}
                                     {% endfor %}
                                 {% endif %}
-                                {% if account.getCommunityFollowed|length > 5 %}
-                                    <li>
-                                        <a href="{{ path('evangeliko_community_list') }}">
-                                            See All
-                                            <i class="tiny material-icons">keyboard_arrow_right</i>
-                                        </a>
-                                    </li>
-                                {% endif %}
+                                <li>
+                                    <a href="{{ path('evangeliko_community_list') }}">
+                                        <i class="small material-icons">list</i> See All
+                                    </a>
+                                </li>
                                 <li role="separator" class="divider"></li>
                                 <li>
                                     <a href="{{ path('evangeliko_community_add_page') }}">
@@ -80,11 +77,16 @@
                         </ul>
                     </li>
                     <li><a href="{{ path('evangeliko_profile_index', {'id': account.getId }) }}"><img src="http://via.placeholder.com/24x24" alt="" class="img-circle img-responsve"> <span class="">{{account.getFirstName}}</span></a></li>
-                    <li><a href=""><span class="">$ {{account.getCredit.getAmount}}</span></a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="">$ {{account.getCredit.getAmount}}</span></a></a>
+                        <ul class="dropdown-menu right">
+                            <li><a href="{{ path('evangeliko_credit_index') }}">Purchase Credits</a></li>
+                            <li><a href="#">Withdraw Credits</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="medium material-icons">settings</i></a>
                         <ul class="dropdown-menu right">
-                            <li><a href="{{ path('evangeliko_credit_index') }}">Purchase Credits</a></li>
                             <li><a href="#">Invite friends</a></li>
                             <li><a href="#">Settings</a></li>
                             <li role="separator" class="divider"></li>

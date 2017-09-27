@@ -39,6 +39,8 @@ class AppKernel extends Kernel
             new Evangeliko\PostBundle\EvangelikoPostBundle(),
             new Evangeliko\NotificationBundle\EvangelikoNotificationBundle(),
             new Evangeliko\TestBundle\EvangelikoTestBundle(),
+
+            new Vich\UploaderBundle\VichUploaderBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

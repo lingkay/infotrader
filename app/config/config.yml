@@ -148,3 +148,16 @@ jms_payment_paypal:
 services:
     fos_user.doctrine_registry:
         alias: doctrine
+
+
+
+vich_uploader:
+    db_driver: orm
+
+    mappings:
+        post_image:
+            uri_prefix:         /images/posts
+            upload_destination: '%kernel.root_dir%/../web/images/posts'
+            inject_on_load:     true
+            delete_on_update:   true
+            delete_on_remove:   true

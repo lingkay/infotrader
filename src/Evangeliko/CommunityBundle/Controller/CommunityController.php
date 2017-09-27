@@ -225,14 +225,15 @@ class CommunityController extends Controller
     public function viewCommunityAction(Request $request, $slug, $filterType)
     {
         $this->request = $request;
-
         $em = $this->getDoctrine()->getManager();
 
         $community = $em->getRepository("EvangelikoCommunityBundle:Community")->findOneBy(['slug' => $slug]);
+        $params['page'] = $community;
 
         $twig_file = "EvangelikoCommunityBundle:Community:view.html.twig";
 
-        $params['page'] = $community;
+//        $gal_images = $em->getRepository('EvangelikoPostBundle:Uploads')->findAll();
+//        $params['gal_images'] = $gal_images;
 
         $filter_type = $filterType;
         $params['filter_type'] = $filter_type;

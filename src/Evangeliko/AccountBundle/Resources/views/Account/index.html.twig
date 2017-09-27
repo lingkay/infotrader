@@ -51,7 +51,11 @@
 
                                         <img src="http://via.placeholder.com/30x30" alt="" class="img-circle">
                                         <div class="author--details">
-                                            <h5>{{ post.getUserCreate.getAccount.getFullName }}</h5>
+                                            {% if post.getCommunity is not null %}
+                                                <h5>{{ post.getCommunity.getName }}</h5>
+                                            {% else %}
+                                                <h5>{{ post.getUserCreate.getAccount.getFullName }}</h5>
+                                            {% endif %}
                                             <small>{{ post.getTimePassed }}</small>
                                         </div>
                                         <div class="clearfix"></div>
@@ -66,7 +70,9 @@
                                                     {{ post.getMessage }}
                                                 </p>
                                             </div>
-                                            <img src="http://via.placeholder.com/460x212" alt="" class="img-responsive">
+                                            {% if post.getFile %}
+                                                <img src="{{ vich_uploader_asset(post.getFile, 'imageFile') }}" alt="{{ post.getFile.getImageName }}" class="img-responsive">
+                                            {% endif %}
                                             <div class="grid-item-content--share">
                                                 <ul>
                                                     <li>
@@ -114,7 +120,9 @@
                                                 {{ post.getMessage }}
                                             </p>
                                         </div>
-                                        <img src="http://via.placeholder.com/460x212" alt="" class="img-responsive">
+                                        {% if post.getFile %}
+                                            <img src="{{ vich_uploader_asset(post.getFile, 'imageFile') }}" alt="{{ post.getFile.getImageName }}" class="img-responsive">
+                                        {% endif %}
                                         <div class="grid-item-content--share">
                                             <ul>
                                                 <li>

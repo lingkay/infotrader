@@ -13,7 +13,7 @@ use DateTime;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="evangeliko_posts") 
+ * @ORM\Table(name="evangeliko_posts")
  */
 
 class Post
@@ -41,6 +41,12 @@ class Post
 
 	/** @ORM\Column(type="decimal", precision=10, scale=2, nullable=true) */
 	protected $amount;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Evangeliko\PostBundle\Entity\Uploads")
+     * @ORM\JoinColumn(name="file_id", referencedColumnName="id")
+     */
+    protected $file;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Evangeliko\CommunityBundle\Entity\Community", inversedBy="post")
@@ -130,6 +136,22 @@ class Post
     public function getAmount()
     {
     	return $this->amount;
+    }
+
+    public function setFile($file)
+    {
+        $this->file = $file;
+        return $this;
+    }
+
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function getUploadDate()
+    {
+        return $this->getFile()->updatedAt->format("m-d-Y");
     }
 
     public function setCommunity($community)

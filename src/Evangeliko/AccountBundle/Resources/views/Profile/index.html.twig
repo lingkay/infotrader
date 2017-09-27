@@ -81,7 +81,9 @@
                                                     {{ post.getMessage }}
 												</p>
 											</div>
-											<img src="http://via.placeholder.com/460x212" alt="" class="img-responsive">
+                                            {% if post.getFile %}
+												<img src="{{ vich_uploader_asset(post.getFile, 'imageFile') }}" alt="{{ post.getFile.getImageName }}" class="img-responsive">
+                                            {% endif %}
 											<div class="grid-item-content--share">
 												<ul>
 													<li>
@@ -120,7 +122,9 @@
                                                 {{ post.getMessage }}
 											</p>
 										</div>
-										<img src="http://via.placeholder.com/460x212" alt="" class="img-responsive">
+                                        {% if post.getFile %}
+											<img src="{{ vich_uploader_asset(post.getFile, 'imageFile') }}" alt="{{ post.getFile.getImageName }}" class="img-responsive">
+                                        {% endif %}
 										<div class="grid-item-content--share">
 											<ul>
 												<li>

@@ -14,6 +14,7 @@ use Core\ValidationException;
 use Core\UserBundle\Entity\User;
 use Evangeliko\AccountBundle\Entity\Account;
 use Evangeliko\PostBundle\Entity\Post;
+use Evangeliko\PostBundle\Entity\Uploads;
 use Evangeliko\CommunityBundle\Entity\CommunityFollowers;
 
 class PostController extends Controller
@@ -115,7 +116,7 @@ class PostController extends Controller
                 $community = $em->getRepository("EvangelikoCommunityBundle:Community")->find($data['community_id']);
                 $post->setCommunity($community);
 
-                $url = $this->generateUrl('evangeliko_community_view', array('slug' => $community->getSlug()));
+                $url = $this->generateUrl('evangeliko_community_view', array('slug' => $community->getSlug(), 'filterType' => 'all'));
             }else{
                 $account = $em->getRepository("EvangelikoAccountBundle:Account")->find($data['community_id']);
                 $post->setAccount($account);
@@ -141,6 +142,19 @@ class PostController extends Controller
         }else{
             $post->setMessage($data['post'])
                 ->setTitle($data['post_title']);
+        }
+
+        $files = $request->files->get('post_file');
+//        var_dump($files);
+//        die();
+
+        if ($files) {
+            $file = new Uploads();
+            $file->setImageName($data['post_title']);
+            $file->setImageFile($files);
+            $em->persist($file);
+            $em->flush();
+            $post->setFile($file);
         }
 
         $post->setUserCreate($this->getUser());

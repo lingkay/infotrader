@@ -1,0 +1,56 @@
+{% import 'CoreTemplateBundle::macro.html.twig' as form %}
+
+<div id="add_entry_modal" class="modal fade" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h4 class="modal-title" id="entry_title">Reload Amount</h4>				
+			</div>
+			<form method="post" id="form-container" class="form-horizontal" action="{{ path('evangeliko_credit_submit') }}">
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-12">
+						Select amount to be reloaded:
+						<br><br><br>
+						{{ form.hidden('reload_amount',"") }}
+						{# {{ form.hidden('redirect', redirect_id) }} #}
+						{{ form.hidden('account_credit_id',app.getUser.getAccount.getID)}}
+						<div class="col-md-4">
+							<a id="set-100" href="#" ><img src="{{ asset("bundles/coretemplate/assets/img/750px-wv-100-svg.png")}}" style="width: 100px; height: 100px;"></a>
+						</div>
+						<div class="col-md-4">
+							<a id="set-500"><img src="{{ asset("bundles/coretemplate/assets/img/500.jpg")}}" style="width: 100px; height: 100px;"></a>
+						</div>
+						<div class="col-md-4">
+							<a id="set-1000"><img src="{{ asset("bundles/coretemplate/assets/img/1000-ast.png")}}" style="width: 100px; height: 100px;"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" name="submit" value="park" id="park_btn_submit" class="btn btn-primary">Pay with paypal</button>
+				<button type="button" data-dismiss="modal" class="btn default">Cancel</button>
+			</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+{% block js %}
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#set-100").click(function(){
+		$("#cform-reload_amount").val(99);
+	});
+
+	$("#set-500").click(function(){
+		$("#cform-reload_amount").val(489);
+	});
+
+	$("#set-1000").click(function(){
+		$("#cform-reload_amount").val(969);
+	});
+});
+</script>
+{% endblock %}

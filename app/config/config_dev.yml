@@ -11,6 +11,10 @@ web_profiler:
     toolbar: true
     intercept_redirects: false
 
+swiftmailer:
+    delivery_address: karlo@quadrantalpha.com
+    disable_delivery: true
+
 monolog:
     handlers:
         main:

@@ -22,6 +22,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
+use JMS\Payment\CoreBundle\Entity\PaymentInstruction;
+use JMS\Payment\CoreBundle\Entity\ExtendedData;
+
 /**
  * @Route("/orders")
  */
@@ -67,40 +70,47 @@ class OrdersController extends Controller
 		        'return_url' => $this->generateUrl('app_orders_paymentcreate', [
 		            'id' => $order->getId(),
 		        ], UrlGeneratorInterface::ABSOLUTE_URL),
-		        'cancel_url' => "http://socialmedia2.purltech.com/credit",
+		        'cancel_url' => "http://socialmedia.purltech.com/credit",
 		    ],
 		];
 
-		$form = $this->createForm('jms_choose_payment_method', null, [
-		    'amount'   => $order->getAmount(),
-		    'currency' => 'USD',
-		    'predefined_data' => $config,
-		]);
+	   $router = $this->get('router');
 
-	    $form->handleRequest($request);
+	    // Create the extended data object
+	    $extendedData = new ExtendedData();
 
-	    if ($form->isSubmitted() && $form->isValid()) {
-	        $ppc = $this->get('payment.plugin_controller');
-	        $ppc->createPaymentInstruction($instruction = $form->getData());
-
-	        $order->setPaymentInstruction($instruction);
-
-	        $em = $this->getDoctrine()->getManager();
-	        $em->persist($order);
-	        $em->flush($order);
-
-	        return $this->redirect($this->generateUrl('app_orders_paymentcreate', [
+	    // Complete payment return URL
+	    $extendedData->set('return_url',
+	        $router->generate('app_orders_paymentcreate', array(
 	            'id' => $order->getId(),
-	        ]));
-	    }
+	        ), true)
+	    );
 
-	    return [
-	    	'notifs' => $notif_list,
-	    	'object' => $user->getAccount(),
-	        'order' => $order,
-	        'form'  => $form->createView(),
-	        'account' => $account
-	    ];
+	    // Cancel payment return URL
+	    $extendedData->set('cancel_url',
+	        $router->generate('evangeliko_account_index', [], true)
+	    );
+
+
+	    // Add checkout information to the exended data
+	    $extendedData->set('checkout_params', []);
+
+	    // Create the payment instruction object
+	    $instruction = new PaymentInstruction(
+	        $order->getAmount(), 'USD', 'paypal_express_checkout', $extendedData
+	    );
+
+	    $this->get('payment.plugin_controller')->createPaymentInstruction($instruction);
+
+		$order->setPaymentInstruction($instruction);
+
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($order);
+		$em->flush($order);
+
+		return $this->redirect($this->generateUrl('app_orders_paymentcreate', [
+			'id' => $order->getId(),
+		]));
 	}
 
 	private function createPayment($order)
@@ -162,7 +172,7 @@ class OrdersController extends Controller
 		$amount = $order->getAmount();
 
 		$credits = $em->getRepository("EvangelikoAccountBundle:CreditAmount")->findOneBy(['amt_pay' => $amount]);
-		
+
 		$balance = floatval($credit->getAmount()) + $credits->getPrice();
 
 		$credit->setAmount($balance);
@@ -180,7 +190,7 @@ class OrdersController extends Controller
 			$this->addFlash('success', "Thank you and enjoy reading");
 		}else{
 			$this->addFlash('success', "Successfully bought credits.");
-            $url = $this->generateUrl('evangeliko_credit_index');
+            $url = $this->generateUrl('evangeliko_account_index');
 		}
 
 	    return new RedirectResponse($url);

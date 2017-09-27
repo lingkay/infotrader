@@ -9,6 +9,14 @@ core_user_registration:
     path: /register
     defaults: { _controller: CoreUserBundle:User:registration }
 
+core_account_activation:
+    path: /activation/{id}/{date}
+    defaults: { _controller: CoreUserBundle:User:activateLink }
+
+core_account_send_link:
+    path: /reactivate/{id}
+    defaults: { _controller: CoreUserBundle:User:reactivateLink }
+
 user:
     type: rest
     resource: Core\UserBundle\Controller\Rest\UserController

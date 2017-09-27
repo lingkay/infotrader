@@ -80,11 +80,11 @@ class CreditController extends Controller
 
 			$acct_credit = $em->getRepository("EvangelikoAccountBundle:Credit")->find($data['account_credit_id']);
 
-			if ($data['redirect'] != false) {
-				$order = new Order($data['reload_amount'],$acct_credit, $data['redirect']);
-			}else{
-				$order = new Order($data['reload_amount'],$acct_credit, 0);
-			}
+			// if ($data['redirect'] != false) {
+			// 	$order = new Order($data['reload_amount'],$acct_credit, $data['redirect']);
+			// }else{
+			$order = new Order($data['reload_amount'],$acct_credit, 0);
+			// }
 
 			$em->persist($order);
 			$em->flush();
@@ -125,8 +125,8 @@ class CreditController extends Controller
             $url = $this->request->headers->get("referer");
             return new RedirectResponse($url);   
         } catch (DBALException $e) {
-            $this->addFlash('error', 'Database error encountered. Possible duplicate.');
-            // $this->addFlash('error', $e->getMessage());
+            // $this->addFlash('error', 'Database error encountered. Possible duplicate.');
+            $this->addFlash('error', $e->getMessage());
 
             $url = $this->request->headers->get("referer");
             return new RedirectResponse($url);

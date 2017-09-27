@@ -51,6 +51,14 @@
 						<div class="col-sm-4">
 							<h4>Sign up now to access Hive!</h4>
 							<hr>
+							<div class="form--input-wrap">
+								{% if redirect %}
+									<div class="form--input-wrap with-label">
+										<label for="input_last_name">Activation Link Expired.</label>
+										<a href="{{ path('core_account_send_link', {'id': account}) }}" class="btn btn-primary sm-pull-right">Resend Activation Account</a>
+									</div>
+								{% endif %}
+							</div>
 							<div class="form">
 								{% for flash_msg in app.session.flashbag.get('error') %}
 						            <div class="alert alert-danger alert-dismissable">
@@ -61,13 +69,13 @@
 						            </div>
 								{% endfor %}
 
-								{#{% for flash_msg in app.session.flashbag.get('success') %}#}
-						            {#<div class="alert alert-success alert-dismissable">#}
-						                {#<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>#}
-						                {#<strong>Success: </strong>#}
-						                {#{{ flash_msg }}#}
-						            {#</div>#}
-					            {#{% endfor %}#}
+								{% for flash_msg in app.session.flashbag.get('success') %}
+						            <div class="alert alert-success alert-dismissable">
+						                <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+						                <strong>Success: </strong>
+						                {{ flash_msg }}
+						            </div>
+					            {% endfor %}
 								<form action="{{ path('core_user_registration') }}" method="POST">
 									<div class="form--input-wrap with-label">
 										<label for="input_first_name">First name</label>

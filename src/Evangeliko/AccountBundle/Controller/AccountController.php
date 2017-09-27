@@ -17,6 +17,8 @@ use Evangeliko\AccountBundle\Entity\Post;
 use Evangeliko\CommunityBundle\Entity\CommunityFollowers;
 use Evangeliko\NotificationBundle\Entity\Notification;
 
+use DateTime;
+
 class AccountController extends Controller
 {
 	protected $request;

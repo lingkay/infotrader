@@ -12,7 +12,7 @@ evangeliko_post_submit:
     defaults: { _controller: EvangelikoPostBundle:Post:post }
 
 evangeliko_view_post:
-    path: /view/post
+    path: /view/post/{id}/{amount_modal}
     methods: [GET]
     defaults: { _controller: EvangelikoPostBundle:Post:viewPost }
 

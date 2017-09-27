@@ -139,6 +139,8 @@ class PostController extends Controller
             $post->setMessage($data['reply'])
                 ->setTitle($parent->getTitle())
                 ->setParent($parent);
+
+            $url = $this->generateUrl('evangeliko_view_free_post', array('id' => $parent->getID()));
         }else{
             $post->setMessage($data['post'])
                 ->setTitle($data['post_title']);
@@ -165,13 +167,13 @@ class PostController extends Controller
         return $this->redirect($url);
     }
 
-    public function viewPostAction(Request $request)
+    public function viewPostAction($id, $amount_modal)
     {
-        $this->request = $request;
-        $data = $this->request->query->all();
+        // $this->request = $request;
+        // $data = $this->request->query->all();
         $em = $this->getDoctrine()->getManager();
 
-        $post = $em->getRepository("EvangelikoPostBundle:Post")->find($data['post_id']);
+        $post = $em->getRepository("EvangelikoPostBundle:Post")->find($id);
         $params['post'] = $post;
         $account = $this->getUser()->getAccount();
         $params['account'] = $account;
@@ -185,7 +187,7 @@ class PostController extends Controller
 
         $credit = $this->getUser()->getAccount()->getCredit();
 
-        $amount = $credit->getAmount() - floatval($data['amount_modal']);
+        $amount = $credit->getAmount() - floatval($amount_modal);
 
         $credit->setAmount($amount);
 

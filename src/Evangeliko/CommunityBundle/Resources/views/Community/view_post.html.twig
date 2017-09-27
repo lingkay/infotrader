@@ -62,14 +62,16 @@
                     </div>
 
                     <div class="page-section space respond">
-                        <form method="post" action="{{ path('evangeliko_post_submit') }}">
-                            {{ form.hidden('account_type', 'community') }}
-                            {{ form.hidden('community_id', account.getID ) }}
-                            {{ form.hidden('parent', post.getID) }}
-                            <textarea name="reply" id="" cols="30" rows="1" placeholder="Write a response"></textarea>
-                            {#<textarea id="cform-reply" name="reply" class="form-control" rows="3" placeholder="What's on your mind?"></textarea>#}
-                            <button id="post-btn" type="submit" class="btn btn-primary pull-right">Post</button>
-                        </form>
+                        <div class="row">
+                            <form method="post" action="{{ path('evangeliko_post_submit') }}">
+                                {{ form.hidden('account_type', 'community') }}
+                                {{ form.hidden('community_id', account.getID ) }}
+                                {{ form.hidden('parent', post.getID) }}
+                                <textarea name="reply" id="" cols="30" rows="1" placeholder="Write a response"></textarea>
+                                {#<textarea id="cform-reply" name="reply" class="form-control" rows="3" placeholder="What's on your mind?"></textarea>#}
+                                <button id="post-btn" type="submit" class="btn btn-primary pull-right">Post</button>
+                            </form>
+                        </div>
                     </div>
 
                     <div class="page-section comments">

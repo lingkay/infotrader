@@ -40,7 +40,6 @@
                 <div class="grid articles">
                     <div class="grid-sizer col-sm-6"></div>
                     <div class="gutter-sizer"></div>
-                    {{ form.typeahead('','account', '', '', path('evangeliko_search_account'), 4, 6) }}
                     {% if posts is not null %}
                         {% for post in posts %}
 
@@ -102,11 +101,7 @@
                                             <div class="grid-item-content--text">
                                                 <h3>{{ post.getTitle }}</h3>
                                                 {% if account.getCredit.getAmount >= post.getAmount %}
-                                                    <form id="add-post-form" action="{{ path('evangeliko_view_post') }}">
-                                                    {{ form.hidden('post_id', post.getID) }}
-                                                    {{ form.hidden('amount_modal', post.getAmount)}}
-                                                    <button class="btn btn-default">Read this article for {{ post.getAmount }} credits only.</button>
-                                                    </form>
+                                                    <a href="{{ path('evangeliko_view_post',{'id':post.getID,'amount_modal': post.getAmount}) }}" class="btn btn-default">Read this article for {{ post.getAmount }} credits only.</a>
                                                 {% else %}
                                                     {# <a href="#add_entry_modal" data-toggle="modal" class="btn btn-default"></a> #}
                                                     <a id="show_modal" data-redirect="{{post.getID}}" class="btn btn-default">Read this article for {{ post.getAmount }} credits only.</a>

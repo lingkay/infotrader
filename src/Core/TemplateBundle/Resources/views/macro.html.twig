@@ -89,3 +89,12 @@
     </div>
 </div>
 {% endmacro %}
+
+{% macro typeahead(label, name, display, value, path, label_size, body_size, readonly = false, prefix = 'c') %}
+<div class="form-group">
+    <div class="col-md-{{ body_size }}">
+        <input type="hidden" name="{{name}}_id" id="{{prefix}}{{name}}_id" value="{{value}}">
+        <input type="text" name="{{name}}" value="{{ display }}" placeholder="{{label}}" id="{{prefix}}{{name}}_typeahead" data-path="{{path}}" class="form-control typeahead" autocomplete="off" {{ readonly ? "readonly" : "" }}/>
+    </div>
+</div>
+{% endmacro %}

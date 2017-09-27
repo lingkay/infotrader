@@ -53,7 +53,7 @@ class CreditController extends Controller
 			$params['redirect_id'] = $data['redirect_id'];
 			$params['deduct'] = $data['amt_deduct'];
 		}else{
-			$params['redirect_id'] = 'false';
+			$params['redirect_id'] = 0;
 			$params['deduct'] = 0.00;
 		}
 
@@ -83,7 +83,7 @@ class CreditController extends Controller
 			// if ($data['redirect'] != false) {
 			// 	$order = new Order($data['reload_amount'],$acct_credit, $data['redirect']);
 			// }else{
-			$order = new Order($data['reload_amount'],$acct_credit, 0);
+			$order = new Order($data['reload_amount'],$acct_credit, $data['redirect']);
 			// }
 
 			$em->persist($order);

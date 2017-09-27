@@ -35,7 +35,13 @@ evangeliko_invite_people:
 evangeliko_search_people:
     path: /searchs/people
     methods: [GET]
-    defaults: { _controller: EvangelikoAccountBundle:Account:searchsPeople }
+    defaults: { _controller: EvangelikoAccountBundle:Account:searchPeople }
+
+evangeliko_search_account:
+    path: /ajax/account
+    methods: [GET]
+    defaults: { _controller: EvangelikoAccountBundle:Account:ajaxFilterAccount }
+
 
 evangeliko_credit_index:
     path: /credit

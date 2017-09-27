@@ -11,20 +11,24 @@
 			<div class="modal-body">
 				<div class="row">
 					<div class="col-md-12">
-						Select amount to be reloaded:
-						<br><br><br>
+						Click on the image for the desired reload amount:
+						<br><br>
 						{{ form.hidden('reload_amount',"") }}
-						{# {{ form.hidden('redirect', redirect_id) }} #}
+						{{ form.hidden('redirect', redirect_id|default(0)) }}
 						{{ form.hidden('account_credit_id',app.getUser.getAccount.getID)}}
-						<div class="col-md-4">
-							<a id="set-100" href="#" ><img src="{{ asset("bundles/coretemplate/assets/img/750px-wv-100-svg.png")}}" style="width: 100px; height: 100px;"></a>
+						<div class="row">
+							<div class="col-md-4" style="text-align: center">
+								<a id="set-100" href="#" ><img src="{{ asset("bundles/coretemplate/assets/img/750px-wv-100-svg.png")}}" style="width: 100px; height: 100px;"></a>
+							</div>
+							<div class="col-md-4" style="text-align: center">
+								<a id="set-500" href="#"><img src="{{ asset("bundles/coretemplate/assets/img/500.jpg")}}" style="width: 100px; height: 100px;"></a>
+							</div>
+							<div class="col-md-4" style="text-align: center">
+								<a id="set-1000" href="#"><img src="{{ asset("bundles/coretemplate/assets/img/1000-ast.png")}}" style="width: 100px; height: 100px;"></a>
+							</div>	
 						</div>
-						<div class="col-md-4">
-							<a id="set-500"><img src="{{ asset("bundles/coretemplate/assets/img/500.jpg")}}" style="width: 100px; height: 100px;"></a>
-						</div>
-						<div class="col-md-4">
-							<a id="set-1000"><img src="{{ asset("bundles/coretemplate/assets/img/1000-ast.png")}}" style="width: 100px; height: 100px;"></a>
-						</div>
+						<br>
+						{{ form.group_textnew('Amount to be reloaded', 'reload', "", 5, 4, {'readonly': true}) }}
 					</div>
 				</div>
 			</div>
@@ -42,14 +46,17 @@
 $(document).ready(function(){
 	$("#set-100").click(function(){
 		$("#cform-reload_amount").val(99);
+		$("#cform-reload").val(100);
 	});
 
 	$("#set-500").click(function(){
 		$("#cform-reload_amount").val(489);
+		$("#cform-reload").val(500);
 	});
 
 	$("#set-1000").click(function(){
 		$("#cform-reload_amount").val(969);
+		$("#cform-reload").val(1000);
 	});
 });
 </script>

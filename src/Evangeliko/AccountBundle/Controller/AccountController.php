@@ -228,4 +228,26 @@ class AccountController extends Controller
         $url = $this->generateUrl('evangeliko_community_view', array('slug' => $community->getSlug()));
         return new RedirectResponse($url);
 	}
+
+	public function ajaxFilterAccountAction(Request $request)
+    {
+        $this->request = $request;
+        $data = $this->request->query->all();
+        $em = $this->getDoctrine()->getManager();
+        $query = $data['query'];
+
+        $employees = $em->getRepository("EvangelikoAccountBundle:Account")->createQueryBuilder('o')
+           ->where('o.first_name LIKE :first_name')
+           ->orWhere('o.last_name LIKE :last_name')
+           ->setParameter('first_name', "%".$query."%")
+           ->setParameter('last_name', "%".$query."%")
+           ->getQuery()
+           ->getResult();
+
+        $list_opts = [];
+        foreach ($employees as $employee) {
+            $list_opts[] = array('id'=>$employee->getID(), 'name'=> $employee->getFullName());
+        }
+        return new JsonResponse($list_opts);
+    }
 }

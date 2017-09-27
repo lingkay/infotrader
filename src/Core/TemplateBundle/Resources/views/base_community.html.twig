@@ -74,6 +74,9 @@
     <script src="https://masonry.desandro.com/masonry.pkgd.js"></script>
     <script src="{{ asset('bundles/coretemplate/assets/js/jquery.reject.min.js') }}"></script>
     <script src="{{ asset('bundles/coretemplate/assets/js/main.js') }}"></script>
+    <script src="{{ asset('bundles/coretemplate/assets/bootstrap-typeahead/bootstrap-typeahead.min.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/coretemplate/assets/select2-4.0.3/dist/js/select2.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/coretemplate/assets/js/template.js') }}" type="text/javascript"></script>
     <script>
         /*
          * Uses jQuery!!!!111one
@@ -83,7 +86,14 @@
          =            ON DOM READY            =
          ====================================*/
         jQuery(function() {
-
+            Template.init();
+            $( ".typeahead" ).each(function() {
+                var auto = $(this);
+                if (auto.val() != '') 
+                {
+                    auto.prop('readonly', true);
+                }
+            });
             // Toggle Nav on Click
             jQuery('.toggle-nav').click(function() {
                 // Calling a function in case you want to expand upon this.

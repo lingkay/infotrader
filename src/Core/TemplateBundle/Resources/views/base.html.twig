@@ -89,12 +89,20 @@
     <script src="{{ asset('bundles/coretemplate/assets/js/jquery.placeholder.min.js')}}" type="text/javascript"></script>
     <script src="{{ asset('bundles/coretemplate/assets/js/jquery.reject.min.js')}}" type="text/javascript"></script>
     <script src="{{ asset('bundles/coretemplate/assets/js/main.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/coretemplate/assets/bootstrap-typeahead/bootstrap-typeahead.min.js')}}" type="text/javascript"></script>
     <script src="https://masonry.desandro.com/masonry.pkgd.js"></script>
     <script src="{{ asset('bundles/coretemplate/assets/select2-4.0.3/dist/js/select2.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/coretemplate/assets/js/template.js') }}" type="text/javascript"></script>
     <script>
         jQuery(document).ready(function() {
             Template.init();
+            $( ".typeahead" ).each(function() {
+                var auto = $(this);
+                if (auto.val() != '') 
+                {
+                    auto.prop('readonly', true);
+                }
+            });
         });
     </script>
     {% embed 'CoreTemplateBundle::credit_modal.html.twig' %}{% endembed %}

@@ -94,6 +94,15 @@
                     auto.prop('readonly', true);
                 }
             });
+            $("#csearch_typeahead").change(function(){
+                var search_id = $("#csearch_id").val();
+                var path = "{{ path('evangeliko_profile_index', {'id': 'ID'}) }}";
+
+                if(search_id != "") {
+                    path = path.replace('ID', search_id);
+                    $(location).attr('href',path);
+                }
+            });
             // Toggle Nav on Click
             jQuery('.toggle-nav').click(function() {
                 // Calling a function in case you want to expand upon this.

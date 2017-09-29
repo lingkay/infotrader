@@ -96,11 +96,13 @@
     <script>
         jQuery(document).ready(function() {
             Template.init();
-            $( ".typeahead" ).each(function() {
-                var auto = $(this);
-                if (auto.val() != '') 
-                {
-                    auto.prop('readonly', true);
+            $("#csearch_typeahead").change(function(){
+                var search_id = $("#csearch_id").val();
+                var path = "{{ path('evangeliko_profile_index', {'id': 'ID'}) }}";
+
+                if(search_id != "") {
+                    path = path.replace('ID', search_id);
+                    $(location).attr('href',path);
                 }
             });
         });

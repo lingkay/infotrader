@@ -21,17 +21,24 @@
             <div class="article-page--title mb10">
                 <h1>{{ post.getTitle }}</h1>
                 <div class="article-page--status paid">
-                    <small>You have</small>
-                    <large>Paid</large>
+                    <small>This post is</small>
+                    {% if post.getPostType == 'Paid' %}
+                        <large>Paid</large>
+                    {% else %}
+                        <large>Free</large>
+                    {% endif %}
+                    <br>
                 </div>
             </div>
 
             <div class="article-page--content--wrap">
                 <div class="article-page--content--wrap--inner">
                     <div class="article-page--content">
-                        <div class="featured-image mb30">
-                            <img src="http://via.placeholder.com/940x627" alt="" class="img-responsve">
-                        </div>
+                        {% if post.getFile %}
+                            <div class="featured-image mb30">
+                                <img src="{{ vich_uploader_asset(post.getFile, 'imageFile') }}" alt="{{ post.getFile.getImageName }}" class="img-responsive">
+                            </div>
+                        {% endif %}
                         <p>{{ post.getMessage}}</p>
                     </div>
 
@@ -73,10 +80,9 @@
                             </form>
                         </div>
                     </div>
-
-                    <div class="page-section comments">
-                        <ul>
-                            {% if post.getReply is not null %}
+                    {% if not post.getReply.isEmpty %}
+                        <div class="page-section comments">
+                            <ul>
                                 {% for reply in post.getReply %}
                                     <li>
                                         <div class="single-comment">
@@ -93,9 +99,9 @@
                                         </div>
                                     </li>
                                 {% endfor %}
-                            {% endif %}
-                        </ul>
-                    </div>
+                            </ul>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -6,13 +6,35 @@
 		<div class="container">
 			<div class="notifications-list">
 				<div class="notifications-list--text-wrap">
-					<h4>All Pages</h4>
+					<h4>Your Pages</h4>
+				</div>
+			{# <div class="notifications-list--text-wrap"> #}
+				<ul class="notifications">
+					{% if account.getCommunityFollowed is not null %}
+						{% for cmty,community in account.getCommunityFollowed %}
+							{% if community.getStatus == 'Followed' and community.getCommunity.getUserCreate.getID == app.getUser.getID %}
+								<li>
+									<a href="{{ path('evangeliko_community_view', {'slug': community.getCommunity.getSlug, 'filterType' : 'all' }) }}">
+										<div class="notifications--single">
+											<img src="http://via.placeholder.com/31x30" alt="">
+											<p><strong>{{community.getCommunity.getName}}</strong></p>
+										</div>
+									</a>
+								</li>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+				</ul>
+			{# </div> #}
+
+				<div class="notifications-list--text-wrap">
+					<h4>Followed Pages</h4>
 				</div>
 				<div class="notifications-list--text-wrap">
 					<ul class="notifications">
 						{% if account.getCommunityFollowed is not null %}
 							{% for cmty,community in account.getCommunityFollowed %}
-								{% if community.getStatus == 'Followed' %}
+								{% if community.getStatus == 'Followed' and community.getCommunity.getUserCreate.getID != app.getUser.getID %}
 									<li>
 										<a href="{{ path('evangeliko_community_view', {'slug': community.getCommunity.getSlug, 'filterType' : 'all' }) }}">
 											<div class="notifications--single">

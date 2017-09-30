@@ -118,7 +118,7 @@ class CommunityController extends BaseController
 		}
 	}
 
-	public function postCommunityFollowAction(Request $request, $account_id, $community_id)
+	public function postCommunityFollowAction($account_id, $community_id)
 	{
 		$em = $this->getDoctrine()->getManager();
 

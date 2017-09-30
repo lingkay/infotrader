@@ -47,7 +47,7 @@ class NotificationController extends BaseController implements ClassResourceInte
             $limit = null == $limit ? 100 : $limit; 
         }
 
-        $notificationss = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy([], null,$limit, $offset);
+        $notifications = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy([], null,$limit, $offset);
 
         return $this->view($notifications);
 	}
@@ -59,5 +59,45 @@ class NotificationController extends BaseController implements ClassResourceInte
 		$em = $this->getDoctrine()->getManager();
 
 		$recipient = $em->getRepository("EvangelikoAccountBundle:Account")->find($this->request->request->get('account_id'));
+
+        $notification = new Notification();
+
+        $notification->setRecipient($recipient)
+                     ->setMessage($this->request->request->get('message'))
+                     ->setUserCreate($this->getUser());
+
+        $em->persist($notification);
+        $em->flush();
+
+        return $this->view($notification);
 	}
+
+    public function getAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $notification = $em->getRepository("EvangelikoNotificationBundle:Notification")->find($id);
+
+        if($notification != NULL){
+            return $this->view($notification);
+        }else{
+            return $this->view($notification, 404);
+        }
+    }
+
+    public function deleteAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $notification = $em->getRepository("EvangelikoNotificationBundle:Notification")->find($id);
+
+        if($notification != NULL){
+            $em->remove($notification);
+            $em->flush();
+
+            return "Delete Success.";
+        }else{
+            return $this->view($notification,404);
+        }
+    }
 }

@@ -1,0 +1,3 @@
+notification:
+    type: rest
+    resource: Evangeliko\NotificationBundle\Controller\Rest\NotificationController

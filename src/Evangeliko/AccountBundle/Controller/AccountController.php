@@ -236,6 +236,7 @@ class AccountController extends Controller
         $em = $this->getDoctrine()->getManager();
         $query = $data['query'];
 
+        $list_opts = [];
         $employees = $em->getRepository("EvangelikoAccountBundle:Account")->createQueryBuilder('o')
            ->where('o.first_name LIKE :first_name')
            ->orWhere('o.last_name LIKE :last_name')
@@ -244,10 +245,66 @@ class AccountController extends Controller
            ->getQuery()
            ->getResult();
 
-        $list_opts = [];
+        
         foreach ($employees as $employee) {
             $list_opts[] = array('id'=>$employee->getID(), 'name'=> $employee->getFullName());
         }
+
+        $communities = $em->getRepository("EvangelikoCommunityBundle:Community")->createQueryBuilder('o')
+                          ->where('o.name LIKE :community')
+                          ->setParameter('community', "%".$query."%")
+                          ->getQuery()
+                          ->getResult();
+
+        foreach ($communities as $community) {
+            $list_opts[] = ['id' => $community->getID(), 'name' => $community->getName()];
+        }
+
+        $employees = $em->getRepository("CoreUserBundle:User")->createQueryBuilder('o')
+                    ->where('o.username LIKE :username')
+                    ->setParameter('username', "%".$query."%")
+                    ->getQuery()
+                    ->getResult();
+
+        foreach ($employees as $employee) {
+            $list_opts[] = array('id'=>$employee->getID(), 'name'=> $employee->getUsername()."(".substr($employee->getName(),0,6).")");
+        }
+
+        if(empty($list_opts)) {
+            $list_opts[] = ['id' => "", 'name' => "No Search Result for ".$query];
+        }
         return new JsonResponse($list_opts);
+    }
+
+    public function redirectAction($id,$name)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $data = $em->getRepository("EvangelikoAccountBundle:Account")->find($id);
+
+        if($data != null) {
+            if($data->getFullName() == $name) {
+                $url = $this->generateUrl("evangeliko_profile_index", ['id' => $data->getID()]);
+                return new JsonResponse($url);
+            }
+        }
+
+        $data = $em->getRepository("EvangelikoCommunityBundle:Community")->find($id);
+
+        if($data != NULL){
+            if($data->getName() == $name) {
+                $url = $this->generateUrl('evangeliko_community_view', array('slug' => $data->getSlug(), 'filterType' => 'all'));
+                return new JsonResponse($url);
+            }
+        }
+
+        $data = $em->getRepository("CoreUserBundle:User")->find($id);
+
+        if($data != NULL){
+            if($data->getUsername() == $name){
+                $url = $this->generateUrl("evangeliko_profile_index", ['id' => $data->getAccount()->getID()]);
+                return new JsonResponse($url);
+            }
+        }
     }
 }

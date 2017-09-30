@@ -167,13 +167,13 @@ class PostController extends Controller
         return $this->redirect($url);
     }
 
-    public function viewPostAction($id, $amount_modal)
+    public function viewPostAction(Request $request)
     {
-        // $this->request = $request;
-        // $data = $this->request->query->all();
+        $this->request = $request;
+        $data = $this->request->query->all();
         $em = $this->getDoctrine()->getManager();
 
-        $post = $em->getRepository("EvangelikoPostBundle:Post")->find($id);
+        $post = $em->getRepository("EvangelikoPostBundle:Post")->find($data['id']);
         $params['post'] = $post;
         $account = $this->getUser()->getAccount();
         $params['account'] = $account;
@@ -187,15 +187,17 @@ class PostController extends Controller
 
         $credit = $this->getUser()->getAccount()->getCredit();
 
-        $amount = $credit->getAmount() - floatval($amount_modal);
+        $amount = $credit->getAmount() - floatval($data['amount_modal']);
 
         $credit->setAmount($amount);
 
         $em->flush();
 
-        $twig_file = 'EvangelikoCommunityBundle:Community:view_post.html.twig';
+        // $twig_file = 'EvangelikoCommunityBundle:Community:view_post.html.twig';
 
-        return $this->render($twig_file, $params);
+        $url = $this->generateUrl('evangeliko_view_free_post', array('id' => $post->getID()));
+        return new RedirectResponse($url);
+        // return $this->render($twig_file, $params);
     }
 
 	public function viewFreePostAction(Request $request, $id = null)

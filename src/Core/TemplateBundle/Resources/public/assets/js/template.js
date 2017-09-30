@@ -10,7 +10,6 @@ var Template = function () {
             ajax: auto.data('path'),
             onSelect : function(item){
                 auto.prev('input').val(item.value)
-                auto.prop('readonly', true)
             }
         });
        });       

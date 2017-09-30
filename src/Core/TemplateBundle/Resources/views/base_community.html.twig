@@ -87,20 +87,22 @@
          ====================================*/
         jQuery(function() {
             Template.init();
-            $( ".typeahead" ).each(function() {
-                var auto = $(this);
-                if (auto.val() != '') 
-                {
-                    auto.prop('readonly', true);
-                }
-            });
             $("#csearch_typeahead").change(function(){
                 var search_id = $("#csearch_id").val();
                 var path = "{{ path('evangeliko_profile_index', {'id': 'ID'}) }}";
 
                 if(search_id != "") {
-                    path = path.replace('ID', search_id);
-                    $(location).attr('href',path);
+                    var name = $(this).val();
+                    var path = "{{ path('evangeliko_redirect_account', {'id':'ID', 'name':'NAME'}) }}";
+                        path = path.replace("ID", search_id);
+                        path = path.replace("NAME",name);
+                    $.ajax({
+                        url: path,
+                        type: "GET",
+                        success: function(data){
+                            $(location).attr('href',data);
+                        }
+                    });
                 }
             });
             // Toggle Nav on Click

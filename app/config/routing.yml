@@ -1,4 +1,10 @@
+evangeliko_post_rest:
+    type: rest
+    resource: "@EvangelikoPostBundle/Resources/config/rest/routing.yml"
+    prefix:   /rest
+
 evangeliko_notification_rest:
+    type: rest
     resource: "@EvangelikoNotificationBundle/Resources/config/rest/routing.yml"
     prefix:   /rest
 

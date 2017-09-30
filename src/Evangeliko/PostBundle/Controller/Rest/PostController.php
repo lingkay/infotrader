@@ -1,6 +1,6 @@
 <?php
 
-namespace Evangeliko\NotificationBundle\Controller\Rest;
+namespace Evangeliko\PostBundle\Controller\Rest;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 //use FOS\RestBundle\View\View;
@@ -15,9 +15,9 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 
 use Core\TemplateBundle\Controller\BaseController;
-use Evangeliko\NotificationBundle\Entity\Notification;
+use Evangeliko\PostBundle\Entity\Post;
 
-class NotificationController extends BaseController implements ClassResourceInterface
+class PostController extends BaseController implements ClassResourceInterface
 {
 	/**
      * List all notes.
@@ -47,9 +47,9 @@ class NotificationController extends BaseController implements ClassResourceInte
             $limit = null == $limit ? 100 : $limit; 
         }
 
-        $notifications = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy([], null,$limit, $offset);
+        $posts = $em->getRepository("EvangelikoPostBundle:Post")->findBy([], null,$limit, $offset);
 
-        return $this->view($notifications);
+        return $this->view($posts);
 	}
 
 	public function postAction(Request $request)
@@ -58,30 +58,29 @@ class NotificationController extends BaseController implements ClassResourceInte
 
 		$em = $this->getDoctrine()->getManager();
 
-		$recipient = $em->getRepository("EvangelikoAccountBundle:Account")->find($this->request->request->get('account_id'));
+        $post = new Post();
 
-        $notification = new Notification();
+        $post->setTitle($this->request->request->get('post_title'))
+             ->setMessage($this->request->request->get('post_message'))
+             ->setPostType($this->request->request->get('post_type'))
+             ->setAmount($this->request->request->get('post_amount'));
 
-        $notification->setRecipient($recipient)
-                     ->setMessage($this->request->request->get('message'))
-                     ->setUserCreate($this->getUser());
-
-        $em->persist($notification);
+        $em->persist($post);
         $em->flush();
 
-        return $this->view($notification);
+        return $this->view($post);
 	}
 
     public function getAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $notification = $em->getRepository("EvangelikoNotificationBundle:Notification")->find($id);
+        $post = $em->getRepository("EvangelikoPostBundle:Post")->find($id);
 
-        if($notification != NULL){
-            return $this->view($notification);
+        if($post != NULL){
+            return $this->view($post);
         }else{
-            return $this->view($notification, 404);
+            return $this->view($post, 404);
         }
     }
 
@@ -89,15 +88,15 @@ class NotificationController extends BaseController implements ClassResourceInte
     {
         $em = $this->getDoctrine()->getManager();
 
-        $notification = $em->getRepository("EvangelikoNotificationBundle:Notification")->find($id);
+        $post = $em->getRepository("EvangelikoPostBundle:Post")->find($id);
 
-        if($notification != NULL){
-            $em->remove($notification);
+        if($post != NULL){
+            $em->remove($post);
             $em->flush();
 
             return "Delete Success.";
         }else{
-            return $this->view($notification,404);
+            return $this->view($post,404);
         }
     }
 }

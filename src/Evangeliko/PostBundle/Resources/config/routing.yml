@@ -3,7 +3,7 @@ evangeliko_post_article:
     defaults: { _controller: EvangelikoPostBundle:Post:index }
 
 evangeliko_post_user_article:
-    path: profile/post
+    path: profile/{username}/post
     defaults: { _controller: EvangelikoPostBundle:Post:createUserPost }
 
 evangeliko_post_submit:

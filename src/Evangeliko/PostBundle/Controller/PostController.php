@@ -63,7 +63,7 @@ class PostController extends Controller
         return $this->render($twig_file, $params);
     }
 
-    public function createUserPostAction(Request $request)
+    public function createUserPostAction(Request $request, $username)
     {
         $this->request = $request;
 

@@ -1,6 +1,18 @@
 {% extends 'CoreTemplateBundle::base.html.twig' %}
 {% import 'CoreTemplateBundle::macro.html.twig' as form %}
 
+{% block css %}
+	<style>
+		input[type="file"] {
+			display: none;
+		}
+
+		#fileupload {
+			cursor: pointer;
+		}
+	</style>
+{% endblock %}
+
 {% block content %}
 	<div class="article-page--header">
 		<div class="container">
@@ -27,7 +39,8 @@
 						<input type="text" name="post_title" class="input-text input-text--large" placeholder="Enter title">
 					</div>
 					<div class="form--input-wrap">
-						<a href="" class="input-text input-text--medium"><i class="medium material-icons">add_circle_outline</i>Upload media</a>
+						<input id="upload-file" type="file" name="post_file" id="post_file">
+						<a id="fileupload" class="input-text input-text--medium"><i class="medium material-icons">add_circle_outline</i>Upload media</a>
 					</div>
 					<div class="form--input-wrap trans-field full-field">
 						<textarea name="post" id="" cols="30" rows="10" placeholder="Tell something about your post"></textarea>
@@ -107,6 +120,10 @@
             });
 
         }
+
+        $("#fileupload").click(function(){
+            $("#upload-file").click();
+        });
 	</script>
     {#added#}
 {% endblock %}

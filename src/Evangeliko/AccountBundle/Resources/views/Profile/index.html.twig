@@ -54,7 +54,7 @@
 				</li>
 			</ul>
             {#{% if user.getAccount == account.getId %}#}
-			<a class="btn btn-info" href="{{ path('evangeliko_post_user_article') }}">Post</a>
+			<a class="btn btn-info" href="{{ path('evangeliko_post_user_article', {'username': profile.getUsername }) }}">Post</a>
             {#{% endif %}#}
 		</div>
 	</div>

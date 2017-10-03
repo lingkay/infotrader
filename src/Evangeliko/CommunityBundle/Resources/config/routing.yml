@@ -1,35 +1,25 @@
 evangeliko_community_add_page:
-    path:     /community
+    path:     /pages/create
     methods:  [GET]
     defaults: { _controller: EvangelikoCommunityBundle:Community:index }
 
 evangeliko_community_add_submit:
-    path:     /community
+    path:     /pages/create
     methods:  [POST]
     defaults: { _controller: EvangelikoCommunityBundle:Community:addSubmit }
 
 evangeliko_community_view:
-    path:     /community/{slug}/{filterType}
+    path:     /pages/{slug}/{filterType}
     methods:  [GET]
     defaults: { _controller: EvangelikoCommunityBundle:Community:viewCommunity }
 
 evangeliko_community_list:
-    path:     /community/list
+    path:     /pages/list
     methods:  [GET]
     defaults: { _controller: EvangelikoCommunityBundle:Community:list }
 
-#evangeliko_community_view_paid:
-#    path:     /community/{slug}/{filterType}
-#    methods:  [GET]
-#    defaults: { _controller: EvangelikoCommunityBundle:Community:viewCommunity } #viewCommunityPaid
-#
-#evangeliko_community_view_free:
-#    path:     /community/{slug}/{filterType}
-#    methods:  [GET]
-#    defaults: { _controller: EvangelikoCommunityBundle:Community:viewCommunity } #viewCommunityFree
-
 evangeliko_community_edit_page:
-    path:     /community/edit/{slug}
+    path:     /pages/{slug}/edit
     methods:  [GET]
     defaults: { _controller: EvangelikoCommunityBundle:Community:editPage }
 

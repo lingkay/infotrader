@@ -17,16 +17,16 @@ class ProfileController extends Controller
 {
 	protected $request;
 
-    public function indexAction(Request $request, $id)
+    public function indexAction(Request $request, $username)
     {
         $this->request = $request;
 
         $em = $this->getDoctrine()->getManager();
 
-        $profile = $em->getRepository("EvangelikoAccountBundle:Account")->findOneBy(['id' => $id]);
+        $profile = $em->getRepository("EvangelikoAccountBundle:Account")->findOneBy(['username' => $username]);
         $params['profile'] = $profile;
 
-        $user = $em->getRepository("CoreUserBundle:User")->findOneBy(['account' => $id]);
+        $user = $em->getRepository("CoreUserBundle:User")->findOneBy(['account' => $profile->getId()]);
         $params['user'] = $user;
 
         $account = $this->getUser()->getAccount();
@@ -61,8 +61,9 @@ class ProfileController extends Controller
         return $this->render($twig_file, $params);
     }
 
-    public function profileAboutAction(Request $request)
+    public function profileAboutAction(Request $request, $username)
     {
+
         $this->request = $request;
 
         $em = $this->getDoctrine()->getManager();
@@ -76,6 +77,9 @@ class ProfileController extends Controller
             'lifestyle' => 'Lifestyle',
             'finance' => 'Finance'
         ];
+
+//        var_dump($user);
+//        die();
 
         $account = $this->getUser()->getAccount();
 
@@ -93,7 +97,7 @@ class ProfileController extends Controller
         return $this->render($twig_file, $params);
     }
 
-	public function profileEditAction(Request $request)
+	public function profileEditAction(Request $request, $username)
 	{
 		$this->request = $request;
 
@@ -108,7 +112,11 @@ class ProfileController extends Controller
 			        ->setMobileNumber($data['mobile_number'])
 			        ->setLandlineNumber($data['phone_number'])
 			        ->setAbout($data['about_me'])
-			        ->setInterests($data['interest']);
+                    ->setUsername($data['username']);
+
+			if (isset($data['interest'])){
+                $account->setInterests($data['interest']);
+            }
 
 			$em->flush();
 

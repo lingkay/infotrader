@@ -41,7 +41,10 @@ class Account
 	/** @ORM\Column(type="string", length=100, nullable=true) */
 	protected $about;
 
-	/** @ORM\OneToMany(targetEntity="\Evangeliko\AccountBundle\Entity\AccountInterest", mappedBy="account") */
+    /** @ORM\Column(type="string", length=30) */
+    protected $username;
+
+    /** @ORM\OneToMany(targetEntity="\Evangeliko\AccountBundle\Entity\AccountInterest", mappedBy="account") */
 	protected $interest;
 
 	/**
@@ -149,6 +152,17 @@ class Account
 		return $this->about;
 	}
 
+    public function setUsername($username)
+    {
+        $this->username = $username;
+        return $this;
+    }
+
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
 	public function getFriends()
 	{
 		return $this->friends;
@@ -207,6 +221,7 @@ class Account
 		$data->mobile_no = $this->mobile_no;
 		$data->landline_no = $this->landline_no;
 		$data->about = $this->about;
+        $data->username = $this->username;
 		$this->dataHasEnabled($data);
 		$this->dataTrackCreate($data);
 

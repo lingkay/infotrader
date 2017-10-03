@@ -278,13 +278,15 @@ class AccountController extends Controller
 
     public function redirectAction($id,$name)
     {
+
+
         $em = $this->getDoctrine()->getManager();
 
         $data = $em->getRepository("EvangelikoAccountBundle:Account")->find($id);
 
         if($data != null) {
             if($data->getFullName() == $name) {
-                $url = $this->generateUrl("evangeliko_profile_index", ['id' => $data->getID()]);
+                $url = $this->generateUrl("evangeliko_profile_index", ['username' => $data->getUsername()]);
                 return new JsonResponse($url);
             }
         }
@@ -301,8 +303,11 @@ class AccountController extends Controller
         $data = $em->getRepository("CoreUserBundle:User")->find($id);
 
         if($data != NULL){
-            if($data->getUsername() == $name){
-                $url = $this->generateUrl("evangeliko_profile_index", ['id' => $data->getAccount()->getID()]);
+            $trimName = explode("(",$name);
+            $trimName = trim($trimName[0]);
+
+            if($data->getUsername() == $trimName){
+                $url = $this->generateUrl("evangeliko_profile_index", ['username' => $data->getAccount()->getUsername()]);
                 return new JsonResponse($url);
             }
         }

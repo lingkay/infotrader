@@ -1,7 +1,7 @@
 evangeliko_community_add_page:
     path:     /pages/create
     methods:  [GET]
-    defaults: { _controller: EvangelikoCommunityBundle:Community:index }
+    defaults: { _controller: EvangelikoCommunityBundle:Community:addPage }
 
 evangeliko_community_add_submit:
     path:     /pages/create
@@ -9,7 +9,7 @@ evangeliko_community_add_submit:
     defaults: { _controller: EvangelikoCommunityBundle:Community:addSubmit }
 
 evangeliko_community_view:
-    path:     /pages/{slug}/{filterType}
+    path:     /pages/{slug}/filter={filterType}
     methods:  [GET]
     defaults: { _controller: EvangelikoCommunityBundle:Community:viewCommunity }
 

@@ -21,7 +21,7 @@ class CommunityController extends Controller
 {
 	protected $request;
 
-	public function indexAction(Request $request)
+	public function addPageAction(Request $request)
 	{
 		$this->request = $request;
 
@@ -60,7 +60,7 @@ class CommunityController extends Controller
 		}
 		$params['notifs'] = $notif_list;
 
-		$twig_file = "EvangelikoCommunityBundle:Community:index.html.twig";
+		$twig_file = "EvangelikoCommunityBundle:Community:create.html.twig";
 
 		return $this->render($twig_file, $params);
 	}
@@ -230,7 +230,7 @@ class CommunityController extends Controller
         $community = $em->getRepository("EvangelikoCommunityBundle:Community")->findOneBy(['slug' => $slug]);
         $params['page'] = $community;
 
-        $twig_file = "EvangelikoCommunityBundle:Community:view.html.twig";
+        $twig_file = "EvangelikoCommunityBundle:Community:feed.html.twig";
 
 //        $gal_images = $em->getRepository('EvangelikoPostBundle:Uploads')->findAll();
 //        $params['gal_images'] = $gal_images;

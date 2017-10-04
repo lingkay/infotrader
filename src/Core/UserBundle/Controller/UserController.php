@@ -97,7 +97,7 @@ class UserController extends SecurityController
 
 	public function registrationAction(Request $request)
 	{
-		$this->request = $request;
+        $this->request = $request;
 
         $em = $this->getDoctrine()->getManager();
       
@@ -139,6 +139,7 @@ class UserController extends SecurityController
                     ->setLastName($data['last_name'])
                     ->setEmail($data['email'])
                     ->setInterests($data['interest'])
+                    ->setUsername(uniqid())
                     ->setUserCreate($user_admin);
                     
             $em->persist($account);

@@ -11,37 +11,7 @@
                 <div class="navbar-header--tools">
                     <ul class="nav navbar-nav">
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                <h2>Pages</h2> <i class="small material-icons">keyboard_arrow_down</i>
-                            </a>
-                            <ul class="dropdown-menu right">
-                                {% if account.getCommunityFollowed is not null %}
-                                    {% for cmty,community in account.getCommunityFollowed %}
-                                        {#{% if community|length < 3 %}#}
-                                            {% if community.getStatus == 'Followed' %}
-                                                <li>
-                                                    <a href="{{ path('evangeliko_community_view', {'slug': community.getCommunity.getSlug, 'filterType' : 'all' }) }}">
-                                                        {{community.getCommunity.getName}}
-                                                        <i class="tiny material-icons">keyboard_arrow_right</i>
-                                                    </a>
-                                                </li>
-                                            {% endif %}
-                                        {#{% endif %}#}
-                                    {% endfor %}
-                                {% endif %}
-                                <li>
-                                    <a href="{{ path('evangeliko_community_list') }}">
-                                        <i class="small material-icons">list</i> See All
-                                    </a>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                                <li>
-                                    <a href="{{ path('evangeliko_community_add_page') }}">
-                                        <i class="small material-icons">person</i> Create Page
-                                    </a>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                            </ul>
+                            <a href="{{ path('evangeliko_community_list') }}"><h2>Pages</h2></a>
                         </li>
                     </ul>
                 </div>
@@ -51,6 +21,7 @@
             </div>
             <div class="top-menu pull-right hidden-xs">
                 <ul class="nav navbar-nav">
+                    {#<li><a href="#"><i class="small material-icons">search</i></a></li>#}
                     <li>
                         {# <form action="" class="search-form"> #}
                             {# <div class="form-group has-feedback"> #}

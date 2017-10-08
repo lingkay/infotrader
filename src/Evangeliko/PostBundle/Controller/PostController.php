@@ -15,6 +15,7 @@ use Core\UserBundle\Entity\User;
 use Evangeliko\AccountBundle\Entity\Account;
 use Evangeliko\PostBundle\Entity\Post;
 use Evangeliko\PostBundle\Entity\Uploads;
+use Evangeliko\PostBundle\Entity\PostRead;
 use Evangeliko\CommunityBundle\Entity\CommunityFollowers;
 
 class PostController extends Controller
@@ -216,6 +217,17 @@ class PostController extends Controller
             $notif_list[] = $notif;
         }
         $params['notifs'] = $notif_list;
+
+        if ($post){
+            $exist_post_read = $em->getRepository("EvangelikoPostBundle:PostRead")->findBy(['post' => $id, 'reader' => $account->getID()]);
+            if(!$exist_post_read){
+                $reader = new PostRead();
+                $reader->setPost($post);
+                $reader->setReader($account);
+                $em->persist($reader);
+                $em->flush();
+            }
+        }
 
 		$twig_file = 'EvangelikoCommunityBundle:Community:view_post.html.twig';
 

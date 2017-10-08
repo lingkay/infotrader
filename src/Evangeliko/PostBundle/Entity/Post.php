@@ -65,6 +65,11 @@ class Post
 	 */
 	protected $reply;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Evangeliko\PostBundle\Entity\PostRead", mappedBy="post")
+     */
+    protected $post_readers;
+
 	function __construct()
 	{
 		$this->initTrackCreate();
@@ -179,6 +184,11 @@ class Post
     public function getReply()
     {
     	return $this->reply;
+    }
+
+    public function getPostReaders()
+    {
+        return $this->post_readers;
     }
 
     public function getTimePassed()

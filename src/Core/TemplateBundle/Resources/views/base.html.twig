@@ -98,7 +98,7 @@
             Template.init();
             $("#csearch_typeahead").change(function(){
                 var search_id = $("#csearch_id").val();
-                var path = "{{ path('evangeliko_profile_index', {'username': 'ID'}) }}";
+                var path = "{{ path('evangeliko_profile_index', {'username': 'ID', 'filterType': 'all'}) }}";
 
                 if(search_id != "") {
                     var name = $(this).val();

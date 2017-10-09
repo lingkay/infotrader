@@ -17,7 +17,7 @@ class ProfileController extends Controller
 {
 	protected $request;
 
-    public function indexAction(Request $request, $username)
+    public function indexAction(Request $request, $username, $filterType)
     {
         $this->request = $request;
 
@@ -32,6 +32,9 @@ class ProfileController extends Controller
         $account = $this->getUser()->getAccount();
         $params['account'] = $account;
 
+        $filter_type = $filterType;
+        $params['filter_type'] = $filter_type;
+
         $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
 
         $notif_list = [];
@@ -41,12 +44,33 @@ class ProfileController extends Controller
         }
         $params['notifs'] = $notif_list;
 
-        $posts = $em->getRepository('EvangelikoPostBundle:Post')
-            ->findBy(
-                ["community" => NULL,
-                    "user_create" => $user->getId()],
-                ['date_create' => "DESC"]
-            );
+        if ($filter_type == 'paid'){
+            $posts = $em->getRepository('EvangelikoPostBundle:Post')->createQueryBuilder('p')
+//                ->join('p.post_readers', 'pr') //join to paid post
+                ->where('p.community is NULL')
+                ->andWhere('p.user_create = :user_create')
+                ->setParameter('user_create', $user->getId())
+                ->orderBy('p.date_create', 'DESC')
+                ->getQuery()
+                ->getResult();
+        } elseif ($filter_type == 'read' ){
+            $posts = $em->getRepository('EvangelikoPostBundle:Post')->createQueryBuilder('p')
+                ->join('p.post_readers', 'pr')
+                ->where('p.community is NULL')
+                ->andWhere('p.user_create = :user_create')
+                ->setParameter('user_create', $user->getId())
+                ->orderBy('p.date_create', 'DESC')
+                ->getQuery()
+                ->getResult();
+        } else{
+            $posts = $em->getRepository('EvangelikoPostBundle:Post')
+                ->findBy(
+                    ["community" => NULL,
+                        "user_create" => $user->getId()],
+                    ['date_create' => "DESC"]
+                );
+        }
+
         $post_array = array();
         foreach ($posts as $post){
             if ($post->getParent() == NULL) {

@@ -34,6 +34,9 @@
                     <li {% if filter_type is defined %}{% if filter_type == 'free' %} class="active" {% endif %}{% endif %}>
                         <a href="{{ path('evangeliko_community_view', {'slug': page.getSlug, 'filterType' : 'free'}) }}">Free articles</a>
                     </li>
+                    <li {% if filter_type is defined %}{% if filter_type == 'read' %} class="active" {% endif %}{% endif %}>
+                        <a href="{{ path('evangeliko_community_view', {'slug': page.getSlug, 'filterType' : 'read'}) }}">You've read</a>
+                    </li>
                 </ul>
                 <a class="btn btn-info" href="{{ path('evangeliko_post_article', {'slug': page.getSlug }) }}">Post</a>
             </div>

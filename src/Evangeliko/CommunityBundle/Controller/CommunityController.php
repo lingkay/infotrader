@@ -232,9 +232,6 @@ class CommunityController extends Controller
 
         $twig_file = "EvangelikoCommunityBundle:Community:feed.html.twig";
 
-//        $gal_images = $em->getRepository('EvangelikoPostBundle:Uploads')->findAll();
-//        $params['gal_images'] = $gal_images;
-
         $filter_type = $filterType;
         $params['filter_type'] = $filter_type;
 
@@ -251,7 +248,6 @@ class CommunityController extends Controller
         $search_result = [];
         $params['search'] = $search_result;
 
-
         $account = $this->getUser()->getAccount();
         $params['account'] = $account;
 
@@ -262,7 +258,7 @@ class CommunityController extends Controller
         }
         $params['notifs'] = $notif_list;
 
-        if($filter_type == 'free' || $filter_type == 'paid'){
+        if ($filter_type == 'free' || $filter_type == 'paid'){
             if ($filter_type == 'free'){
                 $filter_type = 'free';
             } elseif ($filter_type == 'paid'){
@@ -274,6 +270,14 @@ class CommunityController extends Controller
                         "post_type" => $filter_type],
                     ['date_create' => "DESC"]
                 );
+        } elseif ($filter_type == 'read' ){
+            $posts = $em->getRepository('EvangelikoPostBundle:Post')->createQueryBuilder('p')
+                ->join('p.post_readers', 'pr')
+                ->where('p.community = :community')
+                ->setParameter('community', $community->getID())
+                ->orderBy('p.date_create', 'DESC')
+                ->getQuery()
+                ->getResult();
         } else{
             $posts = $em->getRepository('EvangelikoPostBundle:Post')
                 ->findBy(

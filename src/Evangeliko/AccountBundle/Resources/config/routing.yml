@@ -3,7 +3,7 @@ evangeliko_account_index:
     defaults: { _controller: EvangelikoAccountBundle:Account:index }
 
 evangeliko_profile_index:
-    path: /profile/newsfeed{username}
+    path: /profile/newsfeed{username}/filter={filterType}
     methods: [GET]
     defaults: { _controller: EvangelikoAccountBundle:Profile:index }
 

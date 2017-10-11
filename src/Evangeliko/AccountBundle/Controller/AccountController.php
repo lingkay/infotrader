@@ -30,6 +30,7 @@ class AccountController extends Controller
         $user = $this->getUser();
 
         $params['account'] = $user->getAccount();
+        $params['user'] = $user;
 
         $em = $this->getDoctrine()->getManager();
 

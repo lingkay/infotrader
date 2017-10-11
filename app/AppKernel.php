@@ -41,6 +41,7 @@ class AppKernel extends Kernel
             new Evangeliko\TestBundle\EvangelikoTestBundle(),
 
             new Vich\UploaderBundle\VichUploaderBundle(),
+            new SymfonyBundles\RedisBundle\SymfonyBundlesRedisBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

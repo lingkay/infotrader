@@ -46,7 +46,7 @@
                             <li><a href="{{ path('evangeliko_notification_index') }}">See All</a></li>
                         </ul>
                     </li>
-                    <li><a href="{{ path('evangeliko_profile_index', {'username': user.getUsername|default('null'), 'filterType': 'all'}) }}"><img src="http://via.placeholder.com/24x24" alt="" class="img-circle img-responsve"> <span class="">{{account.getFirstName}}</span></a></li>
+                    <li><a href="{{ path('evangeliko_profile_index', {'username': account.getUsername|default('null'), 'filterType': 'all'}) }}"><img src="http://via.placeholder.com/24x24" alt="" class="img-circle img-responsve"> <span class="">{{account.getFirstName}}</span></a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="">$ {{account.getCredit.getAmount}}</span></a></a>
                         <ul class="dropdown-menu right">
@@ -59,7 +59,7 @@
                         <ul class="dropdown-menu right">
                             <li><a href="{{ path('evangeliko_community_add_page') }}">Create Page</a></li>
                             <li><a href="#">Invite friends</a></li>
-                            <li><a href="{{ path('evangeliko_profile_about', {'username': user.getUsername|default('null') }) }}">Settings</a></li>
+                            <li><a href="{{ path('evangeliko_profile_about', {'username': account.getUsername|default('null') }) }}">Settings</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="/logout">Logout</a></li>
                         </ul>

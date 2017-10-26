@@ -45,13 +45,60 @@
                     <div class="page-section grid-item-content--share">
                         <ul>
                             <li>
-                                <a href="#" class="grid-item-content--share--button honeys">
-                                    <i class="honey-icon"></i> 5 honeys
-                                </a>
+                                {% if post.getPostLikes|length > 0 %}
+                                    {% set break = false %}
+                                    {% set liked = false %}
+                                    {% set like_count = null %}
+
+                                    {% for post_likes in post.getPostLikes if not break %}
+                                        {% if post_likes.getLiker.getID == account.getID and post_likes.isEnabled %}
+                                            {% set liked = true %}
+                                            {% set break = true %}
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% for post_likes in post.getPostLikes %}
+                                        {% if post_likes.isEnabled %}
+                                            {% set like_count = like_count + 1 %}
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if liked == true %}
+                                        {#liked#}
+                                        <a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
+                                            <i class="small material-icons">menu</i>{{ like_count }} like
+                                        </a>
+                                        <a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" rel="{{ post.getID }}">
+                                            <i class="small material-icons">menu</i>{{ like_count }} unlike
+                                        </a>
+                                    {% else %}
+                                        {#not liked#}
+                                        <a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" rel="{{ post.getID }}">
+                                            <i class="small material-icons">menu</i>{{ like_count }} like
+                                        </a>
+                                        <a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
+                                            <i class="small material-icons">menu</i>{{ like_count }} unlike
+                                        </a>
+                                    {% endif %}
+
+                                {% else %}
+                                    {#No Like#}
+                                    <a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" rel="{{ post.getID }}">
+                                        <i class="small material-icons">menu</i> like
+                                    </a>
+                                    <a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
+                                        <i class="small material-icons">menu</i> unlike
+                                    </a>
+                                {% endif %}
                             </li>
                             <li>
                                 <a href="#" class="grid-item-content--share--button comments">
-                                    <i class="small material-icons">chat_bubble_outline</i> 4 comments
+                                    <i class="small material-icons">chat_bubble_outline</i>
+                                    {% if not post.getReply.isEmpty %}
+                                        {{ post.getReply|length }} comments
+                                    {% else %}
+                                        comment
+                                    {% endif %}
                                 </a>
                             </li>
                             <li>
@@ -74,9 +121,9 @@
                                 {{ form.hidden('account_type', 'community') }}
                                 {{ form.hidden('community_id', account.getID ) }}
                                 {{ form.hidden('parent', post.getID) }}
-                                <textarea name="reply" id="" cols="30" rows="1" placeholder="Write a response"></textarea>
+                                <textarea name="reply" id="comment-txt" cols="30" rows="1" placeholder="Write a response"></textarea>
                                 {#<textarea id="cform-reply" name="reply" class="form-control" rows="3" placeholder="What's on your mind?"></textarea>#}
-                                <button id="post-btn" type="submit" class="btn btn-primary pull-right">Post</button>
+                                <button id="post-btn" type="submit" class="btn btn-primary pull-right" style="display: none;">Post</button>
                             </form>
                         </div>
                     </div>
@@ -110,6 +157,25 @@
 {% block js %}
     <script type="text/javascript">
         $(document).ready(function(e){
+
+            $('#comment-txt').keydown(function(event) {
+                // enter has keyCode = 13, change it if you want to use another button
+                if (event.keyCode == 13) {
+                    this.form.submit();
+                    return false;
+                }
+            });
+
+            $('.like-btn').click(function(){
+                var post_id = $(this).attr('rel');
+                postLike(post_id);
+            });
+
+            $('.unlike-btn').click(function(){
+                var post_id = $(this).attr('rel');
+                postUnlike(post_id);
+            });
+
             $('#posts').on('click', '.reply-form', function() {
 
                 var read_more_div = $(this).parent("div");
@@ -120,5 +186,41 @@
                 short_msg_div.show();
             });
         });
+
+        function postLike(id) {
+            $.ajax({
+                url:'{{ (path('evangeliko_like_post')) }}',
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "id": id
+                },
+                async: true,
+                success: function (data)
+                {
+                    $("#like_btn_"+data.output).hide();
+                    $("#unlike_btn_"+data.output).show();
+                }
+            });
+            return false;
+        }
+
+        function postUnlike(id) {
+            $.ajax({
+                url:'{{ (path('evangeliko_unlike_post')) }}',
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "id": id
+                },
+                async: true,
+                success: function (data)
+                {
+                    $("#like_btn_"+data.output).show();
+                    $("#unlike_btn_"+data.output).hide();
+                }
+            });
+            return false;
+        }
     </script>
 {% endblock %}

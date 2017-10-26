@@ -44,7 +44,20 @@ class ProfileController extends Controller
         }
         $params['notifs'] = $notif_list;
 
-        if ($filter_type == 'paid'){
+        if ($filter_type == 'free' || $filter_type == 'paid'){
+            if ($filter_type == 'free'){
+                $filter_type = 'free';
+            } elseif ($filter_type == 'paid'){
+                $filter_type = 'Paid';
+            }
+            $posts = $em->getRepository('EvangelikoPostBundle:Post')
+                ->findBy(
+                    ["community" => NULL,
+                        "user_create" => $user->getId(),
+                        "post_type" => $filter_type],
+                    ['date_create' => "DESC"]
+                );
+        } elseif ($filter_type == 'sold'){
             $posts = $em->getRepository('EvangelikoPostBundle:Post')->createQueryBuilder('p')
 //                ->join('p.post_readers', 'pr') //join to paid post
                 ->where('p.community is NULL')

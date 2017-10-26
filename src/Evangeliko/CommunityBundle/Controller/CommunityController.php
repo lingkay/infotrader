@@ -185,7 +185,7 @@ class CommunityController extends Controller
             'Private' => 'Private'
         ];
 
-        $twig_file = "EvangelikoCommunityBundle:Community:index.html.twig";
+        $twig_file = "EvangelikoCommunityBundle:Community:create.html.twig";
 
         return $this->render($twig_file, $params);
     }

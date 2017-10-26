@@ -44,21 +44,29 @@
 					</ul>
 				</div>
 			</div>
-
 			<ul class="feed--tabs--menu hidden-xs">
 				<li {% if filter_type is defined %}{% if filter_type == 'all' %} class="active" {% endif %}{% endif %}>
-					<a href="{{ path('evangeliko_profile_index', {'username': account.getUsername, 'filterType': 'all'}) }}">My articles</a>
+					<a href="{{ path('evangeliko_profile_index', {'username': profile.getUsername, 'filterType': 'all'}) }}">All articles</a>
 				</li>
-				<li {% if filter_type is defined %}{% if filter_type == 'paid' %} class="active" {% endif %}{% endif %}>
-					<a href="{{ path('evangeliko_profile_index', {'username': account.getUsername, 'filterType' : 'paid'}) }}">You've Paid</a>
-				</li>
-				<li {% if filter_type is defined %}{% if filter_type == 'read' %} class="active" {% endif %}{% endif %}>
-					<a href="{{ path('evangeliko_profile_index', {'username': account.getUsername, 'filterType' : 'read'}) }}">You've read</a>
-				</li>
+                {% if profile.getId == account.getId %}
+					<li {% if filter_type is defined %}{% if filter_type == 'paid' %} class="active" {% endif %}{% endif %}>
+						<a href="{{ path('evangeliko_profile_index', {'username': profile.getUsername, 'filterType' : 'paid'}) }}">Paid articles</a>
+					</li>
+					<li {% if filter_type is defined %}{% if filter_type == 'free' %} class="active" {% endif %}{% endif %}>
+						<a href="{{ path('evangeliko_profile_index', {'username': profile.getUsername, 'filterType' : 'free'}) }}">Free articles</a>
+					</li>
+				{% else %}
+					<li {% if filter_type is defined %}{% if filter_type == 'sold' %} class="active" {% endif %}{% endif %}>
+						<a href="{{ path('evangeliko_profile_index', {'username': profile.getUsername, 'filterType' : 'sold'}) }}">You've Paid</a>
+					</li>
+					<li {% if filter_type is defined %}{% if filter_type == 'read' %} class="active" {% endif %}{% endif %}>
+						<a href="{{ path('evangeliko_profile_index', {'username': profile.getUsername, 'filterType' : 'read'}) }}">You've read</a>
+					</li>
+				{% endif %}
 			</ul>
-            {#{% if user.getAccount == account.getId %}#}
-			<a class="btn btn-info" href="{{ path('evangeliko_post_user_article', {'username': profile.getUsername }) }}">Post</a>
-            {#{% endif %}#}
+            {% if profile.getId == account.getId %}
+				<a class="btn btn-info" href="{{ path('evangeliko_post_user_article', {'username': profile.getUsername }) }}">Post</a>
+            {% endif %}
 		</div>
 	</div>
 
@@ -80,9 +88,7 @@
                                         {% if post.getUserCreate.getID == app.getUser.getID %}
 											<div class="grid-item-content--text">
 												<h3>{{ post.getTitle }}</h3>
-												<p>
-                                                    {{ post.getMessage }}
-												</p>
+												<p>{{ post.getMessage }}</p>
 											</div>
                                             {% if post.getFile %}
 												<img src="{{ vich_uploader_asset(post.getFile, 'imageFile') }}" alt="{{ post.getFile.getImageName }}" class="img-responsive">
@@ -90,13 +96,60 @@
 											<div class="grid-item-content--share">
 												<ul>
 													<li>
-														<a href="#" class="grid-item-content--share--button honeys">
-															<i class="small material-icons">menu</i> honeys
-														</a>
+                                                        {% if post.getPostLikes|length > 0 %}
+                                                            {% set break = false %}
+                                                            {% set liked = false %}
+                                                            {% set like_count = null %}
+
+                                                            {% for post_likes in post.getPostLikes if not break %}
+                                                                {% if post_likes.getLiker.getID == account.getID and post_likes.isEnabled %}
+                                                                    {% set liked = true %}
+                                                                    {% set break = true %}
+                                                                {% endif %}
+                                                            {% endfor %}
+
+                                                            {% for post_likes in post.getPostLikes %}
+                                                                {% if post_likes.isEnabled %}
+                                                                    {% set like_count = like_count + 1 %}
+                                                                {% endif %}
+                                                            {% endfor %}
+
+                                                            {% if liked == true %}
+                                                                {#liked#}
+																<a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
+																	<i class="small material-icons">menu</i>{{ like_count }} like
+																</a>
+																<a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" rel="{{ post.getID }}">
+																	<i class="small material-icons">menu</i>{{ like_count }} unlike
+																</a>
+                                                            {% else %}
+                                                                {#not liked#}
+																<a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" rel="{{ post.getID }}">
+																	<i class="small material-icons">menu</i>{{ like_count }} like
+																</a>
+																<a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
+																	<i class="small material-icons">menu</i>{{ like_count }} unlike
+																</a>
+                                                            {% endif %}
+
+                                                        {% else %}
+                                                            {#No Like#}
+															<a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" rel="{{ post.getID }}">
+																<i class="small material-icons">menu</i> like
+															</a>
+															<a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
+																<i class="small material-icons">menu</i> unlike
+															</a>
+                                                        {% endif %}
 													</li>
 													<li>
 														<a href="#" class="grid-item-content--share--button comments">
-															<i class="small material-icons">chat_bubble_outline</i> comments
+															<i class="small material-icons">chat_bubble_outline</i>
+                                                            {% if not post.getReply.isEmpty %}
+                                                                {{ post.getReply|length }} comments
+                                                            {% else %}
+																comment
+                                                            {% endif %}
 														</a>
 													</li>
 													<li>
@@ -131,13 +184,60 @@
 										<div class="grid-item-content--share">
 											<ul>
 												<li>
-													<a href="#" class="grid-item-content--share--button honeys">
-														<i class="small material-icons">menu</i> honeys
-													</a>
+                                                    {% if post.getPostLikes|length > 0 %}
+                                                        {% set break = false %}
+                                                        {% set liked = false %}
+                                                        {% set like_count = null %}
+
+                                                        {% for post_likes in post.getPostLikes if not break %}
+                                                            {% if post_likes.getLiker.getID == account.getID and post_likes.isEnabled %}
+                                                                {% set liked = true %}
+                                                                {% set break = true %}
+                                                            {% endif %}
+                                                        {% endfor %}
+
+                                                        {% for post_likes in post.getPostLikes %}
+                                                            {% if post_likes.isEnabled %}
+                                                                {% set like_count = like_count + 1 %}
+                                                            {% endif %}
+                                                        {% endfor %}
+
+                                                        {% if liked == true %}
+                                                            {#liked#}
+															<a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
+																<i class="small material-icons">menu</i>{{ like_count }} like
+															</a>
+															<a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" rel="{{ post.getID }}">
+																<i class="small material-icons">menu</i>{{ like_count }} unlike
+															</a>
+                                                        {% else %}
+                                                            {#not liked#}
+															<a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" rel="{{ post.getID }}">
+																<i class="small material-icons">menu</i>{{ like_count }} like
+															</a>
+															<a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
+																<i class="small material-icons">menu</i>{{ like_count }} unlike
+															</a>
+                                                        {% endif %}
+
+                                                    {% else %}
+                                                        {#No Like#}
+														<a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" rel="{{ post.getID }}">
+															<i class="small material-icons">menu</i> like
+														</a>
+														<a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
+															<i class="small material-icons">menu</i> unlike
+														</a>
+                                                    {% endif %}
 												</li>
 												<li>
 													<a href="#" class="grid-item-content--share--button comments">
-														<i class="small material-icons">chat_bubble_outline</i> comments
+														<i class="small material-icons">chat_bubble_outline</i>
+                                                        {% if not post.getReply.isEmpty %}
+                                                            {{ post.getReply|length }} comments
+                                                        {% else %}
+															comment
+                                                        {% endif %}
 													</a>
 												</li>
 												<li>
@@ -163,4 +263,58 @@
 			</div>
 		</div>
 	</div>
+{% endblock %}
+
+{% block js %}
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+	<script type="text/javascript">
+        $(document).ready(function(){
+            $('.like-btn').click(function(){
+                var post_id = $(this).attr('rel');
+                postLike(post_id);
+            });
+
+            $('.unlike-btn').click(function(){
+                var post_id = $(this).attr('rel');
+                postUnlike(post_id);
+            });
+        });
+
+        function postLike(id) {
+            $.ajax({
+                url:'{{ (path('evangeliko_like_post')) }}',
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "id": id
+                },
+                async: true,
+                success: function (data)
+                {
+                    $("#like_btn_"+data.output).hide();
+                    $("#unlike_btn_"+data.output).show();
+                }
+            });
+            return false;
+        }
+
+        function postUnlike(id) {
+            $.ajax({
+                url:'{{ (path('evangeliko_unlike_post')) }}',
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "id": id
+                },
+                async: true,
+                success: function (data)
+                {
+                    $("#like_btn_"+data.output).show();
+                    $("#unlike_btn_"+data.output).hide();
+                }
+            });
+            return false;
+        }
+
+	</script>
 {% endblock %}

@@ -16,6 +16,7 @@ use Evangeliko\AccountBundle\Entity\Account;
 use Evangeliko\PostBundle\Entity\Post;
 use Evangeliko\PostBundle\Entity\Uploads;
 use Evangeliko\PostBundle\Entity\PostRead;
+use Evangeliko\PostBundle\Entity\PostLikes;
 use Evangeliko\CommunityBundle\Entity\CommunityFollowers;
 
 class PostController extends Controller
@@ -124,7 +125,7 @@ class PostController extends Controller
             }
         } else{
             $account = $user->getAccount();
-            $url = $this->generateUrl('evangeliko_profile_index', array('id' => $account->getId()));
+            $url = $this->generateUrl('evangeliko_profile_index', array('username' => $account->getUsername(), 'filterType' => 'all'));
         }
         
         if(isset($data['post_type'])){
@@ -141,7 +142,9 @@ class PostController extends Controller
                 ->setTitle($parent->getTitle())
                 ->setParent($parent);
 
-            $url = $this->generateUrl('evangeliko_view_free_post', array('id' => $parent->getID()));
+//            $url = $this->generateUrl('evangeliko_view_free_post', array('id' => $parent->getID()));
+            $url = $request->headers->get('referer');
+//            return new RedirectResponse($referer);
         }else{
             $post->setMessage($data['post'])
                 ->setTitle($data['post_title']);
@@ -219,7 +222,7 @@ class PostController extends Controller
         $params['notifs'] = $notif_list;
 
         if ($post){
-            $exist_post_read = $em->getRepository("EvangelikoPostBundle:PostRead")->findBy(['post' => $id, 'reader' => $account->getID()]);
+            $exist_post_read = $em->getRepository("EvangelikoPostBundle:PostRead")->findBy(['post' => $post->getID(), 'reader' => $account->getID()]);
             if(!$exist_post_read){
                 $reader = new PostRead();
                 $reader->setPost($post);
@@ -254,5 +257,59 @@ class PostController extends Controller
         $twig_file = 'EvangelikoPostBundle:Post:view_paid_post.html.twig';
 
         return $this->render($twig_file, $params);
+    }
+
+    public function likePostAction(Request $request)
+    {
+        $this->request = $request;
+        $em = $this->getDoctrine()->getManager();
+        $data = $this->request->request->all();
+
+        $post = $em->getRepository("EvangelikoPostBundle:Post")->find($data['id']);
+        $account = $this->getUser()->getAccount();
+
+        if ($post){
+            $exist_post_like = $em->getRepository("EvangelikoPostBundle:PostLikes")->findOneBy(['post' => $post->getID(), 'liker' => $account->getID()]);
+
+            if($exist_post_like){
+                $exist_post_like->setEnabled(true);
+                $em->flush();
+            } else{
+                $like_post = new PostLikes();
+                $like_post->setPost($post);
+                $like_post->setLiker($account);
+                $em->persist($like_post);
+                $em->flush();
+            }
+
+            $arrData = ['output' => $post->getID()];
+            return new JsonResponse($arrData);
+        }
+
+        return $this->render("/"); //redirect to index chaagne rredirect
+    }
+
+    public function unlikePostAction(Request $request)
+    {
+        $this->request = $request;
+        $em = $this->getDoctrine()->getManager();
+        $data = $this->request->request->all();
+
+        $post = $em->getRepository("EvangelikoPostBundle:Post")->find($data['id']);
+        $account = $this->getUser()->getAccount();
+
+        if ($post){
+            $exist_post_like = $em->getRepository("EvangelikoPostBundle:PostLikes")->findOneBy(['post' => $post->getID(), 'liker' => $account->getID()]);
+
+            if($exist_post_like){
+                $exist_post_like->setEnabled(false);
+                $em->flush();
+            }
+
+            $arrData = ['output' => $post->getID()];
+            return new JsonResponse($arrData);
+        }
+
+        return $this->render("/"); //redirect to index chaagne rredirect
     }
 }

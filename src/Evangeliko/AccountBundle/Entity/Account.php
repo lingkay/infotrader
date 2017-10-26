@@ -78,8 +78,13 @@ class Account
     /**
      * @ORM\OneToMany(targetEntity="\Evangeliko\PostBundle\Entity\PostRead", mappedBy="reader")
      */
-
     protected $post_read;
+
+    /**
+     * @ORM\OneToMany(targetEntity="\Evangeliko\PostBundle\Entity\PostLikes", mappedBy="liker")
+     */
+    protected $post_liked;
+
 	/**
 	 * @ORM\OneToOne(targetEntity="\Evangeliko\AccountBundle\Entity\Credit", mappedBy="account")
 	 */
@@ -208,6 +213,11 @@ class Account
     public function getPostRead()
     {
         return $this->post_read;
+    }
+
+    public function getPostLiked()
+    {
+        return $this->post_liked;
     }
 
 	public function getCommunityFollowed()

@@ -287,7 +287,7 @@ class AccountController extends Controller
 
         if($data != null) {
             if($data->getFullName() == $name) {
-                $url = $this->generateUrl("evangeliko_profile_index", ['username' => $data->getUsername()]);
+                $url = $this->generateUrl("evangeliko_profile_index", ['username' => $data->getUsername(), 'filterType' => 'all']);
                 return new JsonResponse($url);
             }
         }

@@ -1,0 +1,39 @@
+evangeliko_community_add_page:
+    path:     /pages/create
+    methods:  [GET]
+    defaults: { _controller: EvangelikoCommunityBundle:Community:addPage }
+
+evangeliko_community_add_submit:
+    path:     /pages/create
+    methods:  [POST]
+    defaults: { _controller: EvangelikoCommunityBundle:Community:addSubmit }
+
+evangeliko_community_view:
+    path:     /pages/{slug}/filter={filterType}
+    methods:  [GET]
+    defaults: { _controller: EvangelikoCommunityBundle:Community:viewCommunity }
+
+evangeliko_community_list:
+    path:     /pages/list
+    methods:  [GET]
+    defaults: { _controller: EvangelikoCommunityBundle:Community:list }
+
+evangeliko_community_edit_page:
+    path:     /pages/{slug}/edit
+    methods:  [GET]
+    defaults: { _controller: EvangelikoCommunityBundle:Community:editPage }
+
+evangeliko_community_follow:
+    path:     /community/follow
+    methods:  [POST]
+    defaults: { _controller: EvangelikoCommunityBundle:Community:communityFollow }
+
+evangeliko_community_pending_invite:
+    path:     /community/pending/invites
+    methods:  [GET]
+    defaults: { _controller: EvangelikoCommunityBundle:Community:pendingInvites }
+
+evangeliko_community_accept_invite:
+    path:     /community/pending/invite
+    methods:  [POST]
+    defaults: { _controller: EvangelikoCommunityBundle:Community:acceptInvites }

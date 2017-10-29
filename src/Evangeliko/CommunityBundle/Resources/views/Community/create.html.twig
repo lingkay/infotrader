@@ -1,0 +1,78 @@
+{% extends 'CoreTemplateBundle::base.html.twig' %}
+{% import 'CoreTemplateBundle::macro.html.twig' as form %}
+
+{% block content %}
+	<form class="form-horizontal" method="post" data-toggle="validator" role="form">
+		<div class="article-page--header">
+			<div class="container">
+				<div class="page-primary-details">
+					<input type="text" name="page_name" class="input-text input-text--large" value="{{ page.getName|default('') }}" placeholder="Type your page name">
+					<textarea name="description" id="" class="input-text input-text--default" placeholder="Tell something about your page">{{ page.getDescription|default('') }}</textarea>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="page--wrap--contents">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-5">
+						<div class="page-primary-details">
+
+							<div class="form--input-wrap">
+								<a href="" class="input-text input-text--medium"><i class="medium material-icons">add_circle_outline</i>Upload cover photo</a>
+							</div>
+							<div class="form--input-wrap with-label">
+								<label for="">URL</label>
+
+								<div class="url">
+									<label for="" class="input-text--medium">{{ app.request.getSchemeAndHttpHost() ~ "/" }}</label>
+									<input type="text" name="slug" class="input-text--medium" value="{{ page.getSlug|default('') }}" required>
+								</div>
+							</div>
+
+							<div class="form--input-wrap with-label">
+								<label for="">Category</label>
+                                {#<select>#}
+                                {#{% for interest in page.getInterests %}#}
+                                {#<option></option>#}
+                                {#{% endfor %}#}
+                                {#</select>#}
+                                {{ form.group_selectnew("", "interest[]", interest, page.getInterests|default(''), 3, 12, {multi: true, required:true}) }}
+							</div>
+
+							<div class="form--input-wrap with-label">
+								<label>Privacy</label>
+								<div class="row mt5">
+									<div class="col-md-3 col-sm-4 col-xs-4">
+										<input type="radio" name="page_type" value="Public" id=""><label for="">Public</label>
+									</div>
+									<div class="col-md-3 col-sm-4 col-xs-5">
+										<input type="radio" name="page_type" value="Private" id=""><label for="">Private</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="form--input-wrap with-label terms">
+								<div class="row">
+									<div class="col-xs-1">
+										<input type="checkbox" name="agree-terms" value="agree">
+									</div>
+									<div class="col-xs-11">
+										<p>I agree to terms of agreement and conditions including cookies</p>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<hr>
+				<div class="create-page--buttons right">
+					<input type="submit" class="btn btn-info btn-cancel" value="Cancel">
+					<input type="submit" class="btn btn-info" value="Publish">
+				</div>
+			</div>
+		</div>
+	</form>
+{% endblock %}

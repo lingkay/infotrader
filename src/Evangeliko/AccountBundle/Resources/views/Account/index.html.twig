@@ -1,0 +1,173 @@
+{% extends 'CoreTemplateBundle::base_community.html.twig' %}
+{% import 'CoreTemplateBundle::macro.html.twig' as form %}
+
+{% block content %}
+    <div class="feed--tabs">
+        <div class="container">
+            <div class="row">
+                <div class="dropdown feed--tabs--menu--mobile visible-xs">
+                    <div class="container">
+                        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Featured
+                            <span><i class="small material-icons">keyboard_arrow_down</i></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Trending</a></li>
+                            <li><a href="#">What's new</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <ul class="feed--tabs--menu hidden-xs">
+                    <li class="active">
+                        <a href="#">Featured</a>
+                    </li>
+                    <li>
+                        <a href="#">Trending</a>
+                    </li>
+                    <li>
+                        <a href="#">What's new</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="page--wrap--contents">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="grid articles">
+                    <div class="grid-sizer col-sm-6"></div>
+                    <div class="gutter-sizer"></div>
+                    {% if posts is not null %}
+                        {% for post in posts %}
+
+                            <div class="articles--single grid-item col-sm-6">
+                                <!-- add inner element for column content -->
+                                <div class="grid-item-content">
+                                    <div class="grid-item-content--text author">
+
+                                        <img src="http://via.placeholder.com/30x30" alt="" class="img-circle">
+                                        <div class="author--details">
+                                            {% if post.getCommunity is not null %}
+                                                <h5>{{ post.getCommunity.getName }}</h5>
+                                            {% else %}
+                                                <h5>{{ post.getUserCreate.getAccount.getFullName }}</h5>
+                                            {% endif %}
+                                            <small>{{ post.getTimePassed }}</small>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <input type="hidden" name="post_id" class="post_type" value="{{post.getPostType}}">
+                                    </div>
+
+                                    {% if post.getPostType == 'Paid' %}
+                                        {% if post.getUserCreate.getID == app.getUser.getID %}
+                                            <div class="grid-item-content--text">
+                                                <h3>{{ post.getTitle }}</h3>
+                                                <p>
+                                                    {{ post.getMessage }}
+                                                </p>
+                                            </div>
+                                            {% if post.getFile %}
+                                                <img src="{{ vich_uploader_asset(post.getFile, 'imageFile') }}" alt="{{ post.getFile.getImageName }}" class="img-responsive">
+                                            {% endif %}
+                                            <div class="grid-item-content--share">
+                                                <ul>
+                                                    <li>
+                                                        <a href="#" class="grid-item-content--share--button honeys">
+                                                            <i class="small material-icons">menu</i> honeys
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="grid-item-content--share--button comments">
+                                                            <i class="small material-icons">chat_bubble_outline</i> comments
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="grid-item-content--share--button shares">
+                                                            <i class="small material-icons">share</i> shares
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="grid-item-content--share--button more">
+                                                            <a href="{{ path('evangeliko_view_free_post', {'id':post.getID}) }}"><i class="small material-icons">more_horiz</i></a>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        {% else %}
+                                            <div class="grid-item-content--text">
+                                                <h3>{{ post.getTitle }}</h3>
+                                                {% if account.getCredit.getAmount >= post.getAmount %}
+                                                    <form action="{{ path('evangeliko_view_post')}}">
+                                                        {{ form.hidden('id', post.getID) }}
+                                                        {{ form.hidden('amount_modal', post.getAmount) }}
+                                                        <button name="view_post" type="submit" class="btn btn-default">Read this article for {{ post.getAmount }} credits only.</button>
+                                                    </form>
+                                                {% else %}
+                                                    {# <a href="#add_entry_modal" data-toggle="modal" class="btn btn-default"></a> #}
+                                                    <a id="show_modal" data-redirect="{{post.getID}}" class="btn btn-default">Read this article for {{ post.getAmount }} credits only.</a>
+                                                    {# <a href="{{ path('evangeliko_view_paid_post', {'id': post.getID}) }}" class="btn btn-default"></a>    #}
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    {% else %}
+                                        <div class="grid-item-content--text">
+                                            <h3>{{ post.getTitle }}</h3>
+                                            <p>
+                                                {{ post.getMessage }}
+                                            </p>
+                                        </div>
+                                        {% if post.getFile %}
+                                            <img src="{{ vich_uploader_asset(post.getFile, 'imageFile') }}" alt="{{ post.getFile.getImageName }}" class="img-responsive">
+                                        {% endif %}
+                                        <div class="grid-item-content--share">
+                                            <ul>
+                                                <li>
+                                                    <a href="#" class="grid-item-content--share--button honeys">
+                                                        <i class="small material-icons">menu</i> honeys
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="grid-item-content--share--button comments">
+                                                        <i class="small material-icons">chat_bubble_outline</i> comments
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="grid-item-content--share--button shares">
+                                                        <i class="small material-icons">share</i> shares
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="grid-item-content--share--button more">
+                                                        <a href="{{ path('evangeliko_view_free_post', {'id':post.getID}) }}"><i class="small material-icons">more_horiz</i></a>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#show_modal").click(function(){
+        var redirect_id = $(this).data('redirect');
+        $("#cform-redirect").val(redirect_id);
+        $("#add_entry_modal").modal('show');
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,12 @@
+account:
+    type: rest
+    resource: Evangeliko\AccountBundle\Controller\Rest\AccountController
+
+credit:
+    type: rest
+    resource: Evangeliko\AccountBundle\Controller\Rest\CreditController
+
+credit_history:
+    type: rest
+    parent: credit
+    resource: Evangeliko\AccountBundle\Controller\Rest\HistoryController

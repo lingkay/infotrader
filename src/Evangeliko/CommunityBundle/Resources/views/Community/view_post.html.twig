@@ -1,0 +1,124 @@
+{% extends 'CoreTemplateBundle::base.html.twig' %}
+{% import 'CoreTemplateBundle::macro.html.twig' as form %}
+
+{% block content %}
+    <div class="article-page--header">
+        <div class="container">
+            <div class="author">
+                <img src="http://via.placeholder.com/60x60" alt="" class="img-circle">
+                <div class="author--details">
+                    <h5><a href="#">{{ post.getUserCreate.getAccount.getFullName }}</a></h5>
+                    <p>Visionary, Dreamer, Future maker, Planner. The quick brown fox jumps oer the lazy dog.</p>
+                    <small>{{ post.getTimePassed }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page--wrap--contents">
+
+        <div class="container">
+            <div class="article-page--title mb10">
+                <h1>{{ post.getTitle }}</h1>
+                <div class="article-page--status paid">
+                    <small>This post is</small>
+                    {% if post.getPostType == 'Paid' %}
+                        <large>Paid</large>
+                    {% else %}
+                        <large>Free</large>
+                    {% endif %}
+                    <br>
+                </div>
+            </div>
+
+            <div class="article-page--content--wrap">
+                <div class="article-page--content--wrap--inner">
+                    <div class="article-page--content">
+                        {% if post.getFile %}
+                            <div class="featured-image mb30">
+                                <img src="{{ vich_uploader_asset(post.getFile, 'imageFile') }}" alt="{{ post.getFile.getImageName }}" class="img-responsive">
+                            </div>
+                        {% endif %}
+                        <p>{{ post.getMessage}}</p>
+                    </div>
+
+                    <div class="page-section grid-item-content--share">
+                        <ul>
+                            <li>
+                                <a href="#" class="grid-item-content--share--button honeys">
+                                    <i class="honey-icon"></i> 5 honeys
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="grid-item-content--share--button comments">
+                                    <i class="small material-icons">chat_bubble_outline</i> 4 comments
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="grid-item-content--share--button shares">
+                                    <i class="small material-icons">share</i> 6 shares
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" class="grid-item-content--share--button more">
+                                    <i class="small material-icons">more_horiz</i>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="page-section space respond">
+                        <div class="row">
+                            <form method="post" action="{{ path('evangeliko_post_submit') }}">
+                                {{ form.hidden('account_type', 'community') }}
+                                {{ form.hidden('community_id', account.getID ) }}
+                                {{ form.hidden('parent', post.getID) }}
+                                <textarea name="reply" id="" cols="30" rows="1" placeholder="Write a response"></textarea>
+                                {#<textarea id="cform-reply" name="reply" class="form-control" rows="3" placeholder="What's on your mind?"></textarea>#}
+                                <button id="post-btn" type="submit" class="btn btn-primary pull-right">Post</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% if not post.getReply.isEmpty %}
+                        <div class="page-section comments">
+                            <ul>
+                                {% for reply in post.getReply %}
+                                    <li>
+                                        <div class="single-comment">
+                                            <div class="author">
+                                                <img src="http://via.placeholder.com/40x40" alt="" class="img-circle">
+                                                <div class="author--details">
+                                                    <h5><a href="#">{{ reply.getUserCreate.getAccount.getFullName }}</a></h5>
+                                                    <small>{{ reply.getTimePassed }}</small>
+                                                </div>
+                                            </div>
+
+                                            <p>{{ reply.getMessage }}</p>
+
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function(e){
+            $('#posts').on('click', '.reply-form', function() {
+
+                var read_more_div = $(this).parent("div");
+                var full_msg_div = read_more_div.parent("div");
+                var parent_div = full_msg_div.parent("div");
+                var msg_div = parent_div.parent('div');
+                var short_msg_div = parent_div.find(".replay-text")
+                short_msg_div.show();
+            });
+        });
+    </script>
+{% endblock %}

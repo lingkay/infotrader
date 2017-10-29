@@ -1,0 +1,71 @@
+{% block top_menu %}
+    <nav class="navbar navbar-default navbar-inner white">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="#" class="trigger toggle-nav visible-xs pull-left">
+                    <i class="medium material-icons">menu</i>
+                </a>
+                <a class="navbar-brand" href="{{ path('evangeliko_account_index') }}">
+                    <img src="http://via.placeholder.com/74x38" alt="">
+                </a>
+                <div class="navbar-header--tools">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="{{ path('evangeliko_community_list') }}"><h2>Pages</h2></a>
+                        </li>
+                    </ul>
+                </div>
+                <a href="#" class="trigger visible-xs pull-right">
+                    <i class="medium material-icons">more_vert</i>
+                </a>
+            </div>
+            <div class="top-menu pull-right hidden-xs">
+                <ul class="nav navbar-nav">
+                    {#<li><a href="#"><i class="small material-icons">search</i></a></li>#}
+                    <li>
+                        {# <form action="" class="search-form"> #}
+                            {# <div class="form-group has-feedback"> #}
+                                {{ form.typeahead('', 'search', "","",path('evangeliko_search_account'), 0, 12, false) }}
+                            {# </div> #}
+                        {# </form> #}
+                    </li>
+                    <li class="dropdown">
+                        <a href="{{ path('evangeliko_notification_index') }}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="small material-icons">notifications</i></a>
+                        <ul class="notifications dropdown-menu left">
+                            {% for notif in notifs %}
+                                <li>
+                                    <a href="#">
+                                        <div class="notifications--single">
+                                            <img src="http://via.placeholder.com/31x30" alt="">
+                                            <p>{{notif.getMessage}}</p>
+                                            <small>{{notif.getTimePassed}}</small>
+                                        </div>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                            <li><a href="{{ path('evangeliko_notification_index') }}">See All</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="{{ path('evangeliko_profile_index', {'username': account.getUsername, 'filterType': 'all'}) }}"><img src="http://via.placeholder.com/24x24" alt="" class="img-circle img-responsve"> <span class="">{{account.getFirstName}}</span></a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="">$ {{account.getCredit.getAmount}}</span></a></a>
+                        <ul class="dropdown-menu right">
+                            <li><a href="#add_entry_modal" data-toggle="modal">Purchase Credit</a></li>
+                            <li><a href="#">Withdraw Credits</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="medium material-icons">settings</i></a>
+                        <ul class="dropdown-menu right">
+                            <li><a href="{{ path('evangeliko_community_add_page') }}">Create Page</a></li>
+                            <li><a href="#">Invite friends</a></li>
+                            <li><a href="{{ path('evangeliko_profile_about', {'username': account.getUsername }) }}">Settings</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/logout">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endblock %}

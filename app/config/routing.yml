@@ -1,0 +1,61 @@
+evangeliko_post_rest:
+    type: rest
+    resource: "@EvangelikoPostBundle/Resources/config/rest/routing.yml"
+    prefix:   /rest
+
+evangeliko_notification_rest:
+    type: rest
+    resource: "@EvangelikoNotificationBundle/Resources/config/rest/routing.yml"
+    prefix:   /rest
+
+evangeliko_account_rest:
+    type: rest
+    resource: "@EvangelikoAccountBundle/Resources/config/rest/routing.yml"
+    prefix: /rest
+
+evangeliko_community_rest:
+    type: rest
+    resource: "@EvangelikoCommunityBundle/Resources/config/Rest/routing.yml"
+    prefix: /rest
+
+evangeliko_notification:
+    resource: "@EvangelikoNotificationBundle/Resources/config/routing.yml"
+    prefix:   /
+
+evangeliko_post:
+    resource: "@EvangelikoPostBundle/Resources/config/routing.yml"
+    prefix:   /
+
+# core_fixture:
+#     resource: "@CoreFixtureBundle/Resources/config/routing.yml"
+#     prefix:   /
+
+core_user:
+    resource: "@CoreUserBundle/Resources/config/routing.yml"
+    prefix:   /
+
+evangeliko_community:
+    resource: "@EvangelikoCommunityBundle/Resources/config/routing.yml"
+    prefix:   /
+
+evangeliko_account:
+    resource: "@EvangelikoAccountBundle/Resources/config/routing.yml"
+    prefix:   /
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+    prefix: /
+
+NelmioApiDocBundle:
+  resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+  prefix:   /api/doc
+
+fos_oauth_server_token:
+  resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
+
+fos_oauth_server_authorize:
+  resource: "@FOSOAuthServerBundle/Resources/config/routing/authorize.xml"
+
+# core_api:
+#     resource: "@CoreApiBundle/Resources/config/routing.yml"
+#     prefix:   /

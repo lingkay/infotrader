@@ -1,0 +1,8 @@
+# evangeliko_notification_homepage:
+#     path:     /notification
+#     defaults: { _controller: EvangelikoNotificationBundle:Default:index }
+
+evangeliko_notification_index:
+  path:     /notifications
+  methods:  [GET]
+  defaults: { _controller: EvangelikoNotificationBundle:Notification:index }

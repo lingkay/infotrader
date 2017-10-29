@@ -1,0 +1,76 @@
+evangeliko_account_index:
+    path: /
+    defaults: { _controller: EvangelikoAccountBundle:Account:index }
+
+evangeliko_profile_index:
+    path: /profile/newsfeed{username}/filter={filterType}
+    methods: [GET]
+    defaults: { _controller: EvangelikoAccountBundle:Profile:index }
+
+evangeliko_profile_about:
+    path: /profile/{username}/about
+    methods: [GET]
+    defaults: { _controller: EvangelikoAccountBundle:Profile:profileAbout }
+
+evangeliko_profile_edit_submit:
+    path: /profile/{username}/about
+    methods: [POST] 
+    defaults: { _controller: EvangelikoAccountBundle:Profile:profileEdit }
+
+evangeliko_redirect_account:
+    path: /ajax/redirect/{id}/{name}
+    methods: [GET]
+    defaults: { _controller: EvangelikoAccountBundle:Account:redirect }
+
+evangeliko_reply_post:
+    path: /reply/post
+    methods: [POST]
+    defaults: { _controller: EvangelikoAccountBundle:Account:replyPost }
+
+evangeliko_search_people:
+    path: /search/people
+    methods: [POST]
+    defaults: { _controller: EvangelikoAccountBundle:Account:searchPeople }
+
+evangeliko_invite_people:
+    path:     /invite/people/{id}/{community}
+    methods:  [GET]
+    defaults: { _controller: EvangelikoAccountBundle:Account:invitePeople }
+
+evangeliko_search_people:
+    path: /searchs/people
+    methods: [GET]
+    defaults: { _controller: EvangelikoAccountBundle:Account:searchPeople }
+
+evangeliko_search_account:
+    path: /ajax/account
+    methods: [GET]
+    defaults: { _controller: EvangelikoAccountBundle:Account:ajaxFilterAccount }
+
+
+evangeliko_credit_index:
+    path: /credit
+    methods: [GET]
+    defaults: { _controller: EvangelikoAccountBundle:Credit:index }
+
+evangeliko_credit_submit:
+    path: /credit
+    methods: [POST]
+    defaults: { _controller: EvangelikoAccountBundle:Credit:submit }
+
+evangeliko_new_order:
+    path: /orders/new/{amount}
+    defaults: { _controller: EvangelikoAccountBundle:Orders:new }
+
+evangeliko_show_order:
+    path: /orders/{id}/show
+    defaults: { _controller: EvangelikoAccountBundle:Orders:show }
+
+app_orders_paymentcreate:
+    path: /orders/{id}/payment/create
+    defaults: { _controller: EvangelikoAccountBundle:Orders:paymentCreate }
+
+evangeliko_payment_complete:
+    path: /orders/{id}/payment/complete
+    methods: [GET]
+    defaults: { _controller: EvangelikoAccountBundle:Orders:paymentComplete }

@@ -1,0 +1,58 @@
+{# {% extends 'CoreTemplateBundle::base_community.html.twig' %}
+{% import 'CoreTemplateBundle::macro.html.twig' as form_tool %}
+
+{% block content %}
+<div class="article-page--header">
+	<div class="container">
+		<div class="row">
+			<div class="account">
+				<div class="col-xs-8">
+					<h2>Purchase credits</h2>
+					<p>When topping up your balance, please note: per our fraud control guidelines, some transactions (especially those third-party payments) may require additional verification. In some cases, we’ll need phone verification for the card holder.</p>
+				</div>
+				<div class="col-xs-4 account--balance">
+					<small>Current balance</small>
+					<large>{{ account.getCredit.getAmount }}</large>
+					<a href="">Top-up now!</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="page--wrap--contents">
+	<div class="container">
+		<div class="page-section">
+			<div class="row">
+				<div class="col-md-4 hidden-xs">
+					<div class="banner-bg banner-bg--color">
+						<h2 class="mb30">Purchase credits to enjoy more of the Hive.</h2>
+						<p>Join us for our next chapter as Hive becomes the most rewarding platform for the world’s writers, thinkers, and storytellers.</p>
+					</div>
+				</div>
+				<div class="col-md-8">
+					{{ form_tool.group_textnew("Total Price", "total_price","$"~ order.amount, 3, 4, {'readonly': true}) }}
+					{{ form_start(form) }}
+					<br><br><br>
+					<div class="form-group">
+					    {{ form_widget(form) }}
+					</div>
+					<div class="col-md-3">
+						<div class="form-actions fluid">
+							<input type="submit" value="Pay with Paypal" class="btn btn-primary" />
+						</div>
+					</div>
+					{{ form_end(form) }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+$(document).ready(function(){
+	$('select').select2();
+});
+</script>
+{% endblock %} #}

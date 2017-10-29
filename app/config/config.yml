@@ -1,0 +1,176 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+    
+# Put parameters here that don't need to change on each machine where the app is deployed
+# http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: en
+
+framework:
+    #esi: ~
+    #translator: { fallbacks: ['%locale%'] }
+    secret: '%secret%'
+    router:
+        resource: '%kernel.root_dir%/config/routing.yml'
+        strict_requirements: ~
+    form: ~
+    csrf_protection: ~
+    validation: { enable_annotations: true }
+    #serializer: { enable_annotations: true }
+    templating:
+        engines: ['twig']
+    default_locale: '%locale%'
+    trusted_hosts: ~
+    trusted_proxies: ~
+    session:
+        # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
+        handler_id:  session.handler.native_file
+        save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
+    fragments: ~
+    http_method_override: true
+    assets: ~
+    # php_errors:
+    #     log: true
+
+# Twig Configuration
+twig:
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+
+fos_user:
+    db_driver: orm
+    firewall_name: api
+    user_class: Core\UserBundle\Entity\User
+    from_email:
+        address: karlo.infotrader@gmail.com
+        sender_name: Karlo
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver: pdo_mysql
+        host: '%database_host%'
+        port: '%database_port%'
+        dbname: '%database_name%'
+        user: '%database_user%'
+        password: '%database_password%'
+        charset: UTF8
+        server_version: '5.5'
+        # if using pdo_sqlite as your database driver:
+        #   1. add the path in parameters.yml
+        #     e.g. database_path: "%kernel.root_dir%/../var/data/data.sqlite"
+        #   2. Uncomment database_path in parameters.yml.dist
+        #   3. Uncomment next line:
+        #path: '%database_path%'
+
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: true
+
+fos_oauth_server:
+    db_driver: orm
+    client_class: Core\ApiBundle\Entity\Client
+    access_token_class: Core\ApiBundle\Entity\AccessToken
+    refresh_token_class: Core\ApiBundle\Entity\RefreshToken
+    auth_code_class: Core\ApiBundle\Entity\AuthCode
+    service:
+        user_provider: fos_user.user_provider.username
+        options:
+            access_token_lifetime: 36000
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: '%mailer_transport%'
+    host: '%mailer_host%'
+    username: '%mailer_user%'
+    password: '%mailer_password%'
+
+fos_rest:
+    # disable_csrf_role: ROLE_API
+    param_fetcher_listener: true
+    view:
+        mime_types:
+            json: ['application/json', 'application/json;version=1.0', 'application/json;version=1.1', 'application/json;version=1.2']
+        view_response_listener: true
+        formats:
+            xml:  true
+            json: true
+        templating_formats:
+            html: true
+
+    # format_listener:
+    #     rules:
+    #         - { path: ^/, priorities: [ html, json, xml ], fallback_format: ~, prefer_extension: true }
+    #     media_type:
+    #         version_regex: '/(v|version)=(?P<version>[0-9\.]+)/'
+    exception:
+        codes:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': 404
+            'Doctrine\ORM\OptimisticLockException': HTTP_CONFLICT
+        messages:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': true
+    allowed_methods_listener: true
+    access_denied_listener:
+        json: true
+    body_listener: true
+    routing_loader:
+        default_format: json                            # All responses should be JSON formated
+        include_format: false
+
+fos_http_cache:
+    cache_control:
+        rules:
+            # the controls section values are used in a call to Response::setCache();
+            -
+                match:
+                    path: ^/notes
+                    methods: [GET, HEAD]
+                headers:
+                    cache_control: { public: true, max_age: 15, s_maxage: 30 }
+                    last_modified: "-1 hour"
+                    vary: [Accept-Encoding, Accept-Language]
+
+nelmio_api_doc: ~
+
+jms_payment_core:
+    encryption:
+        secret: def0000068558b290bb54ca3b3a396d4521c052a4bc06a9324e909b807cd0525e7ccfb855916adb1d4cd1349728d4ca66a111c67129a12a39ad6fc4527e255d1f8d4a72d
+
+jms_payment_paypal:
+    username: kd_laquian-facilitator_api1.yahoo.com
+    password: 5G26QTC3AL5EJA4L
+    signature: AFcWxV21C7fd0v3bYYYRCpSSRl31AV.yMc5qhNKgnjqwT9Q3PdH17ZFT
+
+services:
+    fos_user.doctrine_registry:
+        alias: doctrine
+
+
+
+vich_uploader:
+    db_driver: orm
+
+    mappings:
+        post_image:
+            uri_prefix:         /images/posts
+            upload_destination: '%kernel.root_dir%/../web/images/posts'
+            inject_on_load:     true
+            delete_on_update:   true
+            delete_on_remove:   true
+            
+#Redis Configuration
+sb_redis:
+    class:
+        client:  "SymfonyBundles\RedisBundle\Service\Client"
+        factory: "SymfonyBundles\RedisBundle\Service\Factory"
+    clients:
+        default:
+            # container alias for service, defaults name for this client: sb_redis.client.default
+            alias:      ~
+            # client options
+            options:    []
+            # connection parameters
+            parameters: []

@@ -1,0 +1,92 @@
+{% block left_menu %}
+<div class="col-sm-3 col-md-2 sidebar">
+    {% set src = asset('bundles/coretemplate/assets/img/user_avatar.jpg')  %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-4">
+                    <img alt="" class="img-circle" src="{{ src }}" height="60" width="60" border="5"/>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group" style="margin-bottom: 0px !important;">
+                        <label class="control-label label-name">{{object.getFirstName}}</label>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0px !important;">
+                        <label class="control-label label-name">{{object.getLastName}}</label>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0px !important">
+                        <span class="text-muted">Credit: {{object.getCredit.getAmount}}</span>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0px !important;">
+                        <a href="{{ path('evangeliko_profile_index') }}"> About Me</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <ul class="nav nav-sidebar">
+        <li class="active">
+            <a href="/"><i class="fa fa-university" aria-hidden="true"></i> Home</a>
+        </li>
+        <li>
+            {# <a href="{{ path('evangeliko_credit_index') }}"><i class="fa fa-money" aria-hidden="true"></i> Credit</a> #} 
+        </li>
+        <li>
+            <a href="{{ path('evangeliko_notification_index') }}"><i class="fa fa-bell" aria-hidden="true"></i> Notifications</a>
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-user-plus" aria-hidden="true"></i> Request</a>
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-users" aria-hidden="true"></i> Friends</a>
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-address-book" aria-hidden="true"></i> Basic Info</a>
+        </li>
+        <li>
+            <a href="#"><i class="fa fa-lock" aria-hidden="true"></i> Security</a>
+        </li>
+    </ul>
+    <span class="text-muted nav-title-custom">HIVE</span>
+        <ul class="nav nav-sidebar">
+            <li>
+                <a href="{{ path('evangeliko_community_pending_invite') }}">Pending Invites</a>
+            </li>
+        </ul>
+    <span class="text-muted nav-title-custom">FOLLOWED HIVE</span>
+        <ul class="nav nav-sidebar">
+            {% if object.getCommunityFollowed is not null %}
+                {% for community in object.getCommunityFollowed %}
+                    {% if community.getStatus == 'Followed' %}
+                        <li><a href="{{ path('evangeliko_community_view', {'slug': community.getCommunity.getSlug }) }}">{{community.getCommunity.getName}}</a></li>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </ul>
+    <span class="text-muted nav-title-custom">MEDIA</span>
+        <ul class="nav nav-sidebar">
+            <li>
+                <a href="#"><i class="fa fa-picture-o" aria-hidden="true"></i> My Photos</a>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-film" aria-hidden="true"></i> My Videos</a>
+            </li>
+        </ul>
+    <span class="text-muted nav-title-custom">BLOG</span>
+        <ul class="nav nav-sidebar">
+            <li>
+                <a href="#"><i class="fa fa-newspaper-o" aria-hidden="true"></i> New Blog</a>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-archive" aria-hidden="true"></i> Archives</a>
+            </li>
+        </ul>
+    <span class="text-muted nav-title-custom">CREATE</span>
+        <ul class="nav nav-sidebar">
+            <li><a href="{{ path('evangeliko_community_add_page') }}">Hive</a></li>
+        </ul>
+    <span class="text-muted nav-title-custom">INVITE</span>
+        <ul class="nav nav-sidebar">
+            <li><a href="#"><i class="fa fa-plus" aria-hidden="true"></i> New Invite</a></li>
+            <li><a href="#"><i class="fa fa-list" aria-hidden="true"></i> List</a></li>
+        </ul>
+</div>
+{% endblock %}

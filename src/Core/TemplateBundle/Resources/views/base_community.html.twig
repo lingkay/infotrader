@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Infotrade</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <link rel="stylesheet" href="{{ asset('bundles/coretemplate/assets/bootstrap/css/bootstrap.min.css') }}"/>
+    <link href="{{ asset('bundles/coretemplate/assets/font-awesome-4.7.0/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('bundles/coretemplate/assets/jquery-ui/css/jquery-ui.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/coretemplate/assets/css/main.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/coretemplate/assets/css/custom.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/coretemplate/assets/css/reject.css') }}"/>
+    {% block css %}{% endblock %}
+</head>
+
+<body class="page">
+    <div id="site-canvas">
+        <div class="page--wrap">
+            {% embed 'CoreTemplateBundle::top_menu.html.twig' %}{% endembed %}
+            {% for flash_msg in app.session.flashbag.get('error') %}
+                <div class="alert alert-danger alert-dismissable">
+                    <button type="button" 
+                    class="close" data-dismiss="alert" aria-hidden="true"></button>
+                    <strong>Error: </strong>
+                    {{ flash_msg }}
+                </div>
+                {% endfor %}
+
+                {% for flash_msg in app.session.flashbag.get('success') %}
+                <div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                    <strong>Success: </strong>
+                    {{ flash_msg }}
+                </div>
+            {% endfor %}
+            {% block content %}
+            {% endblock %}
+        </div>
+        <footer class="site-footer">
+            <div class="container">
+                <a href="#">Hive <span>/ Copyright 2017</span></a>
+
+                <ul class="site-footer--menu">
+                    <li>
+                        <a href="#">Getting started</a>
+                    </li>
+                    <li>
+                        <a href="#">Help</a>
+                    </li>
+                    <li>
+                        <a href="#">Careers</a>
+                    </li>
+                    <li>
+                        <a href="#">Privacy</a>
+                    </li>
+                    <li>
+                        <a href="#">Terms</a>
+                    </li>
+                    <li>
+                        <a href="#">About</a>
+                    </li>
+                </ul>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ asset('bundles/coretemplate/assets/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('bundles/coretemplate/assets/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/coretemplate/assets/jquery-ui/js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('bundles/coretemplate/assets/js/jquery.placeholder.min.js') }}"></script>
+    <script src="https://masonry.desandro.com/masonry.pkgd.js"></script>
+    <script src="{{ asset('bundles/coretemplate/assets/js/jquery.reject.min.js') }}"></script>
+    <script src="{{ asset('bundles/coretemplate/assets/js/main.js') }}"></script>
+    <script src="{{ asset('bundles/coretemplate/assets/bootstrap-typeahead/bootstrap-typeahead.min.js')}}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/coretemplate/assets/select2-4.0.3/dist/js/select2.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/coretemplate/assets/js/template.js') }}" type="text/javascript"></script>
+    <script>
+        /*
+         * Uses jQuery!!!!111one
+         */
+
+        /*====================================
+         =            ON DOM READY            =
+         ====================================*/
+        jQuery(function() {
+            Template.init();
+            $("#csearch_typeahead").change(function(){
+                var search_id = $("#csearch_id").val();
+                var path = "{{ path('evangeliko_profile_index', {'username': 'ID', 'filterType': 'all'}) }}";
+
+                if(search_id != "") {
+                    var name = $(this).val();
+                    var path = "{{ path('evangeliko_redirect_account', {'id':'ID', 'name':'NAME'}) }}";
+                        path = path.replace("ID", search_id);
+                        path = path.replace("NAME",name);
+                    $.ajax({
+                        url: path,
+                        type: "GET",
+                        success: function(data){
+                            $(location).attr('href',data);
+                        }
+                    });
+                }
+            });
+            // Toggle Nav on Click
+            jQuery('.toggle-nav').click(function() {
+                // Calling a function in case you want to expand upon this.
+                toggleNav();
+            });
+
+        });
+
+        /*========================================
+         =            CUSTOM FUNCTIONS            =
+         ========================================*/
+        function toggleNav() {
+            if (jQuery('body').hasClass('show-nav')) {
+                // Do things on Nav Close
+                jQuery('body').removeClass('show-nav');
+            } else {
+                // Do things on Nav Open
+                jQuery('body').addClass('show-nav');
+            }
+
+            //jQuery('body').toggleClass('show-nav');
+
+
+        }
+
+        jQuery('.grid').masonry({
+            itemSelector: '.grid-item',
+            columnWidth: '.grid-sizer'
+        });
+    </script>
+    {% embed 'CoreTemplateBundle::credit_modal.html.twig' %}{% endembed %}
+    {% block js %}{% endblock %}
+</body>
+</html>

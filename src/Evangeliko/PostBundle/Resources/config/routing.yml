@@ -1,0 +1,27 @@
+evangeliko_post_article:
+    path: community/{slug}/post
+    defaults: { _controller: EvangelikoPostBundle:Post:index }
+
+evangeliko_post_user_article:
+    path: profile/{username}/post
+    defaults: { _controller: EvangelikoPostBundle:Post:createUserPost }
+
+evangeliko_post_submit:
+    path: /post
+    methods: [POST]
+    defaults: { _controller: EvangelikoPostBundle:Post:post }
+
+evangeliko_view_post:
+    path: /view/post
+    methods: [GET]
+    defaults: { _controller: EvangelikoPostBundle:Post:viewPost }
+
+evangeliko_view_free_post:
+    path: /view/post/{id}
+    methods: [GET]
+    defaults: { _controller: EvangelikoPostBundle:Post:viewFreePost }
+
+evangeliko_view_paid_post:
+    path: /view/paid/post/{id}
+    methods: [GET]
+    defaults: { _controller: EvangelikoPostBundle:Post:viewPaidPost }

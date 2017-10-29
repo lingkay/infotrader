@@ -1,0 +1,3 @@
+post:
+    type: rest
+    resource: Evangeliko\PostBundle\Controller\Rest\PostController

@@ -1,0 +1,190 @@
+{% extends 'CoreTemplateBundle::base_community.html.twig' %}
+{% import 'CoreTemplateBundle::macro.html.twig' as form %}
+
+{% block content %}
+    {% set src = asset('bundles/coretemplate/assets/img/restaurant.jpg')  %}
+    {# <img src="{{ src }}" class="img-rounded" alt="restaurant" width="100%" height="20%"> #}
+    <div class="jumbotron" style="background: url('{{ asset("bundles/coretemplate/assets/img/jumbotron-placeholder.jpeg")}}');">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="jumbotron--contents">
+                        <h1>{{page.getName}}</h1>
+                        <p>{{page.getDescription}}</p>
+                        <p><a href="{{ path('evangeliko_community_view', {'slug': page.getSlug, 'filterType' : 'all'}) }}">www.infotrader.dev/community/{{page.getSlug}}</a></p>
+                        <a href="{{ path('evangeliko_community_edit_page', {'slug': page.getSlug }) }}" class="btn btn-default">Edit</a>
+                        {#<a href="#" class="btn btn-default btn-md" style="background-color: transparent; color: #337ab7;">UNBLESS</a>#}
+                        <a href="#" class="btn btn-default btn-md" style="background-color: transparent; color: #337ab7;">FOLLOWED</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="feed--tabs">
+        <div class="container">
+            <div class="row">
+                <ul class="feed--tabs--menu">
+                    <li {% if filter_type is defined %}{% if filter_type == 'all' %} class="active" {% endif %}{% endif %}>
+                        <a href="{{ path('evangeliko_community_view', {'slug': page.getSlug, 'filterType': 'all'}) }}">My articles</a>
+                    </li>
+                    <li {% if filter_type is defined %}{% if filter_type == 'paid' %} class="active" {% endif %}{% endif %}>
+                        <a href="{{ path('evangeliko_community_view', {'slug': page.getSlug, 'filterType' : 'paid'}) }}">Paid articles</a>
+                    </li>
+                    <li {% if filter_type is defined %}{% if filter_type == 'free' %} class="active" {% endif %}{% endif %}>
+                        <a href="{{ path('evangeliko_community_view', {'slug': page.getSlug, 'filterType' : 'free'}) }}">Free articles</a>
+                    </li>
+                    <li {% if filter_type is defined %}{% if filter_type == 'read' %} class="active" {% endif %}{% endif %}>
+                        <a href="{{ path('evangeliko_community_view', {'slug': page.getSlug, 'filterType' : 'read'}) }}">You've read</a>
+                    </li>
+                </ul>
+                <a class="btn btn-info" href="{{ path('evangeliko_post_article', {'slug': page.getSlug }) }}">Post</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page--wrap--contents">
+        <div class="container">
+            <div class="row">
+
+                <div class="grid articles">
+                    <div class="grid-sizer col-sm-6"></div>
+                    <div class="gutter-sizer"></div>
+
+                    {% if posts is not null %}
+                        {% for post in posts %}
+                            <div class="articles--single grid-item col-sm-6">
+                                <!-- add inner element for column content -->
+                                <div class="grid-item-content">
+                                    <input type="hidden" name="post_id" class="post_type" value="{{post.getPostType}}">
+
+                                    {% if post.getPostType == 'Paid' %}
+                                        {% if post.getUserCreate.getID == app.getUser.getID %}
+                                            <div class="grid-item-content--text">
+                                                <h3>{{ post.getTitle }}</h3>
+                                                <p>
+                                                    {{ post.getMessage }}
+                                                </p>
+                                            </div>
+                                            {% if post.getFile %}
+                                                <img src="{{ vich_uploader_asset(post.getFile, 'imageFile') }}" alt="{{ post.getFile.getImageName }}" class="img-responsive">
+                                            {% endif %}
+                                            {#<img src="http://via.placeholder.com/460x212" alt="" class="img-responsive">#}
+                                            <div class="grid-item-content--share">
+                                                <ul>
+                                                    <li>
+                                                        <a href="#" class="grid-item-content--share--button honeys">
+                                                            <i class="small material-icons">menu</i> honeys
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="grid-item-content--share--button comments">
+                                                            <i class="small material-icons">chat_bubble_outline</i> comments
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="grid-item-content--share--button shares">
+                                                            <i class="small material-icons">share</i> shares
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" class="grid-item-content--share--button more">
+                                                            <a href="{{ path('evangeliko_view_free_post', {'id':post.getID}) }}"><i class="small material-icons">more_horiz</i></a>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        {% else %}
+                                            <div class="grid-item-content--text">
+                                                <h3>{{ post.getTitle }}</h3>
+                                                <a href="" class="btn btn-default">Read this article for {{ post.getAmount }} credits only.</a>
+                                            </div>
+                                        {% endif %}
+                                    {% else %}
+                                        <div class="grid-item-content--text">
+                                            <h3>{{ post.getTitle }}</h3>
+                                            <p>
+                                                {{ post.getMessage }}
+                                            </p>
+                                        </div>
+                                        {% if post.getFile %}
+                                            <img src="{{ vich_uploader_asset(post.getFile, 'imageFile') }}" alt="{{ post.getFile.getImageName }}" class="img-responsive">
+                                        {% endif %}
+                                        <div class="grid-item-content--share">
+                                            <ul>
+                                                <li>
+                                                    <a href="#" class="grid-item-content--share--button honeys">
+                                                        <i class="small material-icons">menu</i> honeys
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="grid-item-content--share--button comments">
+                                                        <i class="small material-icons">chat_bubble_outline</i> comments
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="grid-item-content--share--button shares">
+                                                        <i class="small material-icons">share</i> shares
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#" class="grid-item-content--share--button more">
+                                                        <a href="{{ path('evangeliko_view_free_post', {'id':post.getID}) }}"><i class="small material-icons">more_horiz</i></a>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{# 
+    {% embed 'EvangelikoCommunityBundle:Community:modal/post.type.modal.html.twig' %}{% endembed %}
+    {% embed 'EvangelikoCommunityBundle:Community:modal/insufficient.modal.html.twig' %}{% endembed %} #}
+{% endblock %}
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function(e){
+            $('#cform-post_type').change(function(){
+                var post_type = $(this).val();
+
+                if(post_type == 'Paid'){
+                    $("#paid_post").show();
+                }else{
+                    $('#cform-amount').val(0);
+                    $("#paid_post").hide();
+                }
+            });
+
+            $('#posts').on('click', '.read-more-a', function() {
+                var id = $(this).data('id');
+                var amount = $(this).data('amount');
+                var credits = $('#cform-credits').val();
+
+                if (credits >= amount) {
+                    $('#cform-post_id').val(id);
+                    $('#cform-amount_modal').val(amount);
+                }else{
+                    $('#cform-redirect_id').val(id);
+                    $('#cform-amt_deduct').val(amount);
+                }
+            });
+
+            $('#posts').on('click', '.reply-form', function() {
+                var read_more_div = $(this).parent("div");
+                var full_msg_div = read_more_div.parent("div");
+                var parent_div = full_msg_div.parent("div");
+                var short_msg_div = parent_div.find(".replay-text")
+                short_msg_div.show();
+                // full_msg_div.hide();
+            });
+        });
+    </script>
+{% endblock %}

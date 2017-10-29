@@ -1,0 +1,69 @@
+# To get started with security, check out the documentation:
+# http://symfony.com/doc/current/security.html
+security:
+    encoders:
+        FOS\UserBundle\Model\UserInterface: sha512
+    
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    # http://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+    providers:
+        in_memory:
+            memory: ~
+        fos_userbundle:
+            id: fos_user.user_provider.username
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        oauth_token:                                   # Everyone can access the access token URL.
+            pattern: ^/oauth/v2/token
+            security: false
+        doc:                                   # Everyone can access the access token URL.
+            pattern: ^/api/doc
+            security: false
+        api:
+            pattern: ^/rest                                # All URLs are protected
+            fos_oauth: true                            # OAuth2 protected resource
+            stateless: true                            # Do no set session cookies
+            anonymous: false
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            pattern: ^/
+            form_login:
+                check_path: /login_check
+                login_path: /login
+                provider: fos_userbundle
+                default_target_path: /
+                require_previous_session: false
+            logout:
+                path: /logout
+                target: /
+                invalidate_session: true
+            anonymous: ~
+            switch_user: { role: ROLE_ADMIN, parameter: _switch }
+            # remember_me:
+            #     secret:      "%secret%"
+            #     lifetime: 31536000
+            #     path:     /
+            #     domain:   ~ 
+            # activate different ways to authenticate
+
+            # http://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+            #http_basic: ~
+
+            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+            #form_login: ~
+
+    access_control:
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login_check$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/activation, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/reactivate, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: ROLE_USER }    

@@ -1,0 +1,129 @@
+{% extends 'CoreTemplateBundle::base.html.twig' %}
+{% import 'CoreTemplateBundle::macro.html.twig' as form %}
+
+{% block css %}
+	<style>
+		input[type="file"] {
+			display: none;
+		}
+
+		#fileupload {
+			cursor: pointer;
+		}
+	</style>
+{% endblock %}
+
+{% block content %}
+	<div class="article-page--header">
+		<div class="container">
+			<div class="author">
+				<img src="http://via.placeholder.com/60x60" alt="" class="img-circle">
+				<div class="author--details">
+					<h5><a href="#">{{ account.getFullName }}</a></h5>
+					<p>Visionary, Dreamer, Future maker, Planner. The quick brown fox jumps oer the lazy dog.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="page--wrap--contents">
+
+
+		<div class="container">
+			<form method="post" id="post-form" action="{{ path('evangeliko_post_submit') }}">
+				<div class="page-primary-details">
+                    {{ form.hidden('account_type', 'user') }}
+					<div class="form--input-wrap trans-field">
+                        {#{{ form.group_textnew('Enter title', 'post_title','', 2) }}#}
+						<input type="text" name="post_title" class="input-text input-text--large" placeholder="Enter title">
+					</div>
+					<div class="form--input-wrap">
+						<input id="upload-file" type="file" name="post_file" id="post_file">
+						<a id="fileupload" class="input-text input-text--medium"><i class="medium material-icons">add_circle_outline</i>Upload media</a>
+					</div>
+					<div class="form--input-wrap trans-field full-field">
+						<textarea name="post" id="" cols="30" rows="10" placeholder="Tell something about your post"></textarea>
+					</div>
+                    {{ form.hidden('parent', '') }}
+				</div>
+
+				<hr>
+
+				<div class="create-page--buttons">
+					<div class="left create-page--buttons--options">
+						<div class="article-type">
+							<input type="radio" name="post_type" value="Free" id="article-type-free">
+							<label for="article-type-free">Free</label>
+						</div>
+						<div class="article-type">
+							<input type="radio" name="post_type" value="Paid" id="article-type-paid">
+							<label for="article-type-paid">Paid</label>
+						</div>
+						<div class="form--input-wrap with-label">
+							<input type="number" name="amount" class="input-text--medium">
+							<label for="">Set credit</label>
+						</div>
+					</div>
+					<div class="right">
+						<input type="submit" class="btn btn-info btn-cancel hidden-xs" value="Cancel">
+						<input type="submit" class="btn btn-info" value="Publish">
+						<input type="submit" class="btn btn-info btn-cancel visible-xs" value="Cancel">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+{% endblock %}
+{% block js %}
+    {#added#}
+	<script>
+		/*
+		 * Uses jQuery!!!!111one
+		 */
+
+		/*====================================
+		 =            ON DOM READY            =
+		 ====================================*/
+        jQuery(function() {
+
+            // Toggle Nav on Click
+            jQuery('.toggle-nav').click(function() {
+                // Calling a function in case you want to expand upon this.
+                toggleNav();
+            });
+
+        });
+
+		/*========================================
+		 =            CUSTOM FUNCTIONS            =
+		 ========================================*/
+        function toggleNav() {
+            if (jQuery('body').hasClass('show-nav')) {
+                // Do things on Nav Close
+                jQuery('body').removeClass('show-nav');
+            } else {
+                // Do things on Nav Open
+                jQuery('body').addClass('show-nav');
+            }
+
+            //jQuery('body').toggleClass('show-nav');
+
+
+        }
+        var windowSize = jQuery(window).width(); // Could've done $(this).width()
+        if(windowSize > 767){
+
+            jQuery('.grid').masonry({
+                itemSelector: '.grid-item',
+                columnWidth: '.grid-sizer'
+            });
+
+        }
+
+        $("#fileupload").click(function(){
+            $("#upload-file").click();
+        });
+	</script>
+    {#added#}
+{% endblock %}

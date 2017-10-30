@@ -98,15 +98,13 @@ class ProfileController extends Controller
         return $this->render($twig_file, $params);
     }
 
-    public function profileAboutAction(Request $request, $username)
+    public function profileAboutAction(Request $request)
     {
 
         $this->request = $request;
-
         $em = $this->getDoctrine()->getManager();
 
         $user = $this->getUser();
-
         $params['account'] = $user->getAccount();
 
         $params['interest'] = [
@@ -115,15 +113,10 @@ class ProfileController extends Controller
             'finance' => 'Finance'
         ];
 
-//        var_dump($user);
-//        die();
-
         $account = $this->getUser()->getAccount();
 
         $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
-
         $notif_list = [];
-
         foreach ($notifs as $notif) {
             $notif_list[] = $notif;
         }
@@ -134,7 +127,36 @@ class ProfileController extends Controller
         return $this->render($twig_file, $params);
     }
 
-	public function profileEditAction(Request $request, $username)
+    public function profileSettingsAction(Request $request)
+    {
+
+        $this->request = $request;
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $this->getUser();
+        $params['account'] = $user->getAccount();
+
+        $params['interest'] = [
+            'cars' => 'Cars',
+            'lifestyle' => 'Lifestyle',
+            'finance' => 'Finance'
+        ];
+
+        $account = $this->getUser()->getAccount();
+
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+        $notif_list = [];
+        foreach ($notifs as $notif) {
+            $notif_list[] = $notif;
+        }
+        $params['notifs'] = $notif_list;
+
+        $twig_file = "EvangelikoAccountBundle:Profile:settings.html.twig";
+
+        return $this->render($twig_file, $params);
+    }
+
+	public function profileEditAction(Request $request)
 	{
 		$this->request = $request;
 
@@ -144,12 +166,16 @@ class ProfileController extends Controller
 
 		$account = $em->getRepository("EvangelikoAccountBundle:Account")->find($data['user']);
 		try {
-			$account->setFirstName($data['first_name'])
-			        ->setLastName($data['last_name'])
-			        ->setMobileNumber($data['mobile_number'])
-			        ->setLandlineNumber($data['phone_number'])
-			        ->setAbout($data['about_me'])
-                    ->setUsername($data['username']);
+            if (isset($data['username'])){
+                $account->setUsername($data['username']);
+            } else{
+			    $account->setFirstName($data['first_name'])
+			            ->setLastName($data['last_name'])
+			            ->setMobileNumber($data['mobile_number'])
+			            ->setLandlineNumber($data['phone_number'])
+			            ->setAbout($data['about_me']);
+            }
+
 
 			if (isset($data['interest'])){
                 $account->setInterests($data['interest']);

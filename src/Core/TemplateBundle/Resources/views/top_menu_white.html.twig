@@ -8,9 +8,9 @@
                 <a class="navbar-brand" href="{{ path('evangeliko_account_index') }}">
                     <img src="http://via.placeholder.com/74x38" alt="">
                 </a>
-                <div class="navbar-header--tools">
+                <div class="navbar-header--tools hidden-xs">
                     <ul class="nav navbar-nav">
-                        <li class="dropdown">
+                        <li>
                             <a href="{{ path('evangeliko_community_list') }}"><h2>Pages</h2></a>
                         </li>
                     </ul>
@@ -59,7 +59,7 @@
                         <ul class="dropdown-menu right">
                             <li><a href="{{ path('evangeliko_community_add_page') }}">Create Page</a></li>
                             <li><a href="#">Invite friends</a></li>
-                            <li><a href="{{ path('evangeliko_profile_about', {'username': account.getUsername }) }}">Settings</a></li>
+                            <li><a href="{{ path('evangeliko_profile_settings') }}">Settings</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="/logout">Logout</a></li>
                         </ul>

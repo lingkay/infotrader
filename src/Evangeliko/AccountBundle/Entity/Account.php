@@ -85,6 +85,11 @@ class Account
      */
     protected $post_liked;
 
+    /**
+     * @ORM\OneToMany(targetEntity="\Evangeliko\PostBundle\Entity\PostComment", mappedBy="commenter")
+     */
+    protected $post_commented;
+
 	/**
 	 * @ORM\OneToOne(targetEntity="\Evangeliko\AccountBundle\Entity\Credit", mappedBy="account")
 	 */
@@ -218,6 +223,11 @@ class Account
     public function getPostLiked()
     {
         return $this->post_liked;
+    }
+
+    public function getPostCommented()
+    {
+        return $this->post_commented;
     }
 
 	public function getCommunityFollowed()

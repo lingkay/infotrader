@@ -75,6 +75,11 @@ class Post
      */
     protected $post_likes;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Evangeliko\PostBundle\Entity\PostComment", mappedBy="post")
+     */
+    protected $post_comment;
+
 	function __construct()
 	{
 		$this->initTrackCreate();
@@ -199,6 +204,11 @@ class Post
     public function getPostLikes()
     {
         return $this->post_likes;
+    }
+
+    public function getPostComment()
+    {
+        return $this->post_comment;
     }
 
     public function getTimePassed()

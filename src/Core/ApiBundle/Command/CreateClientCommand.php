@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Core\UserBundle\Entity\User;
+use OAuth2\OAuth2;
 
 class CreateClientCommand extends ContainerAwareCommand
 {
@@ -44,7 +45,7 @@ class CreateClientCommand extends ContainerAwareCommand
 
         $clientManager = $this->getContainer()->get('fos_oauth_server.client_manager.default');
         $client = $clientManager->createClient();
-       // $client->setRedirectUris($input->getOption('redirect-uri'));
+
         $client->setAllowedGrantTypes($input->getOption('grant-type'));
         $clientManager->updateClient($client);
         
@@ -53,12 +54,12 @@ class CreateClientCommand extends ContainerAwareCommand
         $user->setUserName($username);
         $user->setPlainPassword($plainpassword);
         $user->setEmail($email);
-        //automatically enables user
+
         $user->setEnabled(1);
-        
+        $user->setOAuthClient($client);
+
         $em->persist($user);
         $em->flush();
-        //$user_id = $user->getId();
 
         $output->writeln(
             sprintf(

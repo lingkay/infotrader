@@ -59,3 +59,8 @@ fos_oauth_server_authorize:
 # core_api:
 #     resource: "@CoreApiBundle/Resources/config/routing.yml"
 #     prefix:   /
+
+app_api:
+    resource: "@CoreApiBundle/Controller/Api"
+    type:     annotation
+    prefix:   /api

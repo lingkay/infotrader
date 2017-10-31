@@ -76,10 +76,11 @@ fos_oauth_server:
     access_token_class: Core\ApiBundle\Entity\AccessToken
     refresh_token_class: Core\ApiBundle\Entity\RefreshToken
     auth_code_class: Core\ApiBundle\Entity\AuthCode
+
     service:
-        user_provider: fos_user.user_provider.username
+        client_manager: app.manager.oauth_client
         options:
-            access_token_lifetime: 36000
+            supported_scopes: client widget
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -92,20 +93,20 @@ fos_rest:
     # disable_csrf_role: ROLE_API
     param_fetcher_listener: true
     view:
+        view_response_listener: force
         mime_types:
             json: ['application/json', 'application/json;version=1.0', 'application/json;version=1.1', 'application/json;version=1.2']
-        view_response_listener: true
+        view_response_listener: force
         formats:
             xml:  true
             json: true
         templating_formats:
             html: true
+    format_listener:
+        rules:
+            - { path: '^/api', priorities: ['json', 'xml'], fallback_format: json, prefer_extension: false }
+            - { path: ^/, priorities: ['html', '*/*'], fallback_format: html, prefer_extension: true }
 
-    # format_listener:
-    #     rules:
-    #         - { path: ^/, priorities: [ html, json, xml ], fallback_format: ~, prefer_extension: true }
-    #     media_type:
-    #         version_regex: '/(v|version)=(?P<version>[0-9\.]+)/'
     exception:
         codes:
             'Symfony\Component\Routing\Exception\ResourceNotFoundException': 404
@@ -162,15 +163,15 @@ vich_uploader:
             delete_on_remove:   true
             
 #Redis Configuration
-sb_redis:
-    class:
-        client:  "SymfonyBundles\RedisBundle\Service\Client"
-        factory: "SymfonyBundles\RedisBundle\Service\Factory"
-    clients:
-        default:
-            # container alias for service, defaults name for this client: sb_redis.client.default
-            alias:      ~
-            # client options
-            options:    []
-            # connection parameters
-            parameters: []
+# sb_redis:
+#     class:
+#         client:  "SymfonyBundles\RedisBundle\Service\Client"
+#         factory: "SymfonyBundles\RedisBundle\Service\Factory"
+#     clients:
+#         default:
+#             # container alias for service, defaults name for this client: sb_redis.client.default
+#             alias:      ~
+#             # client options
+#             options:    []
+#             # connection parameters
+#             parameters: []

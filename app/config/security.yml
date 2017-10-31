@@ -24,7 +24,7 @@ security:
             pattern: ^/api/doc
             security: false
         api:
-            pattern: ^/rest                                # All URLs are protected
+            pattern: ^/api                                # All URLs are protected
             fos_oauth: true                            # OAuth2 protected resource
             stateless: true                            # Do no set session cookies
             anonymous: false
@@ -61,6 +61,7 @@ security:
 
     access_control:
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/api, role: IS_AUTHENTICATED_FULLY }
         - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login_check$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }

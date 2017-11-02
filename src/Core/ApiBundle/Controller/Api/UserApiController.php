@@ -7,11 +7,15 @@ use FOS\RestBundle\Context\Context;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Hashids\Hashids;
 use FOS\RestBundle\Controller\FOSRestController;
+use Evangeliko\AccountBundle\Entity\Account;
 use FOS\RestBundle\View\View;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 class UserApiController extends FOSRestController
 {
   const MIN_HASH_LENGTH = 6;
@@ -44,36 +48,64 @@ class UserApiController extends FOSRestController
    */
   public function registerUserAction(Request $request)
   {
+        try
+        {
+            $response = [];
+            $user = new User();
+            $data = $request->request->all();
 
-        $user = new User();
-        $data = $request->request->all();
-        
-        $clientManager = $this->container->get('fos_oauth_server.client_manager.default');
-        $client = $clientManager->createClient();
+            $clientManager = $this->container->get('fos_oauth_server.client_manager.default');
+            $client = $clientManager->createClient();
 
-        $client->setAllowedGrantTypes(["authorization_code","password","refresh_token","token","client_credentials"]);
-        $clientManager->updateClient($client);
+            $client->setAllowedGrantTypes(["authorization_code","password","refresh_token","token","client_credentials"]);
+            $clientManager->updateClient($client);
 
-        $user->setOAuthClient($client);
+            $user->setOAuthClient($client);
 
-        $password = $data['password'];
-        $email = $data['email'];
-        $username = $data['password'];
-        $user->setPassword($password);
-        $user->setEmail($email);
-        $user->setEnabled(1);
-        $user->setUsername($username);
+            $password = $data['password'];
+            $email = $data['email'];
+            $username = $data['username'];
+            $name = $data['first_name'].' '.$data['last_name'];
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($user);
-        $em->flush();
+            $user->setPassword($password);
+            $user->setEmail($email);
+            $user->setEnabled(1);
+            $user->setName($name);
+            $user->setUsername($username);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+
+            $user_admin = $em->getRepository("CoreUserBundle:User")->findOneBy(['username' => 'admin']);
+
+            $account = new Account();
+
+            $account->setFirstName($data['first_name'])
+                ->setLastName($data['last_name'])
+                ->setEmail($data['email'])
+                ->setInterests([null])
+                ->setUsername(uniqid())
+                ->setUserCreate($user_admin);
+
+            $em->persist($account);
+            $user->setAccount($account);
+
+            $em->flush();
 
 
-        $encoder = new Hashids($this->container->getParameter('secret'), self::MIN_HASH_LENGTH);
-        $hashid = $encoder->encode($user->getId());
-        $user->setHashid($hashid);
-        $em->flush();
+            $encoder = new Hashids($this->container->getParameter('secret'), self::MIN_HASH_LENGTH);
+            $hashid = $encoder->encode($user->getId());
+            $user->setHashid($hashid);
+            $em->flush();
 
-        return $user->getHashid();
-  }
+            $response[] = array('user_hash_id'=>$user->getHashid(), 'status'=>'registered');
+
+        } catch (\Exception $e) {
+
+            $response[] = array('status'=>'failed');
+            
+        }
+
+        return new JsonResponse($response);
+    }
 }

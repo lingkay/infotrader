@@ -102,8 +102,8 @@ class UserApiController extends FOSRestController
 
         } catch (\Exception $e) {
 
-            $response[] = array('status'=>'failed');
-            
+            $response[] = array('status'=>'failed', 'error'=>$e->getMessage());
+
         }
 
         return new JsonResponse($response);

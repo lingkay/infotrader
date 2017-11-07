@@ -98,11 +98,11 @@ class UserApiController extends FOSRestController
             $user->setHashid($hashid);
             $em->flush();
 
-            $response[] = array('user_hash_id'=>$user->getHashid(), 'status'=>'registered');
+            $response = array('status'=>'1', 'userHashId'=>$user->getHashid());
 
         } catch (\Exception $e) {
 
-            $response[] = array('status'=>'failed', 'error'=>$e->getMessage());
+            $response = array('status'=>'0', 'message'=>$e->getMessage());
 
         }
 

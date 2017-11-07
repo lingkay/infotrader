@@ -12,6 +12,8 @@ use FOS\OAuthServerBundle\Model\ClientManagerInterface;
 use OAuth2\OAuth2;
 use OAuth2\OAuth2ServerException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TokenController extends BaseTokenController
 {
@@ -49,8 +51,8 @@ class TokenController extends BaseTokenController
       $request->$property->set('grant_type', OAuth2::GRANT_TYPE_CLIENT_CREDENTIALS);
       $request->$property->set('scope', 'widget');
       // handle the request, decoding the created token so we can get a managed entity
-      $response = parent::tokenAction($request);
-      $responseToken = json_decode($response->getContent());
+      $parentResponse = parent::tokenAction($request);
+      $responseToken = json_decode($parentResponse->getContent());
       if (!$responseToken || !($token = $this->tokenManager->findTokenByToken($responseToken->access_token))) {
         throw new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, OAuth2::ERROR_INVALID_REQUEST, 'Unable to decode the token.');
       }
@@ -58,9 +60,14 @@ class TokenController extends BaseTokenController
       $user = $this->entityManager->getRepository('CoreUserBundle:User')->findOneBy(array('hashid' => $hashid));
       $token->setUser($user);
       $this->tokenManager->updateToken($token);
-      return $response;
+
+      $response = array('status'=>'1', 'message'=>$responseToken);
+      return new JsonResponse($response);
+      //return $response;
     } catch (OAuth2ServerException $e) {
-      return $e->getHttpResponse();
+      // return $e->getHttpResponse();
+      $response = array('status'=>'0', 'message'=>$e->getMessage());
+      return new JsonResponse($response);
     }
   }
 }

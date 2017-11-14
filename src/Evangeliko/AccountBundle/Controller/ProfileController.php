@@ -86,9 +86,9 @@ class ProfileController extends Controller
 
         $post_array = array();
         foreach ($posts as $post){
-            if ($post->getParent() == NULL) {
+//            if ($post->getParent() == NULL) {
                 $post_array[$post->getID()] = $post;
-            }
+//            }
         }
 
         $params['posts'] = $post_array;

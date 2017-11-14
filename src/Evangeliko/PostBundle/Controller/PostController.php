@@ -97,7 +97,6 @@ class PostController extends Controller
             $notif_list[] = $notif;
         }
         $params['notifs'] = $notif_list;
-        //
 
         return $this->render($twig_file, $params);
     }
@@ -140,6 +139,7 @@ class PostController extends Controller
 
             $post->setMessage($data['reply'])
                 ->setTitle($parent->getTitle())
+                ->setPostType('free')
                 ->setParent($parent);
 
 //            $url = $this->generateUrl('evangeliko_view_free_post', array('id' => $parent->getID()));
@@ -151,9 +151,6 @@ class PostController extends Controller
         }
 
         $files = $request->files->get('post_file');
-//        var_dump($files);
-//        die();
-
         if ($files) {
             $file = new Uploads();
             $file->setImageName($data['post_title']);

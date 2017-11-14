@@ -1,0 +1,126 @@
+{% block feed_post %}
+    <div class="grid-item-content--text">
+        {% if post.getParent is not null %}
+            <p>{{ post.getMessage }}</p>
+            <div class="grid-item-content">
+                <div class="grid-item-content--text">
+                    <h3>{{ post.getParent.getTitle }}</h3>
+                    <p>{{ post.getParent.getMessage }}</p>
+                </div>
+                {% if post.getParent.getFile %}
+                    <img src="{{ vich_uploader_asset(post.getParent.getFile, 'imageFile') }}" alt="{{ post.getParent.getFile.getImageName }}" class="img-responsive">
+                {% endif %}
+            </div>
+        {% else %}
+            <h3>{{ post.getTitle }}</h3>
+            <p>{{ post.getMessage }}</p>
+        {% endif %}
+    </div>
+    {% if post.getFile %}
+        <img src="{{ vich_uploader_asset(post.getFile, 'imageFile') }}" alt="{{ post.getFile.getImageName }}" class="img-responsive">
+    {% endif %}
+    <div class="grid-item-content--share">
+        <ul>
+            <li>
+                {% if post.getPostLikes|length > 0 %}
+                    {% set break = false %}
+                    {% set liked = false %}
+                    {% set like_count = null %}
+
+                    {% for post_likes in post.getPostLikes if not break %}
+                        {% if post_likes.getLiker.getID == account.getID and post_likes.isEnabled %}
+                            {% set liked = true %}
+                            {% set break = true %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% for post_likes in post.getPostLikes %}
+                        {% if post_likes.isEnabled %}
+                            {% set like_count = like_count + 1 %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if liked == true %}
+                        {#liked#}
+                        <a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
+                            <i class="small material-icons">menu</i>{{ like_count }} like
+                        </a>
+                        <a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" rel="{{ post.getID }}">
+                            <i class="small material-icons">menu</i>{{ like_count }} unlike
+                        </a>
+                    {% else %}
+                        {#not liked#}
+                        <a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" rel="{{ post.getID }}">
+                            <i class="small material-icons">menu</i>{{ like_count }} like
+                        </a>
+                        <a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
+                            <i class="small material-icons">menu</i>{{ like_count }} unlike
+                        </a>
+                    {% endif %}
+
+                {% else %}
+                    {#No Like#}
+                    <a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" rel="{{ post.getID }}">
+                        <i class="small material-icons">menu</i> like
+                    </a>
+                    <a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
+                        <i class="small material-icons">menu</i> unlike
+                    </a>
+                {% endif %}
+            </li>
+            <li>
+                <a href="#" class="grid-item-content--share--button comments">
+                    <i class="small material-icons">chat_bubble_outline</i>
+                    {% if not post.getPostComment.isEmpty %}
+                        {{ post.getPostComment|length }} comments
+                    {% else %}
+                        comment
+                    {% endif %}
+                </a>
+            </li>
+            <li>
+                <a href="#" class="share-btn grid-item-content--share--button shares" post_id="{{ post.getID }}" data-toggle="modal" data-target="#shareModal">
+                    <i class="small material-icons">share</i> shares
+                </a>
+            </li>
+            <li>
+                <a href="#" class="grid-item-content--share--button more">
+                    <a href="{{ path('evangeliko_view_free_post', {'id':post.getID}) }}"><i class="small material-icons">more_horiz</i></a>
+                </a>
+            </li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+    {% if not post.getPostComment.isEmpty %}
+        <div class="page-section comments">
+            <ul id="comments_{{ post.getID }}">
+                {% for comment in post.getPostComment %}
+                    <li>
+                        <div class="single-comment">
+                            <div class="author">
+                                <img src="http://via.placeholder.com/40x40" alt="" class="img-circle">
+                                <div class="author--details">
+                                    <h6><a href="#">{{ comment.getComment.getCommenter.getFullName }}</a></h6>
+                                    <small>{{ comment.getComment.getTimePassed }}</small>
+                                    <p>{{ comment.getComment.getMessage }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <div class="page-section space respond">
+        <div class="row">
+            <form method="post" action="{{ path('evangeliko_comment_submit') }}">
+                {#{{ form.hidden('account_type', 'community') }}#}
+                {#{{ form.hidden('community_id', account.getID ) }}#}
+                {{ form.hidden('post_id', post.getID) }}
+                <textarea id="comment_text_{{ post.getID }}" name="comment" post_id="{{ post.getID }}" class="comment-txt" cols="30" rows="1" placeholder="Write a response"></textarea>
+                {#<textarea id="cform-reply" name="reply" class="form-control" rows="3" placeholder="What's on your mind?"></textarea>#}
+                <button id="post-btn" type="submit" class="btn btn-primary pull-right" style="display: none;">Post</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

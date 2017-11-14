@@ -21,6 +21,11 @@ evangeliko_unlike_post:
     methods: [POST]
     defaults: { _controller: EvangelikoPostBundle:Post:unlikePost }
 
+evangeliko_comment_submit:
+    path: /comment
+    methods: [POST]
+    defaults: { _controller: EvangelikoPostBundle:Comment:comment }
+
 evangeliko_view_post:
     path: /view/post
     methods: [GET]

@@ -4,9 +4,15 @@
 <head>
     <title>Infotrade</title>
     <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
     <link rel="shortcut icon" href="favicon.ico"/>
+    <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="{{ asset('bundles/coretemplate/assets/bootstrap/css/bootstrap.min.css') }}"/>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="{{ asset('bundles/coretemplate/assets/font-awesome-4.7.0/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('bundles/coretemplate/assets/jquery-ui/css/jquery-ui.min.css') }}"/>
@@ -19,6 +25,7 @@
 <body class="page">
     <div id="site-canvas">
         <div class="page--wrap">
+            {% embed 'CoreTemplateBundle::side_menu.html.twig' %}{% endembed %}
             {% embed 'CoreTemplateBundle::top_menu.html.twig' %}{% endembed %}
             {% for flash_msg in app.session.flashbag.get('error') %}
                 <div class="alert alert-danger alert-dismissable">
@@ -65,6 +72,44 @@
                 </ul>
             </div>
         </footer>
+    </div>
+
+    <div id="shareModal" class="modal fade" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- header -->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Share</h3>
+                </div>
+                <!-- body -->
+                <div class="modal-body">
+                    <div class="page-section space respond">
+                        <div class="row">
+                            <form method="post" action="{{ path('evangeliko_post_submit') }}">
+                                {#{{ form.hidden('account_type', 'user') }}#}
+                                {#{{ form.hidden('community_id', account.getID ) }}#}
+                                {#add community selection and timeline = default null#}
+                                {#{{ form.hidden('parent', post.getID) }}#}
+                                {#<select>#}
+                                {#<option value="">Timeline</option>#}
+                                {#{% if post.getCommunity is not null %}#}
+                                {#{% for post in post.getCommunity %}#}
+                                {#</select>#}
+                                <input type="hidden" name="account_type" value="user">
+                                <input type="hidden" id="parent" name="parent" />
+                                <textarea name="reply" id="" cols="30" rows="2" placeholder="Write a caption"></textarea>
+                                <button id="post-btn" type="submit" class="btn btn-primary pull-right">SHARE</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- footer -->
+                {#<div class="modal-footer">#}
+                {#<button class="btn btn-warning pull-right">Share</button>#}
+                {#</div>#}
+            </div>
+        </div>
     </div>
 
     <script src="{{ asset('bundles/coretemplate/assets/jquery/dist/jquery.min.js') }}"></script>

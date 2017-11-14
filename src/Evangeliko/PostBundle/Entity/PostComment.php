@@ -29,8 +29,8 @@ class PostComment
     protected $post;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Evangeliko\PostBundle\Entity\Post", inversedBy="post_comment")
-     * @ORM\JoinColumn(name="liker_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Evangeliko\PostBundle\Entity\Comment", inversedBy="post_comment")
+     * @ORM\JoinColumn(name="post_comment_id", referencedColumnName="id")
      */
     protected $comment;
 

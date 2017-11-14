@@ -22,7 +22,7 @@ class Comment
     use HasGeneratedID;
 
     /** @ORM\Column(type="text") */
-    protected $comment;
+    protected $message;
 
     /**
      * @ORM\ManyToOne(targetEntity="Evangeliko\AccountBundle\Entity\Account", inversedBy="post_commented")
@@ -41,15 +41,15 @@ class Comment
         $this->post_title = 0;
     }
 
-    public function setComment($comment)
+    public function setMessage($message)
     {
-        $this->comment = $comment;
+        $this->message = $message;
         return $this;
     }
 
-    public function getComment()
+    public function getMessage()
     {
-        return $this->comment;
+        return $this->message;
     }
 
     public function setCommenter($commenter)
@@ -94,7 +94,7 @@ class Comment
     }
 
     public function getShortComment() {
-        $pieces = explode(" ", $this->post_comment);
+        $pieces = explode(" ", $this->message);
         $message = implode(" ", array_splice($pieces, 0, 15));
 
         return $message."...";

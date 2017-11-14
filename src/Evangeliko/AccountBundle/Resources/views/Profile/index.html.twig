@@ -87,85 +87,7 @@
 
                                     {% if post.getPostType == 'Paid' %}
                                         {% if post.getUserCreate.getID == app.getUser.getID %}
-											<div class="grid-item-content--text">
-												<h3>{{ post.getTitle }}</h3>
-												<p>{{ post.getMessage }}</p>
-											</div>
-                                            {% if post.getFile %}
-												<img src="{{ vich_uploader_asset(post.getFile, 'imageFile') }}" alt="{{ post.getFile.getImageName }}" class="img-responsive">
-                                            {% endif %}
-											<div class="grid-item-content--share">
-												<ul>
-													<li>
-                                                        {% if post.getPostLikes|length > 0 %}
-                                                            {% set break = false %}
-                                                            {% set liked = false %}
-                                                            {% set like_count = null %}
-
-                                                            {% for post_likes in post.getPostLikes if not break %}
-                                                                {% if post_likes.getLiker.getID == account.getID and post_likes.isEnabled %}
-                                                                    {% set liked = true %}
-                                                                    {% set break = true %}
-                                                                {% endif %}
-                                                            {% endfor %}
-
-                                                            {% for post_likes in post.getPostLikes %}
-                                                                {% if post_likes.isEnabled %}
-                                                                    {% set like_count = like_count + 1 %}
-                                                                {% endif %}
-                                                            {% endfor %}
-
-                                                            {% if liked == true %}
-                                                                {#liked#}
-																<a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
-																	<i class="small material-icons">menu</i>{{ like_count }} like
-																</a>
-																<a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" rel="{{ post.getID }}">
-																	<i class="small material-icons">menu</i>{{ like_count }} unlike
-																</a>
-                                                            {% else %}
-                                                                {#not liked#}
-																<a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" rel="{{ post.getID }}">
-																	<i class="small material-icons">menu</i>{{ like_count }} like
-																</a>
-																<a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
-																	<i class="small material-icons">menu</i>{{ like_count }} unlike
-																</a>
-                                                            {% endif %}
-
-                                                        {% else %}
-                                                            {#No Like#}
-															<a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" rel="{{ post.getID }}">
-																<i class="small material-icons">menu</i> like
-															</a>
-															<a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
-																<i class="small material-icons">menu</i> unlike
-															</a>
-                                                        {% endif %}
-													</li>
-													<li>
-														<a href="#" class="grid-item-content--share--button comments">
-															<i class="small material-icons">chat_bubble_outline</i>
-                                                            {% if not post.getReply.isEmpty %}
-                                                                {{ post.getReply|length }} comments
-                                                            {% else %}
-																comment
-                                                            {% endif %}
-														</a>
-													</li>
-													<li>
-														<a href="#" class="grid-item-content--share--button shares">
-															<i class="small material-icons">share</i> shares
-														</a>
-													</li>
-													<li>
-														<a href="#" class="grid-item-content--share--button more">
-															<a href="{{ path('evangeliko_view_free_post', {'id':post.getID}) }}"><i class="small material-icons">more_horiz</i></a>
-														</a>
-													</li>
-												</ul>
-												<div class="clearfix"></div>
-											</div>
+                                            {% embed 'CoreTemplateBundle::feed_post.html.twig' %}{% endembed %}
                                         {% else %}
 											<div class="grid-item-content--text">
 												<h3>{{ post.getTitle }}</h3>
@@ -173,87 +95,7 @@
 											</div>
                                         {% endif %}
                                     {% else %}
-										<div class="grid-item-content--text">
-											<h3>{{ post.getTitle }}</h3>
-											<p>
-                                                {{ post.getMessage }}
-											</p>
-										</div>
-                                        {% if post.getFile %}
-											<img src="{{ vich_uploader_asset(post.getFile, 'imageFile') }}" alt="{{ post.getFile.getImageName }}" class="img-responsive">
-                                        {% endif %}
-										<div class="grid-item-content--share">
-											<ul>
-												<li>
-                                                    {% if post.getPostLikes|length > 0 %}
-                                                        {% set break = false %}
-                                                        {% set liked = false %}
-                                                        {% set like_count = null %}
-
-                                                        {% for post_likes in post.getPostLikes if not break %}
-                                                            {% if post_likes.getLiker.getID == account.getID and post_likes.isEnabled %}
-                                                                {% set liked = true %}
-                                                                {% set break = true %}
-                                                            {% endif %}
-                                                        {% endfor %}
-
-                                                        {% for post_likes in post.getPostLikes %}
-                                                            {% if post_likes.isEnabled %}
-                                                                {% set like_count = like_count + 1 %}
-                                                            {% endif %}
-                                                        {% endfor %}
-
-                                                        {% if liked == true %}
-                                                            {#liked#}
-															<a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
-																<i class="small material-icons">menu</i>{{ like_count }} like
-															</a>
-															<a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" rel="{{ post.getID }}">
-																<i class="small material-icons">menu</i>{{ like_count }} unlike
-															</a>
-                                                        {% else %}
-                                                            {#not liked#}
-															<a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" rel="{{ post.getID }}">
-																<i class="small material-icons">menu</i>{{ like_count }} like
-															</a>
-															<a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
-																<i class="small material-icons">menu</i>{{ like_count }} unlike
-															</a>
-                                                        {% endif %}
-
-                                                    {% else %}
-                                                        {#No Like#}
-														<a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" rel="{{ post.getID }}">
-															<i class="small material-icons">menu</i> like
-														</a>
-														<a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
-															<i class="small material-icons">menu</i> unlike
-														</a>
-                                                    {% endif %}
-												</li>
-												<li>
-													<a href="#" class="grid-item-content--share--button comments">
-														<i class="small material-icons">chat_bubble_outline</i>
-                                                        {% if not post.getReply.isEmpty %}
-                                                            {{ post.getReply|length }} comments
-                                                        {% else %}
-															comment
-                                                        {% endif %}
-													</a>
-												</li>
-												<li>
-													<a href="#" class="grid-item-content--share--button shares">
-														<i class="small material-icons">share</i> shares
-													</a>
-												</li>
-												<li>
-													<a href="#" class="grid-item-content--share--button more">
-														<a href="{{ path('evangeliko_view_free_post', {'id':post.getID}) }}"><i class="small material-icons">more_horiz</i></a>
-													</a>
-												</li>
-											</ul>
-											<div class="clearfix"></div>
-										</div>
+                                        {% embed 'CoreTemplateBundle::feed_post.html.twig' %}{% endembed %}
                                     {% endif %}
 								</div>
 							</div>
@@ -278,6 +120,23 @@
             $('.unlike-btn').click(function(){
                 var post_id = $(this).attr('rel');
                 postUnlike(post_id);
+            });
+
+            $('.comment-txt').keydown(function(event) {
+                if (event.keyCode == 13) {
+                    var data = {};
+
+                    data['post_id'] = $(this).attr('post_id');
+                    data['comment'] = $(this).val();
+
+                    comment(data);
+
+                    return false;
+                }
+            });
+
+            $('.share-btn').click(function(){
+                $("#shareModal #parent").val($(this).attr('post_id'));
             });
         });
 
@@ -317,5 +176,34 @@
             return false;
         }
 
+        function comment(data) {
+
+            $.ajax({
+                url:'{{ (path('evangeliko_comment_submit')) }}',
+                type: "POST",
+                dataType: "json",
+                data: data,
+                async: true,
+                success: function (data)
+                {
+                    $("#comment_text_"+data.post_id).val('');
+                    $("#comments_"+data.post_id).append(
+                        ' <li>'
+                        + '<div class="single-comment">'
+                        + '    <div class="author">'
+                        + '        <img src="http://via.placeholder.com/40x40" alt="" class="img-circle">'
+                        + '        <div class="author--details">'
+                        + '            <h6><a href="#">'+data.commenter+'</a></h6>'
+                        + '            <small>Just now</small></h6>'
+                        + '            <p>'+data.comment+'</p></h6>'
+                        + '        </div>'
+                        + '    </div>'
+                        + '</div>'
+                        + '</li>'
+                    );
+                }
+            });
+            return false;
+        }
 	</script>
 {% endblock %}

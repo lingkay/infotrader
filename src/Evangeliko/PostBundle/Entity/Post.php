@@ -21,11 +21,11 @@ class Post
 	use TrackCreate;
 	use HasGeneratedID;
 
-	/** @ORM\Column(type="text") */
-	protected $post_title;
-
-	/** @ORM\Column(type="text") */
-	protected $post_message;
+    /**
+     * @ORM\ManyToOne(targetEntity="Evangeliko\PostBundle\Entity\PostDetails", inversedBy="post")
+     * @ORM\JoinColumn(name="post_details_id", referencedColumnName="id")
+     */
+    protected $post_details;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Evangeliko\PostBundle\Entity\Post")
@@ -35,12 +35,6 @@ class Post
 
 	/** @ORM\Column(type="integer", nullable=true) */
 	protected $order_number;
-
-	/** @ORM\Column(type="string", length=20) */
-	protected $post_type;
-
-	/** @ORM\Column(type="decimal", precision=10, scale=2, nullable=true) */
-	protected $amount;
 
     /**
      * @ORM\ManyToOne(targetEntity="Evangeliko\PostBundle\Entity\Uploads")
@@ -60,11 +54,6 @@ class Post
 	 */
 	protected $account;
 
-	/**
-	 * @ORM\OneToMany(targetEntity="Evangeliko\PostBundle\Entity\Post", mappedBy="parent")
-	 */
-	protected $reply;
-
     /**
      * @ORM\OneToMany(targetEntity="Evangeliko\PostBundle\Entity\PostRead", mappedBy="post")
      */
@@ -83,31 +72,18 @@ class Post
 	function __construct()
 	{
 		$this->initTrackCreate();
-		$this->amount = 0;
-		$this->post_type = 'free';
 	}
 
-	public function setTitle($title)
-	{
-		$this->post_title = $title;
-		return $this;
-	}
+    public function setPostDetails($post_details)
+    {
+        $this->post_details = $post_details;
+        return $this;
+    }
 
-	public function getTitle()
-	{
-		return $this->post_title;
-	}
-
-	public function setMessage($post_message)
-	{
-		$this->post_message = $post_message;
-		return $this;
-	}
-
-	public function getMessage()
-	{
-		return $this->post_message;
-	}
+    public function getPostDetails()
+    {
+        return $this->post_details;
+    }
 
 	public function setParent($parent)
 	{
@@ -119,39 +95,6 @@ class Post
 	{
 		return $this->parent;
 	}
-
-	public function setOrder($order_number)
-	{
-		$this->order_number = $order_number;
-		return $this;
-	}
-
-	public function getOrder()
-	{
-		return $this->order_number;
-	}
-
-	public function setPostType($post_type)
-	{
-		$this->post_type = $post_type;
-		return $this;
-	}
-
-	public function getPostType()
-	{
-		return $this->post_type;
-	}
-
-	public function setAmount($amount)
-    {
-    	$this->amount = $amount;
-    	return $this;
-    }
-
-    public function getAmount()
-    {
-    	return $this->amount;
-    }
 
     public function setFile($file)
     {
@@ -191,11 +134,6 @@ class Post
     	return $this->account;
     }
 
-    public function getReply()
-    {
-    	return $this->reply;
-    }
-
     public function getPostReaders()
     {
         return $this->post_readers;
@@ -211,49 +149,13 @@ class Post
         return $this->post_comment;
     }
 
-    public function getTimePassed()
-    {
-    	$current = new Datetime();
-    	$passed = $current->diff($this->date_create);
-
-    	if($passed->y > 0){
-    		return $passed->y." year(s) ago";
-    	}
-    	if($passed->m > 0){
-    		return $passed->m." month(s) ago";
-    	}
-    	if($passed->d > 0){
-    		return $passed->d." day(s) ago";
-    	}
-    	if($passed->h > 0){
-    		return $passed->h." hour(s) ago";
-    	}
-    	if($passed->i > 0){
-    		return $passed->i." minute(s) ago";
-    	}
-    	if($passed->s > 0){
-    		return $passed->s." second(s) ago";
-    	}
-    }
-
-    public function getShortMessage() {
-		$pieces = explode(" ", $this->post_message);
-		$message = implode(" ", array_splice($pieces, 0, 15));
-		
-		return $message."...";
-	}
-
 	public function toData()
 	{
 		$data = new stdClass;
 
 		$this->dataHasGeneratedID($data);
-		
-		$data->message = $this->message;
-		$data->parent = $this->parent;
+
 		$data->order = $this->order;
-		$data->post_type = $this->post_type;
-		$data->amount = $this->amount;
 
 		$this->dataTrackCreate($data);
 

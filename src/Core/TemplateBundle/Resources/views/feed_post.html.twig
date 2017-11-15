@@ -1,19 +1,19 @@
 {% block feed_post %}
     <div class="grid-item-content--text">
         {% if post.getParent is not null %}
-            <p>{{ post.getMessage }}</p>
+            <p>{{ post.getPostDetails.getMessage }}</p>
             <div class="grid-item-content">
                 <div class="grid-item-content--text">
-                    <h3>{{ post.getParent.getTitle }}</h3>
-                    <p>{{ post.getParent.getMessage }}</p>
+                    <h3>{{ post.getParent.getPostDetails.getTitle }}</h3>
+                    <p>{{ post.getParent.getPostDetails.getMessage }}</p>
                 </div>
                 {% if post.getParent.getFile %}
                     <img src="{{ vich_uploader_asset(post.getParent.getFile, 'imageFile') }}" alt="{{ post.getParent.getFile.getImageName }}" class="img-responsive">
                 {% endif %}
             </div>
         {% else %}
-            <h3>{{ post.getTitle }}</h3>
-            <p>{{ post.getMessage }}</p>
+            <h3>{{ post.getPostDetails.getTitle }}</h3>
+            <p>{{ post.getPostDetails.getMessage }}</p>
         {% endif %}
     </div>
     {% if post.getFile %}
@@ -123,4 +123,17 @@
             </form>
         </div>
     </div>
+    {#<div class="page-section space respond">#}
+        {#<div class="row">#}
+            {#<form method="post" action="{{ path('evangeliko_post_submit') }}">#}
+                {#SHARE#}
+                {#{{ form.hidden('account_type', 'user') }}#}
+                {#{{ form.hidden('community_id', account.getID ) }}#}
+                {#add community selection and timeline = default null#}
+                {#{{ form.hidden('parent', post.getID) }}#}
+                {#<textarea name="reply" id="" cols="30" rows="1" placeholder="Write a caption"></textarea>#}
+                {#<button id="post-btn" type="submit" class="btn btn-primary pull-right">SHARE</button>#}
+            {#</form>#}
+        {#</div>#}
+    {#</div>#}
 {% endblock %}

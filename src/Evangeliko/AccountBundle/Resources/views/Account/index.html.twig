@@ -52,13 +52,13 @@
                                             {% else %}
                                                 <h5>{{ post.getUserCreate.getAccount.getFullName }}</h5>
                                             {% endif %}
-                                            <small>{{ post.getTimePassed }}</small>
+                                            <small>{{ post.getPostDetails.getTimePassed }}</small>
                                         </div>
                                         <div class="clearfix"></div>
-                                        <input type="hidden" name="post_id" class="post_type" value="{{post.getPostType}}">
+                                        <input type="hidden" name="post_id" class="post_type" value="{{post.getPostDetails.getPostType}}">
                                     </div>
 
-                                    {% if post.getPostType == 'Paid' %}
+                                    {% if post.getPostDetails.getPostType == 'Paid' %}
                                         {% if post.getUserCreate.getID == app.getUser.getID %}
                                             {% embed 'CoreTemplateBundle::feed_post.html.twig' %}{% endembed %}
                                         {% else %}
@@ -79,19 +79,6 @@
                                         {% endif %}
                                     {% else %}
                                         {% embed 'CoreTemplateBundle::feed_post.html.twig' %}{% endembed %}
-                                        {#<div class="page-section space respond">#}
-                                            {#<div class="row">#}
-                                                {#<form method="post" action="{{ path('evangeliko_post_submit') }}">#}
-                                                    {#SHARE#}
-                                                    {#{{ form.hidden('account_type', 'user') }}#}
-                                                    {#{{ form.hidden('community_id', account.getID ) }}#}
-                                                    {#add community selection and timeline = default null#}
-                                                    {#{{ form.hidden('parent', post.getID) }}#}
-                                                    {#<textarea name="reply" id="" cols="30" rows="1" placeholder="Write a caption"></textarea>#}
-                                                    {#<button id="post-btn" type="submit" class="btn btn-primary pull-right">SHARE</button>#}
-                                                {#</form>#}
-                                            {#</div>#}
-                                        {#</div>#}
                                     {% endif %}
                                 </div>
                             </div>

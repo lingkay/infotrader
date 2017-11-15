@@ -96,8 +96,18 @@
                                 {#{% if post.getCommunity is not null %}#}
                                 {#{% for post in post.getCommunity %}#}
                                 {#</select>#}
-                                <input type="hidden" name="account_type" value="user">
                                 <input type="hidden" id="parent" name="parent" />
+                                Share to:
+                                <select name="community_id">
+                                    <option value="">Timeline</option>
+                                    {% if account.getCommunityFollowed is not null %}
+                                        {% for cmty,community in account.getCommunityFollowed %}
+                                            {% if community.getStatus == 'Followed' and community.getCommunity.getUserCreate.getID == app.getUser.getID %}
+                                                <option value="{{ community.getCommunity.getID }}">{{community.getCommunity.getName}}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
                                 <textarea name="reply" id="" cols="30" rows="2" placeholder="Write a caption"></textarea>
                                 <button id="post-btn" type="submit" class="btn btn-primary pull-right">SHARE</button>
                             </form>

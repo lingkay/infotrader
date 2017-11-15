@@ -65,15 +65,15 @@
                             <div class="articles--single grid-item col-sm-6">
                                 <!-- add inner element for column content -->
                                 <div class="grid-item-content">
-                                    <input type="hidden" name="post_id" class="post_type" value="{{post.getPostType}}">
+                                    <input type="hidden" name="post_id" class="post_type" value="{{post.getPostDetails.getPostType}}">
 
-                                    {% if post.getPostType == 'Paid' %}
+                                    {% if post.getPostDetails.getPostType == 'Paid' %}
                                         {% if post.getUserCreate.getID == app.getUser.getID %}
                                             {% embed 'CoreTemplateBundle::feed_post.html.twig' %}{% endembed %}
                                         {% else %}
                                             <div class="grid-item-content--text">
-                                                <h3>{{ post.getTitle }}</h3>
-                                                <a href="" class="btn btn-default">Read this article for {{ post.getAmount }} credits only.</a>
+                                                <h3>{{ post.getPostDetails.getTitle }}</h3>
+                                                <a href="" class="btn btn-default">Read this article for {{ post.getPostDetails.getAmount }} credits only.</a>
                                             </div>
                                         {% endif %}
                                     {% else %}

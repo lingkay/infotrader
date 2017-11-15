@@ -9,7 +9,7 @@
                 <div class="author--details">
                     <h5><a href="#">{{ post.getUserCreate.getAccount.getFullName }}</a></h5>
                     <p>Visionary, Dreamer, Future maker, Planner. The quick brown fox jumps oer the lazy dog.</p>
-                    <small>{{ post.getTimePassed }}</small>
+                    <small>{{ post.getPostDetails.getTimePassed }}</small>
                 </div>
             </div>
         </div>
@@ -19,10 +19,10 @@
 
         <div class="container">
             <div class="article-page--title mb10">
-                <h1>{{ post.getTitle }}</h1>
+                <h1>{{ post.getPostDetails.getTitle }}</h1>
                 <div class="article-page--status paid">
                     <small>This post is</small>
-                    {% if post.getPostType == 'Paid' %}
+                    {% if post.getPostDetails.getPostType == 'Paid' %}
                         <large>Paid</large>
                     {% else %}
                         <large>Free</large>
@@ -39,7 +39,7 @@
                                 <img src="{{ vich_uploader_asset(post.getFile, 'imageFile') }}" alt="{{ post.getFile.getImageName }}" class="img-responsive">
                             </div>
                         {% endif %}
-                        <p>{{ post.getMessage}}</p>
+                        <p>{{ post.getPostDetails.getMessage}}</p>
                     </div>
 
                     <div class="page-section grid-item-content--share">
@@ -94,16 +94,16 @@
                             <li>
                                 <a href="#" class="grid-item-content--share--button comments">
                                     <i class="small material-icons">chat_bubble_outline</i>
-                                    {% if not post.getReply.isEmpty %}
-                                        {{ post.getReply|length }} comments
+                                    {% if not post.getPostComment.isEmpty %}
+                                        {{ post.getPostComment|length }} comments
                                     {% else %}
                                         comment
                                     {% endif %}
                                 </a>
                             </li>
                             <li>
-                                <a href="#" class="grid-item-content--share--button shares">
-                                    <i class="small material-icons">share</i> 6 shares
+                                <a href="#" class="share-btn grid-item-content--share--button shares" post_id="{{ post.getID }}" data-toggle="modal" data-target="#shareModal">
+                                    <i class="small material-icons">share</i> shares
                                 </a>
                             </li>
                             <li>
@@ -117,32 +117,30 @@
 
                     <div class="page-section space respond">
                         <div class="row">
-                            <form method="post" action="{{ path('evangeliko_post_submit') }}">
-                                {{ form.hidden('account_type', 'community') }}
-                                {{ form.hidden('community_id', account.getID ) }}
-                                {{ form.hidden('parent', post.getID) }}
-                                <textarea name="reply" id="comment-txt" cols="30" rows="1" placeholder="Write a response"></textarea>
+                            <form method="post" action="{{ path('evangeliko_comment_submit') }}">
+                                {#{{ form.hidden('account_type', 'community') }}#}
+                                {#{{ form.hidden('community_id', account.getID ) }}#}
+                                {{ form.hidden('post_id', post.getID) }}
+                                <textarea id="comment_text_{{ post.getID }}" name="comment" post_id="{{ post.getID }}" class="comment-txt" cols="30" rows="1" placeholder="Write a response"></textarea>
                                 {#<textarea id="cform-reply" name="reply" class="form-control" rows="3" placeholder="What's on your mind?"></textarea>#}
                                 <button id="post-btn" type="submit" class="btn btn-primary pull-right" style="display: none;">Post</button>
                             </form>
                         </div>
                     </div>
-                    {% if not post.getReply.isEmpty %}
+                    {% if not post.getPostComment.isEmpty %}
                         <div class="page-section comments">
-                            <ul>
-                                {% for reply in post.getReply %}
+                            <ul id="comments_{{ post.getID }}">
+                                {% for comment in post.getPostComment %}
                                     <li>
                                         <div class="single-comment">
                                             <div class="author">
                                                 <img src="http://via.placeholder.com/40x40" alt="" class="img-circle">
                                                 <div class="author--details">
-                                                    <h5><a href="#">{{ reply.getUserCreate.getAccount.getFullName }}</a></h5>
-                                                    <small>{{ reply.getTimePassed }}</small>
+                                                    <h6><a href="#">{{ comment.getComment.getCommenter.getFullName }}</a></h6>
+                                                    <small>{{ comment.getComment.getTimePassed }}</small>
+                                                    <p>{{ comment.getComment.getMessage }}</p>
                                                 </div>
                                             </div>
-
-                                            <p>{{ reply.getMessage }}</p>
-
                                         </div>
                                     </li>
                                 {% endfor %}
@@ -176,14 +174,8 @@
                 postUnlike(post_id);
             });
 
-            $('#posts').on('click', '.reply-form', function() {
-
-                var read_more_div = $(this).parent("div");
-                var full_msg_div = read_more_div.parent("div");
-                var parent_div = full_msg_div.parent("div");
-                var msg_div = parent_div.parent('div');
-                var short_msg_div = parent_div.find(".replay-text")
-                short_msg_div.show();
+            $('.share-btn').click(function(){
+                $("#shareModal #parent").val($(this).attr('post_id'));
             });
         });
 

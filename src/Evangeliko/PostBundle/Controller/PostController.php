@@ -14,6 +14,7 @@ use Core\ValidationException;
 use Core\UserBundle\Entity\User;
 use Evangeliko\AccountBundle\Entity\Account;
 use Evangeliko\PostBundle\Entity\Post;
+use Evangeliko\PostBundle\Entity\PostDetails;
 use Evangeliko\PostBundle\Entity\Uploads;
 use Evangeliko\PostBundle\Entity\PostRead;
 use Evangeliko\PostBundle\Entity\PostLikes;
@@ -104,50 +105,53 @@ class PostController extends Controller
     public function postAction(Request $request)
     {
         $this->request = $request;
-
         $user = $this->getUser();
-
         $em = $this->getDoctrine()->getManager();
-
         $data = $this->request->request->all();
 
+        $post_details = new PostDetails();
         $post = new Post();
-        if($data['account_type'] != 'user') {
-            if($data['account_type'] == 'community'){
-                $community = $em->getRepository("EvangelikoCommunityBundle:Community")->find($data['community_id']);
-                $post->setCommunity($community);
-
-                $url = $this->generateUrl('evangeliko_community_view', array('slug' => $community->getSlug(), 'filterType' => 'all'));
-            }else{
-                $account = $em->getRepository("EvangelikoAccountBundle:Account")->find($data['community_id']);
-                $post->setAccount($account);
-            }
-        } else{
-            $account = $user->getAccount();
-            $url = $this->generateUrl('evangeliko_profile_index', array('username' => $account->getUsername(), 'filterType' => 'all'));
-        }
-        
-        if(isset($data['post_type'])){
-            $post->setPostType($data['post_type']);
-            if($data['post_type'] == 'Paid'){
-                $post->setAmount($data['amount']);
-            }
-        }
 
         if($data['parent'] != NULL){
             $parent = $em->getRepository("EvangelikoPostBundle:Post")->find($data['parent']);
 
-            $post->setMessage($data['reply'])
-                ->setTitle($parent->getTitle())
-                ->setPostType('free')
-                ->setParent($parent);
+            $post_details->setMessage($data['reply'])
+                ->setTitle($parent->getPostDetails()->getTitle())
+                ->setPostType('free');
 
-//            $url = $this->generateUrl('evangeliko_view_free_post', array('id' => $parent->getID()));
-            $url = $request->headers->get('referer');
-//            return new RedirectResponse($referer);
+            $post->setParent($parent);
         }else{
-            $post->setMessage($data['post'])
+            $post_details->setMessage($data['post'])
                 ->setTitle($data['post_title']);
+        }
+
+        if (isset($data['post_type'])){
+            $post_details->setPostType($data['post_type']);
+
+            if($data['post_type'] == 'Paid'){
+                $post_details->setAmount($data['amount']);
+            }
+        }
+
+        $em->persist($post_details);
+        $em->flush();
+
+        if (isset($data['community_id'])) {
+            $community = $em->getRepository("EvangelikoCommunityBundle:Community")->find($data['community_id']);
+            $post->setCommunity($community);
+        }
+
+        if (isset($data['account_type'])) {
+            if($data['account_type'] == 'user') {
+                $account = $user->getAccount();
+                $url = $this->generateUrl('evangeliko_profile_index', array('username' => $account->getUsername(), 'filterType' => 'all'));
+            } elseif ($data['account_type'] == 'community') {
+                $url = $this->generateUrl('evangeliko_community_view', array('slug' => $community->getSlug(), 'filterType' => 'all'));
+            } else {
+                $url = $request->headers->get('referer');
+            }
+        } else {
+            $url = $request->headers->get('referer');
         }
 
         $files = $request->files->get('post_file');
@@ -159,7 +163,7 @@ class PostController extends Controller
             $em->flush();
             $post->setFile($file);
         }
-
+        $post->setPostDetails($post_details);
         $post->setUserCreate($this->getUser());
 
         $em->persist($post);

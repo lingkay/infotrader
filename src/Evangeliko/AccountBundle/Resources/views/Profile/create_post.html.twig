@@ -22,12 +22,9 @@
 		</div>
 	</div>
 
-
 	<div class="page--wrap--contents">
-
-
 		<div class="container">
-			<form method="post" id="post-form" action="{{ path('evangeliko_post_submit') }}">
+			<form method="post" id="post-form" enctype="multipart/form-data" action="{{ path('evangeliko_post_submit') }}">
 				<div class="page-primary-details">
                     {{ form.hidden('account_type', 'user') }}
 					<div class="form--input-wrap trans-field">
@@ -49,7 +46,7 @@
 				<div class="create-page--buttons">
 					<div class="left create-page--buttons--options">
 						<div class="article-type">
-							<input type="radio" name="post_type" value="Free" id="article-type-free">
+							<input type="radio" name="post_type" value="Free" id="article-type-free" checked="checked">
 							<label for="article-type-free">Free</label>
 						</div>
 						<div class="article-type">

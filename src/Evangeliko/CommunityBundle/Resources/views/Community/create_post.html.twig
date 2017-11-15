@@ -3,9 +3,9 @@
 
 {% block css %}
     <style>
-    input[type="file"] {
-        display: none;
-    }
+        input[type="file"] {
+            display: none;
+        }
     </style>
 {% endblock %}
 
@@ -30,15 +30,6 @@
                     {{ form.hidden('community_id', page.getID ) }}
                     <div class="form--input-wrap trans-field">
                         {#{{ form.group_textnew('Enter title', 'post_title','', 2) }}#}
-
-                        {#{% if object.getID|default('') != '' %}#}
-                            {#<div class="form-group">#}
-                                {#<div class="col-sm-offset-4 col-md-8">#}
-                                    {#<a href="{{ vich_uploader_asset(object.getFile|default(''), 'imageFile') }}" class="btn c-theme-btn c-btn-square c-btn-uppercase c-btn-bold">View File</a>#}
-                                {#</div>#}
-                            {#</div>#}
-                        {#{% endif %}#}
-
                         <input type="text" name="post_title" class="input-text input-text--large" placeholder="Enter title">
                     </div>
                     <div class="form--input-wrap">
@@ -56,7 +47,7 @@
                 <div class="create-page--buttons">
                     <div class="left create-page--buttons--options">
                         <div class="article-type">
-                            <input type="radio" name="post_type" value="Free" id="article-type-free">
+                            <input type="radio" name="post_type" value="Free" id="article-type-free" checked="checked">
                             <label for="article-type-free">Free</label>
                         </div>
                         <div class="article-type">

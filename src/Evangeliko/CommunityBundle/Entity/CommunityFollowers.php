@@ -33,11 +33,11 @@ class CommunityFollowers
 	 */
 	protected $community;
 
-	/**
-	 * @ORM\ManyToOne(targetEntity="\Evangeliko\AccountBundle\Entity\Account", inversedBy="community")
-	 * @ORM\JoinColumn(name="follower_id", referencedColumnName="id")
-	 */
-	protected $follower;
+    /**
+     * @ORM\ManyToOne(targetEntity="\Evangeliko\AccountBundle\Entity\Account", inversedBy="followed_community")
+     * @ORM\JoinColumn(name="follower_id", referencedColumnName="id")
+     */
+    protected $follower;
 
 	/** @ORM\Column(type="string", length=15) */
 	protected $status;

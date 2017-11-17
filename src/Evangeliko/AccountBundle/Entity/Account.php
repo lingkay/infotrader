@@ -57,10 +57,15 @@ class Account
 	 */
 	protected $account;
 
+    /**
+     * @ORM\OneToMany(targetEntity="\Evangeliko\CommunityBundle\Entity\Community", mappedBy="creator")
+     */
+    protected $created_community;
+
 	/**
 	 * @ORM\OneToMany(targetEntity="\Evangeliko\CommunityBundle\Entity\CommunityFollowers", mappedBy="follower")
 	 */
-	protected $community;
+	protected $followed_community;
 
     /**
      * @ORM\OneToOne(targetEntity="\Core\UserBundle\Entity\User", mappedBy="account", cascade={"persist"})
@@ -230,9 +235,14 @@ class Account
         return $this->post_commented;
     }
 
-	public function getCommunityFollowed()
+    public function getCreatedCommunity()
+    {
+        return $this->created_community;
+    }
+
+	public function getFollowedCommunity()
 	{
-		return $this->community;
+		return $this->followed_community;
 	}
 
 	public function getCredit()

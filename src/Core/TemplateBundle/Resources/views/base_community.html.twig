@@ -100,8 +100,8 @@
                                 Share to:
                                 <select name="community_id">
                                     <option value="">Timeline</option>
-                                    {% if account.getCommunityFollowed is not null %}
-                                        {% for cmty,community in account.getCommunityFollowed %}
+                                    {% if account.getFollowedCommunity is not null %}
+                                        {% for cmty,community in account.getFollowedCommunity %}
                                             {% if community.getStatus == 'Followed' and community.getCommunity.getUserCreate.getID == app.getUser.getID %}
                                                 <option value="{{ community.getCommunity.getID }}">{{community.getCommunity.getName}}</option>
                                             {% endif %}

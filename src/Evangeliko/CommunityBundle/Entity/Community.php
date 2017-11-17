@@ -34,6 +34,12 @@ class Community
 	/** @ORM\Column(type="string", length=255) */
 	protected $description;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="\Evangeliko\AccountBundle\Entity\Account", inversedBy="created_community")
+     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
+     */
+    protected $creator;
+
 	/**
 	 * @ORM\OneToMany(targetEntity="\Evangeliko\CommunityBundle\Entity\CommunityFollowers", mappedBy="community")
 	 */
@@ -66,6 +72,17 @@ class Community
 	{
 		return $this->slug;
 	}
+
+    public function setCreator($creator)
+    {
+        $this->creator = $creator;
+        return $this;
+    }
+
+    public function getCreator()
+    {
+        return $this->creator;
+    }
 
 	public function getFollowers()
 	{

@@ -98,16 +98,19 @@ class CommunityController extends Controller
 
 		$em = $this->getDoctrine()->getManager();
 
+        $account = $this->getUser()->getAccount();
+
 		$community = new Community();
 
 		try {
 			$community->setName($data['page_name'])
-		          ->setSlug($data['slug'])
-		          ->setType($data['page_type'])
-		          ->setDescription($data['description'])
-		          ->setEnabled(true)
-		          ->setInterests($data['interest'])
-		          ->setUserCreate($this->getUser());
+		            ->setSlug($data['slug'])
+		            ->setType($data['page_type'])
+		            ->setDescription($data['description'])
+		            ->setEnabled(true)
+                    ->setInterests($data['interest'])
+                    ->setCreator($account)
+		            ->setUserCreate($this->getUser());
 
 			$em->persist($community);
 
@@ -314,7 +317,8 @@ class CommunityController extends Controller
 			$community = $em->getRepository("EvangelikoCommunityBundle:Community")->find($data['community_id']);
 
 			$community_follow->setCommunity($community)
-			                 ->setFollower($account);
+                                ->setFollower($account)
+                                ->setUserCreate($this->getUser());
 
 			if($community->getType() == 'Public'){
 				$community_follow->setStatus(CommunityFollowers::STATUS_FOLLOW);

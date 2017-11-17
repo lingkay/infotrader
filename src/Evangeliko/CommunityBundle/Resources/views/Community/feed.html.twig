@@ -16,7 +16,11 @@
                             <a href="{{ path('evangeliko_community_edit_page', {'slug': page.getSlug }) }}" class="btn btn-default">Edit</a>
                         {% endif %}
                         {#<a href="#" class="btn btn-default btn-md" style="background-color: transparent; color: #337ab7;">UNBLESS</a>#}
-                        <a href="#" class="btn btn-default">Follow</a>
+                        <form method="post" action="{{ path('evangeliko_community_follow') }}">
+                            {#<a href="#" class="btn btn-default">Follow</a>#}
+                            {{ form.hidden('community_id', page.getID) }}
+                            <button type="submit" class="btn btn-default">Follow</button>
+                        </form>
                     </div>
                 </div>
             </div>

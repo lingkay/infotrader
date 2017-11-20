@@ -51,7 +51,7 @@ class AccountController extends Controller
 
         $community_followed = [];
 
-        foreach ($user->getAccount()->getCommunityFollowed() as $follow) {
+        foreach ($user->getAccount()->getFollowedCommunity() as $follow) {
             $community_followed[] = $follow->getCommunity()->getID();
         }
 

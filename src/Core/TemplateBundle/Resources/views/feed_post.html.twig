@@ -4,7 +4,7 @@
             <p>{{ post.getPostDetails.getMessage }}</p>
             <div class="grid-item-content">
                 <div class="grid-item-content--text">
-                    <h3>{{ post.getParent.getPostDetails.getTitle }}</h3>
+                    <a href="{{ path('evangeliko_view_free_post', {'id':post.getParent.getID}) }}"><h3>{{ post.getParent.getPostDetails.getTitle }}</h3></a>
                     <p>{{ post.getParent.getPostDetails.getMessage }}</p>
                 </div>
                 {% if post.getParent.getFile %}
@@ -12,7 +12,7 @@
                 {% endif %}
             </div>
         {% else %}
-            <h3>{{ post.getPostDetails.getTitle }}</h3>
+            <a href="{{ path('evangeliko_view_free_post', {'id':post.getID}) }}"><h3>{{ post.getPostDetails.getTitle }}</h3></a>
             <p>{{ post.getPostDetails.getMessage }}</p>
         {% endif %}
     </div>
@@ -20,12 +20,27 @@
         <img src="{{ vich_uploader_asset(post.getFile, 'imageFile') }}" alt="{{ post.getFile.getImageName }}" class="img-responsive">
     {% endif %}
     <div class="grid-item-content--share">
+        {% set like_count = null %}
+        {% if post.getPostLikes|length > 0 %}
+            <ul>
+                <li>
+                    <a class="like-count grid-item-content--share--button" post_id="{{ post.getID }}" data-toggle="modal" data-target="#likesModal"> {#data-toggle="modal" data-target="#likesModal"#}
+
+                        {% for post_likes in post.getPostLikes %}
+                            {% if post_likes.isEnabled %}
+                                {% set like_count = like_count + 1 %}
+                            {% endif %}
+                        {% endfor %}
+                        {{ like_count }} like/likes
+                    </a>
+                </li>
+            </ul>
+        {% endif %}
         <ul>
             <li>
                 {% if post.getPostLikes|length > 0 %}
                     {% set break = false %}
                     {% set liked = false %}
-                    {% set like_count = null %}
 
                     {% for post_likes in post.getPostLikes if not break %}
                         {% if post_likes.getLiker.getID == account.getID and post_likes.isEnabled %}
@@ -34,37 +49,32 @@
                         {% endif %}
                     {% endfor %}
 
-                    {% for post_likes in post.getPostLikes %}
-                        {% if post_likes.isEnabled %}
-                            {% set like_count = like_count + 1 %}
-                        {% endif %}
-                    {% endfor %}
-
                     {% if liked == true %}
                         {#liked#}
                         <a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
-                            <i class="small material-icons">menu</i>{{ like_count }} like
+                            <i class="small material-icons">menu</i>like
                         </a>
                         <a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" rel="{{ post.getID }}">
-                            <i class="small material-icons">menu</i>{{ like_count }} unlike
+                            <i class="small material-icons">menu</i>unlike
                         </a>
+                        {#<a class="grid-item-content--share--button" id="like_btn_{{ post.getID }}">count{{ like_count }}</a>#}
                     {% else %}
                         {#not liked#}
                         <a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" rel="{{ post.getID }}">
-                            <i class="small material-icons">menu</i>{{ like_count }} like
+                            <i class="small material-icons">menu</i>like
                         </a>
                         <a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
-                            <i class="small material-icons">menu</i>{{ like_count }} unlike
+                            <i class="small material-icons">menu</i>unlike
                         </a>
                     {% endif %}
 
                 {% else %}
                     {#No Like#}
                     <a class="like-btn grid-item-content--share--button honeys" id="like_btn_{{ post.getID }}" rel="{{ post.getID }}">
-                        <i class="small material-icons">menu</i> like
+                        <i class="small material-icons">menu</i>like
                     </a>
                     <a class="unlike-btn grid-item-content--share--button honeys" id="unlike_btn_{{ post.getID }}" style="display: none;" rel="{{ post.getID }}">
-                        <i class="small material-icons">menu</i> unlike
+                        <i class="small material-icons">menu</i>unlike
                     </a>
                 {% endif %}
             </li>
@@ -85,12 +95,32 @@
             </li>
             <li>
                 <a href="#" class="grid-item-content--share--button more">
-                    <a href="{{ path('evangeliko_view_free_post', {'id':post.getID}) }}"><i class="small material-icons">more_horiz</i></a>
+                    <i class="small material-icons">more_horiz</i>
                 </a>
             </li>
         </ul>
-        <div class="clearfix"></div>
+        {#<div class="clearfix"></div>#}
     </div>
+    {{ dump(post.getPostLikes) }}
+    {% if not post.getPostLikes.isEmpty %}
+        <div class="page-section comments">
+            <ul id="comments_{{ post.getID }}">
+                {% for likes in post.getPostLikes %}
+                    <li>
+                        <div class="single-comment">
+                            <div class="author">
+                                <img src="http://via.placeholder.com/40x40" alt="" class="img-circle">
+                                <div class="author--details">
+                                    <p>{{ likes.getLiker.getFullName }}{{ likes.getLiker.getID }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
     {% if not post.getPostComment.isEmpty %}
         <div class="page-section comments">
             <ul id="comments_{{ post.getID }}">
@@ -100,7 +130,7 @@
                             <div class="author">
                                 <img src="http://via.placeholder.com/40x40" alt="" class="img-circle">
                                 <div class="author--details">
-                                    <h6><a href="#">{{ comment.getComment.getCommenter.getFullName }}</a></h6>
+                                    <h6><a href="{{ path('evangeliko_profile_index', {'username': comment.getComment.getCommenter.getUsername|default('null'), 'filterType': 'all'}) }}">{{ comment.getComment.getCommenter.getFullName }}</a></h6>
                                     <small>{{ comment.getComment.getTimePassed }}</small>
                                     <p>{{ comment.getComment.getMessage }}</p>
                                 </div>

@@ -26,6 +26,11 @@ evangeliko_comment_submit:
     methods: [POST]
     defaults: { _controller: EvangelikoPostBundle:Comment:comment }
 
+evangeliko_post_like_count:
+    path: /likecount
+    methods: [POST]
+    defaults: { _controller: EvangelikoPostBundle:Post:likeCount }
+
 evangeliko_view_post:
     path: /view/post
     methods: [GET]

@@ -313,4 +313,22 @@ class PostController extends Controller
 
         return $this->render("/"); //redirect to index chaagne rredirect
     }
+
+    public function likeCountAction(Request $request)
+    {
+        $this->request = $request;
+        $em = $this->getDoctrine()->getManager();
+        $data = $this->request->request->all();
+
+        $post = $em->getRepository("EvangelikoPostBundle:Post")->find($data['id']);
+
+        if ($post){\
+//            $arrData = ['output' => $post->getPostLikes()->getLiker()->getID()];
+            $arrData = ['liker' => $post.getID()];
+//                ['output' => $liker_list->getLiker()->getID()];
+            return new JsonResponse($arrData);
+        }
+
+        return $this->render("/"); //redirect to index chaagne rredirect
+    }
 }

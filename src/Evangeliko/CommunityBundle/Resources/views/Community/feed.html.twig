@@ -14,13 +14,30 @@
                         <p><a href="{{ path('evangeliko_community_view', {'slug': page.getSlug, 'filterType' : 'all'}) }}">www.infotrader.dev/community/{{page.getSlug}}</a></p>
                         {% if page.getUserCreate.getID == app.getUser.getID %}
                             <a href="{{ path('evangeliko_community_edit_page', {'slug': page.getSlug }) }}" class="btn btn-default">Edit</a>
+                        {% else %}
+                            {% if account.getFollowedCommunity is not null %}
+                                {% set break = false %}
+                                {% set follow_status = 'no' %}
+                                {% for cmty,community in account.getFollowedCommunity if not break %}
+                                    {% if community.getCommunity.getID == page.getID and community.getStatus == 'Followed' and community.isEnabled == true %}
+                                        {% set follow_status = 'yes' %}
+                                        {% set break = true %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if follow_status == 'yes' %}
+                                    <form method="post" action="{{ path('evangeliko_community_unfollow') }}">
+                                        {{ form.hidden('community_id', page.getID) }}
+                                        <button type="submit" class="btn btn-default">Unfollow</button>
+                                    </form>
+                                {% else %}
+                                    <form method="post" action="{{ path('evangeliko_community_follow') }}">
+                                        {{ form.hidden('community_id', page.getID) }}
+                                        <button type="submit" class="btn btn-default">Follow</button>
+                                    </form>
+                                {% endif %}
+                            {% endif %}
                         {% endif %}
-                        {#<a href="#" class="btn btn-default btn-md" style="background-color: transparent; color: #337ab7;">UNBLESS</a>#}
-                        <form method="post" action="{{ path('evangeliko_community_follow') }}">
-                            {#<a href="#" class="btn btn-default">Follow</a>#}
-                            {{ form.hidden('community_id', page.getID) }}
-                            <button type="submit" class="btn btn-default">Follow</button>
-                        </form>
                     </div>
                 </div>
             </div>

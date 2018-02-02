@@ -28,6 +28,11 @@ evangeliko_community_follow:
     methods:  [POST]
     defaults: { _controller: EvangelikoCommunityBundle:Community:communityFollow }
 
+evangeliko_community_unfollow:
+    path:     /community/unfollow
+    methods:  [POST]
+    defaults: { _controller: EvangelikoCommunityBundle:Community:communityUnfollow }
+
 evangeliko_community_pending_invite:
     path:     /community/pending/invites
     methods:  [GET]

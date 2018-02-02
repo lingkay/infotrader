@@ -12,12 +12,19 @@
 					<ul class="notifications">
                         {% for notif in notifs %}
 							<li>
-								<a href="#">
+								{% set notif_path = "" %}
+								{% if notif.getCommunity is not null %}
+									{% set notif_path = path('evangeliko_community_view', {'slug': notif.getCommunity.getSlug, 'filterType' : 'all'}) %}
+                                {% elseif notif.getPost is not null %}
+                                    {% set notif_path = path('evangeliko_view_free_post', {'id':notif.getPost.getID}) %}
+                                {% else %}
+                                	{% set notif_path = "" %}
+                                {% endif %}
+								<a href="{{ notif_path }}">
 									<div class="notifications--single">
 										<img src="http://via.placeholder.com/31x30" alt="">
-                                        {#<p><strong>maria cruz</strong> likes your article</p>#}
-                                        {#<small>5 hours ago</small>#}
 										<p>{{ notif.getMessage }}</p>
+
 									</div>
 								</a>
 							</li>

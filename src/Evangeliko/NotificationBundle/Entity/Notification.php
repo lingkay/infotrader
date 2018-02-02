@@ -23,11 +23,29 @@ class Notification
 	use HasGeneratedID;
 	use HasEnabled;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Evangeliko\AccountBundle\Entity\Account")
+     * @ORM\JoinColumn(name="source_id", referencedColumnName="id")
+     */
+    protected $source;
+
 	/**
 	 * @ORM\ManyToOne(targetEntity="Evangeliko\AccountBundle\Entity\Account")
 	 * @ORM\JoinColumn(name="recipient_id", referencedColumnName="id")
 	 */
 	protected $recipient;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Evangeliko\PostBundle\Entity\Post")
+     * @ORM\JoinColumn(name="post_id", referencedColumnName="id")
+     */
+    protected $post;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Evangeliko\CommunityBundle\Entity\Community")
+     * @ORM\JoinColumn(name="community_id", referencedColumnName="id")
+     */
+    protected $community;
 
 	/** @ORM\Column(type="string") */
 	protected $message;
@@ -37,6 +55,17 @@ class Notification
 		$this->initTrackCreate();
 		$this->initHasEnabled();
 	}
+
+    public function setSource($source)
+    {
+        $this->source = $source;
+        return $this;
+    }
+
+    public function getSource()
+    {
+        return $this->source;
+    }
 
 	public function setRecipient($recipient)
 	{
@@ -48,6 +77,28 @@ class Notification
 	{
 		return $this->recipient;
 	}
+
+    public function setPost($post)
+    {
+        $this->post = $post;
+        return $this;
+    }
+
+    public function getPost()
+    {
+        return $this->post;
+    }
+
+    public function setCommunity($community)
+    {
+        $this->community = $community;
+        return $this;
+    }
+
+    public function getCommunity()
+    {
+        return $this->community;
+    }
 
 	public function setMessage($message)
 	{

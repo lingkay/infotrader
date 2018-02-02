@@ -3,6 +3,7 @@
 namespace Evangeliko\PostBundle\Controller;
 
 
+use Evangeliko\NotificationBundle\Entity\Notification;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,6 +40,15 @@ class CommentController extends Controller
                 $post_comment->setPost($post);
                 $post_comment->setComment($comment);
                 $em->persist($post_comment);
+
+                if ($account != $post->getUserCreate()->getAccount()){
+                    $notif = new Notification();
+                    $notif->setRecipient($post->getUserCreate()->getAccount())
+                        ->setMessage($account->getFullName()." commented on your post " . $post->getPostDetails()->getTitle().".")
+                        ->setPost($post);
+                    $em->persist($notif);
+                }
+
                 $em->flush();
             }
 

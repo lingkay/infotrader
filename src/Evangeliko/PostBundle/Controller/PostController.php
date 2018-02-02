@@ -2,6 +2,7 @@
 
 namespace Evangeliko\PostBundle\Controller;
 
+use Evangeliko\NotificationBundle\Entity\Notification;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -109,6 +110,8 @@ class PostController extends Controller
         $em = $this->getDoctrine()->getManager();
         $data = $this->request->request->all();
 
+        $account = $user->getAccount();
+
         $post_details = new PostDetails();
         $post = new Post();
 
@@ -143,7 +146,6 @@ class PostController extends Controller
 
         if (isset($data['account_type'])) {
             if($data['account_type'] == 'user') {
-                $account = $user->getAccount();
                 $url = $this->generateUrl('evangeliko_profile_index', array('username' => $account->getUsername(), 'filterType' => 'all'));
             } elseif ($data['account_type'] == 'community') {
                 $url = $this->generateUrl('evangeliko_community_view', array('slug' => $community->getSlug(), 'filterType' => 'all'));
@@ -167,6 +169,16 @@ class PostController extends Controller
         $post->setUserCreate($this->getUser());
 
         $em->persist($post);
+
+        if($data['parent'] != NULL){
+            if ($account != $parent->getUserCreate()->getAccount()){
+                $notif = new Notification();
+                $notif->setRecipient($parent->getUserCreate()->getAccount())
+                    ->setMessage($account->getFullName()." shared your post " . $parent->getPostDetails()->getTitle().".")
+                    ->setPost($post);
+                $em->persist($notif);
+            }
+        }
         $em->flush();
 
         return $this->redirect($url);
@@ -272,16 +284,25 @@ class PostController extends Controller
         if ($post){
             $exist_post_like = $em->getRepository("EvangelikoPostBundle:PostLikes")->findOneBy(['post' => $post->getID(), 'liker' => $account->getID()]);
 
-            if($exist_post_like){
+            if ($exist_post_like){
                 $exist_post_like->setEnabled(true);
-                $em->flush();
+                $em->persist($exist_post_like);
             } else{
                 $like_post = new PostLikes();
                 $like_post->setPost($post);
                 $like_post->setLiker($account);
                 $em->persist($like_post);
-                $em->flush();
             }
+
+            if ($account != $post->getUserCreate()->getAccount()){
+                $notif = new Notification();
+                $notif->setRecipient($post->getUserCreate()->getAccount())
+                    ->setMessage($account->getFullName()." likes your post " . $post->getPostDetails()->getTitle().".")
+                    ->setPost($post);
+                $em->persist($notif);
+            }
+
+            $em->flush();
 
             $arrData = ['output' => $post->getID()];
             return new JsonResponse($arrData);
@@ -322,7 +343,7 @@ class PostController extends Controller
 
         $post = $em->getRepository("EvangelikoPostBundle:Post")->find($data['id']);
 
-        if ($post){\
+        if ($post){
 //            $arrData = ['output' => $post->getPostLikes()->getLiker()->getID()];
             $arrData = ['liker' => $post.getID()];
 //                ['output' => $liker_list->getLiker()->getID()];

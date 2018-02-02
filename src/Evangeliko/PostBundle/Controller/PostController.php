@@ -56,7 +56,7 @@ class PostController extends Controller
         $account = $this->getUser()->getAccount();
         $params['account'] = $account;
 
-        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account], ['date_create' => 'desc'], 5);
         $notif_list = [];
         foreach ($notifs as $notif) {
             $notif_list[] = $notif;
@@ -93,7 +93,7 @@ class PostController extends Controller
         $account = $this->getUser()->getAccount();
         $params['account'] = $account;
 
-        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account], ['date_create' => 'desc'], 5);
         $notif_list = [];
         foreach ($notifs as $notif) {
             $notif_list[] = $notif;
@@ -195,7 +195,7 @@ class PostController extends Controller
         $account = $this->getUser()->getAccount();
         $params['account'] = $account;
 
-        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account], ['date_create' => 'desc'], 5);
         $notif_list = [];
         foreach ($notifs as $notif) {
             $notif_list[] = $notif;
@@ -227,7 +227,7 @@ class PostController extends Controller
         $account = $this->getUser()->getAccount();
 		$params['account'] = $account;
 
-        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account], ['date_create' => 'desc'], 5);
         $notif_list = [];
         foreach ($notifs as $notif) {
             $notif_list[] = $notif;
@@ -260,7 +260,7 @@ class PostController extends Controller
         $account = $this->getUser()->getAccount();
         $params['account'] = $account;
 
-        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account], ['date_create' => 'desc'], 5);
         $notif_list = [];
         foreach ($notifs as $notif) {
             $notif_list[] = $notif;

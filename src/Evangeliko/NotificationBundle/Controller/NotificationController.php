@@ -31,7 +31,7 @@ class NotificationController extends Controller
 
         $params['account']= $account;
 
-		$notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+		$notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account], ['date_create' => 'desc']);
 
 		$notif_list = [];
 

@@ -35,7 +35,7 @@ class ProfileController extends Controller
         $filter_type = $filterType;
         $params['filter_type'] = $filter_type;
 
-        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account], ['date_create' => 'desc'], 5);
 
         $notif_list = [];
 
@@ -115,7 +115,7 @@ class ProfileController extends Controller
 
         $account = $this->getUser()->getAccount();
 
-        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account], ['date_create' => 'desc'], 5);
         $notif_list = [];
         foreach ($notifs as $notif) {
             $notif_list[] = $notif;

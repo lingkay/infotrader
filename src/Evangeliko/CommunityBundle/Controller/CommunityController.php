@@ -254,7 +254,7 @@ class CommunityController extends Controller
         $account = $this->getUser()->getAccount();
         $params['account'] = $account;
 
-        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account]);
+        $notifs = $em->getRepository("EvangelikoNotificationBundle:Notification")->findBy(['recipient' => $account], ['date_create' => 'desc'], 5);
         $notif_list = [];
         foreach ($notifs as $notif) {
             $notif_list[] = $notif;
@@ -304,34 +304,37 @@ class CommunityController extends Controller
 	public function communityFollowAction(Request $request)
 	{
 		$this->request = $request;
-
 		$em = $this->getDoctrine()->getManager();
-
 		$data = $this->request->request->all();
-
 		$account = $this->getUser()->getAccount();
 
 		try {
-			$community_follow = new CommunityFollowers();
+            $community = $em->getRepository("EvangelikoCommunityBundle:Community")->find($data['community_id']);
+            $community_follow = $em->getRepository("EvangelikoCommunityBundle:CommunityFollowers")->findOneBy(['follower' => $account->getID(), 'community' => $data['community_id'], 'status' => 'Unfollowed']);
 
-			$community = $em->getRepository("EvangelikoCommunityBundle:Community")->find($data['community_id']);
+            if ($community_follow) {
+                $community_follow->setEnabled(true);
+            } else{
+                $community_follow = new CommunityFollowers();
+                $community_follow->setCommunity($community)
+                    ->setFollower($account)
+                    ->setUserCreate($this->getUser());
+            }
 
-			$community_follow->setCommunity($community)
-                                ->setFollower($account)
-                                ->setUserCreate($this->getUser());
-
-			if($community->getType() == 'Public'){
+            if($community->getType() == 'Public'){
 				$community_follow->setStatus(CommunityFollowers::STATUS_FOLLOW);
 
 				$notif_owner = new Notification();
 
 				$notif_owner->setRecipient($community->getUserCreate()->getAccount())
-					        ->setMessage($account->getFullName()." followed ".$community->getName().' hive.');
+					        ->setMessage($account->getFullName()." followed ".$community->getName().' hive.')
+                            ->setCommunity($community);
 
 				$notif_joiner = new Notification();
 
 				$notif_joiner->setRecipient($this->getUser()->getAccount())
-					         ->setMessage("You followed ".$community->getName().' hive.');
+					         ->setMessage("You followed ".$community->getName().' hive.')
+                             ->setCommunity($community);
 
 				$em->persist($notif_owner);
 				$em->persist($notif_joiner);
@@ -341,7 +344,8 @@ class CommunityController extends Controller
 				$notif_owner = new Notification();
 
 				$notif_owner->setRecipient($community->getUserCreate()->getAccount())
-					        ->setMessage($account->getFullName()." wants to follow ".$community->getName().' hive.');
+					        ->setMessage($account->getFullName()." wants to follow ".$community->getName().' hive.')
+                            ->setCommunity($community);
 
 				$em->persist($notif_owner);
 			}
@@ -368,6 +372,42 @@ class CommunityController extends Controller
 			return new RedirectResponse($url);
 		}
 	}
+
+    public function communityUnfollowAction(Request $request)
+    {
+        $this->request = $request;
+        $em = $this->getDoctrine()->getManager();
+        $data = $this->request->request->all();
+        $account = $this->getUser()->getAccount();
+
+        try {
+            $community = $em->getRepository("EvangelikoCommunityBundle:Community")->find($data['community_id']);
+//            $community_follow = $em->getRepository("EvangelikoCommunityBundle:CommunityFollowers")->findOneBy(['community' => $community, 'follower' => $account, '']);
+            $community_follow = $em->getRepository("EvangelikoCommunityBundle:CommunityFollowers")->findOneBy(['follower' => $account->getID(), 'community' => $data['community_id']]);
+
+//            dump($community_follow);
+//            die();
+
+            $community_follow->setEnabled(false);
+            $community_follow->setStatus(CommunityFollowers::STATUS_UNFOLLOW);
+            $em->persist($community_follow);
+            $em->flush();
+
+//           delete notification
+
+            $url = $this->request->headers->get("referer");
+            return new RedirectResponse($url);
+
+        } catch (ValidationException $e) {
+            $this->addFlash('error', $e->getMessage());
+            $url = $this->request->headers->get("referer");
+            return new RedirectResponse($url);
+        } catch (DBALException $e) {
+            $this->addFlash('error', 'Database error encountered. Possible duplicate.');
+            $url = $this->request->headers->get("referer");
+            return new RedirectResponse($url);
+        }
+    }
 
 	public function pendingInvitesAction(Request $request)
 	{

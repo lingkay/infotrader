@@ -22,6 +22,16 @@ evangeliko_profile_edit_submit:
     methods: [POST] 
     defaults: { _controller: EvangelikoAccountBundle:Profile:profileEdit }
 
+evangeliko_account_follow:
+    path:     /profile/follow
+    methods:  [POST]
+    defaults: { _controller: EvangelikoAccountBundle:Profile:followAccount }
+
+evangeliko_account_unfollow:
+    path:     /profile/unfollow
+    methods:  [POST]
+    defaults: { _controller: EvangelikoAccountBundle:Profile:unfollowAccount }
+
 evangeliko_redirect_account:
     path: /ajax/redirect/{id}/{name}
     methods: [GET]

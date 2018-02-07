@@ -68,6 +68,16 @@ class Account
 	protected $followed_community;
 
     /**
+     * @ORM\OneToMany(targetEntity="\Evangeliko\AccountBundle\Entity\AccountFollowers", mappedBy="account")
+     */
+    protected $followers;
+
+    /**
+     * @ORM\OneToMany(targetEntity="\Evangeliko\AccountBundle\Entity\AccountFollowers", mappedBy="follower")
+     */
+    protected $followed_account;
+
+    /**
      * @ORM\OneToOne(targetEntity="\Core\UserBundle\Entity\User", mappedBy="account", cascade={"persist"})
      */
     protected $user;
@@ -244,6 +254,16 @@ class Account
 	{
 		return $this->followed_community;
 	}
+
+    public function getFollowers()
+    {
+        return $this->followers;
+    }
+
+    public function getFollowedAccount()
+    {
+        return $this->followed_account;
+    }
 
 	public function getCredit()
 	{

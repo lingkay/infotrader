@@ -12,6 +12,9 @@ use Doctrine\DBAL\DBALException;
 use Core\ValidationException;
 
 use Evangeliko\AccountBundle\Entity\Account;
+use Evangeliko\AccountBundle\Entity\AccountFollowers;
+
+use Evangeliko\NotificationBundle\Entity\Notification;
 
 class ProfileController extends Controller
 {
@@ -196,4 +199,127 @@ class ProfileController extends Controller
 	        return new RedirectResponse($url);
 		}
 	}
+
+    public function followAccountAction(Request $request)
+    {
+        $this->request = $request;
+        $em = $this->getDoctrine()->getManager();
+        $data = $this->request->request->all();
+        $account = $this->getUser()->getAccount();
+
+        try {
+            $profile = $em->getRepository("EvangelikoAccountBundle:Account")->find($data['account_id']);
+            $account_follow = $em->getRepository("EvangelikoAccountBundle:AccountFollowers")->findOneBy(['follower' => $account->getID(), 'account' => $data['account_id'], 'status' => 'Unfollowed']);
+
+            if ($account_follow) {
+                $account_follow->setEnabled(true);
+            } else{
+                $account_follow = new AccountFollowers();
+                $account_follow->setAccount($profile)
+                    ->setFollower($account)
+                    ->setUserCreate($this->getUser());
+            }
+
+            $account_follow->setStatus(AccountFollowers::STATUS_FOLLOW);
+
+            $notif_owner = new Notification();
+
+            $notif_owner->setRecipient($profile)
+                ->setMessage($account->getFullName()." followed you.")
+                ->setAccount($profile);
+
+            $notif_joiner = new Notification();
+
+            $notif_joiner->setRecipient($this->getUser()->getAccount())
+                ->setMessage("You followed ".$profile->getFullName().' hive.')
+                ->setAccount($profile);
+
+            $em->persist($notif_owner);
+            $em->persist($notif_joiner);
+
+//            if($community->getType() == 'Public'){
+//                $community_follow->setStatus(CommunityFollowers::STATUS_FOLLOW);
+//
+//                $notif_owner = new Notification();
+//
+//                $notif_owner->setRecipient($community->getUserCreate()->getAccount())
+//                    ->setMessage($account->getFullName()." followed ".$community->getName().' hive.')
+//                    ->setCommunity($community);
+//
+//                $notif_joiner = new Notification();
+//
+//                $notif_joiner->setRecipient($this->getUser()->getAccount())
+//                    ->setMessage("You followed ".$community->getName().' hive.')
+//                    ->setCommunity($community);
+//
+//                $em->persist($notif_owner);
+//                $em->persist($notif_joiner);
+//            }else{
+//                $community_follow->getStatus(CommunityFollowers::STATUS_PENDING);
+//
+//                $notif_owner = new Notification();
+//
+//                $notif_owner->setRecipient($community->getUserCreate()->getAccount())
+//                    ->setMessage($account->getFullName()." wants to follow ".$community->getName().' hive.')
+//                    ->setCommunity($community);
+//
+//                $em->persist($notif_owner);
+//            }
+
+            $em->persist($account_follow);
+            $em->flush();
+
+            $this->addFlash('success', $profile->getFullName().' followed successfully.');
+
+//            if($profile->getType() == 'Public'){
+//                $this->addFlash('success', $profile->getFullName().' hive followed successfully.');
+//            }else{
+//                $this->addFlash('success', 'Request to follow '.$profile->getFullName().' hive has been sent.');
+//            }
+
+            $url = $this->request->headers->get("referer");
+            return new RedirectResponse($url);
+
+        } catch (ValidationException $e) {
+            $this->addFlash('error', $e->getMessage());
+            $url = $this->request->headers->get("referer");
+            return new RedirectResponse($url);
+        } catch (DBALException $e) {
+            $this->addFlash('error', 'Database error encountered. Possible duplicate.');
+            $url = $this->request->headers->get("referer");
+            return new RedirectResponse($url);
+        }
+    }
+
+    public function unfollowAccountAction(Request $request)
+    {
+        $this->request = $request;
+        $em = $this->getDoctrine()->getManager();
+        $data = $this->request->request->all();
+        $account = $this->getUser()->getAccount();
+
+        try {
+            $profile = $em->getRepository("EvangelikoAccountBundle:Account")->find($data['account_id']);
+            $account_follow = $em->getRepository("EvangelikoAccountBundle:AccountFollowers")->findOneBy(['follower' => $account->getID(), 'account' => $data['account_id'], 'status' => 'Followed']);
+
+            $account_follow->setEnabled(false);
+            $account_follow->setStatus(AccountFollowers::STATUS_UNFOLLOW);
+            $em->persist($account_follow);
+            $em->flush();
+
+//           delete notification
+
+            $url = $this->request->headers->get("referer");
+            return new RedirectResponse($url);
+
+        } catch (ValidationException $e) {
+            $this->addFlash('error', $e->getMessage());
+            $url = $this->request->headers->get("referer");
+            return new RedirectResponse($url);
+        } catch (DBALException $e) {
+            $this->addFlash('error', 'Database error encountered. Possible duplicate.');
+            $url = $this->request->headers->get("referer");
+            return new RedirectResponse($url);
+        }
+    }
 }

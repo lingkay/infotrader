@@ -301,7 +301,7 @@ class CommunityController extends Controller
         return $this->render($twig_file, $params);
     }
 
-	public function communityFollowAction(Request $request)
+	public function followCommunityAction(Request $request)
 	{
 		$this->request = $request;
 		$em = $this->getDoctrine()->getManager();
@@ -373,7 +373,7 @@ class CommunityController extends Controller
 		}
 	}
 
-    public function communityUnfollowAction(Request $request)
+    public function unfollowCommunityAction(Request $request)
     {
         $this->request = $request;
         $em = $this->getDoctrine()->getManager();
@@ -383,10 +383,7 @@ class CommunityController extends Controller
         try {
             $community = $em->getRepository("EvangelikoCommunityBundle:Community")->find($data['community_id']);
 //            $community_follow = $em->getRepository("EvangelikoCommunityBundle:CommunityFollowers")->findOneBy(['community' => $community, 'follower' => $account, '']);
-            $community_follow = $em->getRepository("EvangelikoCommunityBundle:CommunityFollowers")->findOneBy(['follower' => $account->getID(), 'community' => $data['community_id']]);
-
-//            dump($community_follow);
-//            die();
+            $community_follow = $em->getRepository("EvangelikoCommunityBundle:CommunityFollowers")->findOneBy(['follower' => $account->getID(), 'community' => $data['community_id'], 'status' => 'Followed']);
 
             $community_follow->setEnabled(false);
             $community_follow->setStatus(CommunityFollowers::STATUS_UNFOLLOW);
@@ -495,6 +492,6 @@ class CommunityController extends Controller
 		$em->flush();
 
 		$url = $this->request->headers->get("referer");
-		return new RedirectResponse($url);	
+		return new RedirectResponse($url);
 	}
 }

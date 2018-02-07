@@ -25,8 +25,32 @@
 									<p><strong>250</strong> Followers</p>
 								</div>
 							</div>
-							<a href="{{ path('evangeliko_profile_about') }}" class="btn btn-default">Edit</a>
-							<a href="#" class="btn btn-default">Follow</a>
+                            {% if profile.getUser.getID == app.getUser.getID %}
+								<a href="{{ path('evangeliko_profile_about') }}" class="btn btn-default">Edit</a>
+							{% else %}
+                                {% if account.getFollowedAccount is not null %}
+                                    {% set break = false %}
+                                    {% set follow_status = 'no' %}
+                                    {% for flw,followed_acc in account.getFollowedAccount if not break %}
+                                        {% if followed_acc.getAccount.getID == profile.getID and followed_acc.getStatus == 'Followed' and followed_acc.isEnabled == true %}
+                                            {% set follow_status = 'yes' %}
+                                            {% set break = true %}
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if follow_status == 'yes' %}
+										<form method="post" action="{{ path('evangeliko_account_unfollow') }}">
+                                            {{ form.hidden('account_id', profile.getID) }}
+											<button type="submit" class="btn btn-default">Unfollow</button>
+										</form>
+                                    {% else %}
+										<form method="post" action="{{ path('evangeliko_account_follow') }}">
+                                            {{ form.hidden('account_id', profile.getID) }}
+											<button type="submit" class="btn btn-default">Follow</button>
+										</form>
+                                    {% endif %}
+                                {% endif %}
+							{% endif %}
 						</div>
 					</div>
 				</div>

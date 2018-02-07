@@ -23,17 +23,17 @@ class Notification
 	use HasGeneratedID;
 	use HasEnabled;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Evangeliko\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="source_id", referencedColumnName="id")
-     */
-    protected $source;
-
 	/**
 	 * @ORM\ManyToOne(targetEntity="Evangeliko\AccountBundle\Entity\Account")
 	 * @ORM\JoinColumn(name="recipient_id", referencedColumnName="id")
 	 */
 	protected $recipient;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Evangeliko\AccountBundle\Entity\Account")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id")
+     */
+    protected $account;
 
     /**
      * @ORM\ManyToOne(targetEntity="Evangeliko\PostBundle\Entity\Post")
@@ -56,17 +56,6 @@ class Notification
 		$this->initHasEnabled();
 	}
 
-    public function setSource($source)
-    {
-        $this->source = $source;
-        return $this;
-    }
-
-    public function getSource()
-    {
-        return $this->source;
-    }
-
 	public function setRecipient($recipient)
 	{
 		$this->recipient = $recipient;
@@ -77,6 +66,17 @@ class Notification
 	{
 		return $this->recipient;
 	}
+
+    public function setAccount($account)
+    {
+        $this->account = $account;
+        return $this;
+    }
+
+    public function getAccount()
+    {
+        return $this->account;
+    }
 
     public function setPost($post)
     {
